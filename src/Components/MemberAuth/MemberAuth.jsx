@@ -7,6 +7,7 @@ import {
   updateProfile,
   sendEmailVerification,
   sendPasswordResetEmail,
+  reload,
 } from "firebase/auth";
 import { getFriendlyFirebaseError } from "../../utils/firebaseErrorHandler";
 import styles from "./MemberAuth.module.css";
@@ -27,123 +28,147 @@ export default function MemberAuth() {
     setError("");
     setInfoMessage("");
     setLoading(true);
-
     try {
       if (isLogin) {
         // LOGIN
         const cred = await signInWithEmailAndPassword(auth, email, password);
-
+        // Ensure latest user state
+        await reload(cred.user);
         if (!cred.user.emailVerified) {
-          setInfoMessage("Please verify your email before logging in.");
-          return; // don't navigate yet
+          setInfoMessage("Verification email sent previously. Please verify your email before logging in.");
+          return;
         }
-
-        // Verified → go to gated area
         navigate("/membersArea");
-        return;
       } else {
         // SIGN UP
-        const cred = await createUserWithEmailAndPassword(auth, email, password);
-
-        if (name) {
-          await updateProfile(cred.user, { displayName: name });
+        if (!name.trim()) {
+          setError("Please enter your name.");
+          return;
         }
-
+        const cred = await createUserWithEmailAndPassword(auth, email, password);
+        await updateProfile(cred.user, { displayName: name.trim() });
         await sendEmailVerification(cred.user);
-        setInfoMessage("Verification email sent! Please check your inbox.");
-        // Do NOT navigate yet; user must verify and then log in
-        return;
+        setInfoMessage(`Verification email sent to ${email}. Please verify, then log in.`);
+        setIsLogin(true);
       }
     } catch (err) {
-      console.error("Auth error:", err?.code, err?.message);
-      setError(getFriendlyFirebaseError(err?.code || "unknown"));
+      setError(getFriendlyFirebaseError(err.code) || err.message);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleResendVerification = async () => {
+    setError("");
+    setInfoMessage("");
+    try {
+      if (!auth.currentUser) {
+        setError("Please log in first to resend verification.");
+        return;
+      }
+      await sendEmailVerification(auth.currentUser);
+      setInfoMessage(`Verification email resent to ${auth.currentUser.email}.`);
+    } catch (err) {
+      setError(getFriendlyFirebaseError(err.code) || err.message);
     }
   };
 
   const handlePasswordReset = async () => {
     setError("");
     setInfoMessage("");
-
-    if (!email) {
-      setError("Please enter your email to reset your password.");
-      return;
-    }
-
     try {
+      if (!email) {
+        setError("Enter your email above first.");
+        return;
+      }
       await sendPasswordResetEmail(auth, email);
-      setInfoMessage("Password reset email sent! Check your inbox.");
+      setInfoMessage(`Password reset link sent to ${email}.`);
     } catch (err) {
-      console.error("Reset error:", err?.code, err?.message);
-      setError(getFriendlyFirebaseError(err?.code || "unknown"));
+      setError(getFriendlyFirebaseError(err.code) || err.message);
     }
   };
 
   return (
-    <div className={styles.authContainer}>
-      <h2>{isLogin ? "Member Login" : "Sign Up"}</h2>
+    <div className={styles.authCard}>
+      <div className={styles.toggleRow}>
+        <button
+          type="button"
+          onClick={() => setIsLogin(true)}
+          className={`${styles.toggleBtn} ${isLogin ? styles.active : ""}`}
+          aria-pressed={isLogin}
+        >
+          Login
+        </button>
+        <button
+          type="button"
+          onClick={() => setIsLogin(false)}
+          className={`${styles.toggleBtn} ${!isLogin ? styles.active : ""}`}
+          aria-pressed={!isLogin}
+        >
+          Sign Up
+        </button>
+      </div>
 
-      {error && <p className={styles.errorMessage}>{error}</p>}
-      {infoMessage && <p className={styles.infoMessage}>{infoMessage}</p>}
+      {infoMessage && <div className={styles.info}>{infoMessage}</div>}
+      {error && <div className={styles.error}>{error}</div>}
 
-      <form onSubmit={handleAuth}>
+      <form onSubmit={handleAuth} className={styles.form}>
         {!isLogin && (
-          <div className={styles.inputGroup}>
-            <label>Name:</label>
+          <div className={styles.formGroup}>
+            <label htmlFor="name">Name</label>
             <input
+              id="name"
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Your Name"
               required
+              autoComplete="name"
             />
           </div>
         )}
 
-        <div className={styles.inputGroup}>
-          <label>Email:</label>
+        <div className={styles.formGroup}>
+          <label htmlFor="email">Email</label>
           <input
+            id="email"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="Your Email"
             required
+            autoComplete="email"
           />
         </div>
 
-        <div className={styles.inputGroup}>
-          <label>Password:</label>
+        <div className={styles.formGroup}>
+          <label htmlFor="password">Password</label>
           <input
+            id="password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="Your Password"
             required
+            autoComplete={isLogin ? "current-password" : "new-password"}
+            minLength={6}
           />
         </div>
 
-        <Button mode="filled" type="submit" disabled={loading}>
-          {loading ? "Please wait..." : isLogin ? "Login" : "Sign Up"}
-        </Button>
-
-        {isLogin && (
-          <p onClick={handlePasswordReset} className={styles.forgotPassword}>
-            Forgot Password?
-          </p>
-        )}
+        <div className={styles.actions}>
+          <Button mode="filled" type="submit" disabled={loading}>
+            {loading ? "Please wait..." : isLogin ? "Login" : "Sign Up"}
+          </Button>
+          {isLogin && (
+            <button type="button" className={styles.linkBtn} onClick={handlePasswordReset}>
+              Forgot password?
+            </button>
+          )}
+        </div>
       </form>
 
-      <p className={styles.switchMode}>
-        {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
-        <button
-          type="button"
-          className={styles.switchButton}
-          onClick={() => setIsLogin(!isLogin)}
-        >
-          {isLogin ? "Sign Up" : "Login"}
+      {isLogin && (
+        <button type="button" className={styles.linkBtn} onClick={handleResendVerification}>
+          Resend verification email
         </button>
-      </p>
+      )}
     </div>
   );
 }

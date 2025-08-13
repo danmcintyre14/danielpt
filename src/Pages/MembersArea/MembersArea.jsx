@@ -1,6 +1,6 @@
 // src/pages/MembersArea/MembersArea.jsx
 import { useEffect, useState } from "react";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import { onAuthStateChanged, signOut, reload } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../../firebase";
 import Button from "../../Components/Button/Button";
@@ -15,12 +15,24 @@ import styles from "./MembersArea.module.css";
 
 export default function MembersArea() {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (u) => {
-      if (!u) navigate("/membersPage");
-      else setUser(u);
+    const unsub = onAuthStateChanged(auth, async (u) => {
+      if (!u) {
+        setUser(null);
+        setLoading(false);
+        navigate("/membersPage");
+        return;
+      }
+      await reload(u);
+      setUser(u);
+      setLoading(false);
+      if (!u.emailVerified) {
+        // Push back to signup with message
+        navigate("/membersPage", { state: { needsVerification: true } });
+      }
     });
     return () => unsub();
   }, [navigate]);
@@ -30,14 +42,21 @@ export default function MembersArea() {
     navigate("/membersPage");
   };
 
-  if (!user) return null; // or a loading spinner
+  if (loading) {
+    return <div className={styles.container}><p>Loading...</p></div>;
+  }
+
+  if (!user || !user.emailVerified) {
+    return null; // Redirect in effect
+  }
 
   return (
-    <div className={styles.pageContainer}>
-      <div className={styles.header}>
-        <h2 className={styles.heading}>
-          Welcome, {user.displayName || user.email}
-        </h2>
+    <div className={styles.container}>
+      <div className={styles.topbar}>
+        <div className={styles.greeting}>
+          <h1>Welcome{user?.displayName ? `, ${user.displayName}` : ""}</h1>
+          <p>You’re verified and logged in. Explore your tools below.</p>
+        </div>
         <Button mode="filled" onClick={handleLogout}>Logout</Button>
       </div>
 

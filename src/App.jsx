@@ -9,7 +9,6 @@ function App() {
 
   const router = createBrowserRouter(createRoutesFromElements(
     <Route path="/" element={ <Root /> }>
-      <Route index element={<Homepage />} /> 
       <Route path='homePage' element={ <Homepage /> } />
       <Route path='membersPage' element={ <MembersPage />} />
       <Route path="/membersArea" element={<MembersArea />} />
