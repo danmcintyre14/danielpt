@@ -1,0 +1,171 @@
+.container {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1em;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+.title {
+  color: #ff5722; /* Orange theme */
+  font-weight: 700;
+  margin-bottom: 1em;
+}
+
+/* ✅ Bold, gradient open button (Orange theme) */
+.openBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 160px;
+  font-size: 1.2em;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, #ff5722, #ff784e);
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.openBtn:hover {
+  background: linear-gradient(135deg, #e64a19, #ff5722);
+  transform: translateY(-2px);
+}
+
+.icon {
+  font-size: 2.2em;
+  margin-bottom: 0.3em;
+}
+
+/* ✅ Apple-like close button */
+.closeBtn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(240, 240, 240, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease;
+}
+
+.closeBtn:hover {
+  background: rgba(220, 220, 220, 1);
+  transform: scale(1.08);
+}
+
+/* ✅ Responsive form rows */
+.formRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+  margin-bottom: 1em;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 200px;
+}
+
+.formGroup label {
+  font-size: 0.95em;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 0.4em;
+}
+
+/* ✅ Bold input & select style with Orange accent */
+.formGroup input,
+.formGroup select {
+  padding: 0.7em;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  font-size: 1em;
+  background: linear-gradient(#fff, #f9f9f9);
+  font-weight: 500;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.formGroup input:focus,
+.formGroup select:focus {
+  border-color: #ff5722;
+  box-shadow: 0 0 8px rgba(255, 87, 34, 0.3);
+  outline: none;
+}
+
+/* ✅ Slider group (if you add duration sliders later) */
+.sliderGroup {
+  margin: 1em 0;
+  text-align: left;
+}
+
+.sliderGroup label {
+  font-weight: 600;
+  font-size: 0.95em;
+  color: #222;
+  display: block;
+  margin-bottom: 0.5em;
+}
+
+.sliderGroup input[type="range"] {
+  width: 100%;
+  appearance: none;
+  height: 10px;
+  border-radius: 5px;
+  background: #ddd;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.sliderGroup input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ff5722;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.sliderGroup input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+  background: #e64a19;
+}
+
+/* ✅ Results box */
+.results {
+  margin-top: 1.5em;
+  padding: 1em;
+  background: #f7f7f7;
+  border-radius: 12px;
+  border: 2px solid #eee;
+  text-align: center;
+  font-weight: 600;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+/* ✅ For positioning close button properly */
+.calculatorCard {
+  position: relative;
+  padding-top: 2em;
+}
+
+
+
+

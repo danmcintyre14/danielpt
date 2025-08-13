@@ -1,0 +1,215 @@
+.container {
+  max-width: 500px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.closeContainer {
+  text-align: right;
+}
+
+.closeButton {
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+/* === STEP INDICATOR & PROGRESS BAR === */
+.stepIndicator {
+  text-align: center;
+  font-size: 0.95rem;
+  color: #666;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.progressBar {
+  width: 100%;
+  max-width: 400px;
+  height: 8px;
+  background: #eee;
+  border-radius: 5px;
+  margin: 0 auto 1.2rem auto;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: #2ecc71; /* Brand color */
+  border-radius: 5px;
+  transition: width 0.3s ease;
+}
+
+/* === FORM INPUTS === */
+.form input {
+  width: 100%;
+  padding: 0.9rem;
+  margin-bottom: 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border 0.3s ease;
+}
+
+.form input:focus {
+  border-color: #2ecc71;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(46, 204, 113, 0.2);
+}
+
+/* === GENDER SELECTION === */
+.form fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.genderGroup {
+  display: flex;
+  justify-content: space-around;
+  padding: 0.8rem;
+  background: #f9f9f9;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  margin-bottom: 1rem;
+}
+
+.genderOption {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.genderOption input[type="radio"] {
+  accent-color: #2ecc71;
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+/* === STEPS HEADING === */
+.step h3 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+/* === GOAL & ACTIVITY BUTTONS === */
+.goalButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.goalButtons button {
+  min-width: 150px;
+  font-weight: 600;
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
+  margin-top: 1.5rem;
+}
+
+.buttonGroup button {
+  min-width: 120px;
+}
+
+/* === OPT-IN BOX === */
+.optInBox {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  background: #f0fdf4;
+  border-radius: 12px;
+  text-align: center;
+  border: 1px solid #d3f3e3;
+}
+
+.optInBox p {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.optInBox strong {
+  color: #2ecc71;
+}
+
+.optInBox input {
+  padding: 0.7rem;
+  margin-bottom: 0.8rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  width: 100%;
+  max-width: 280px;
+  font-size: 1rem;
+}
+
+.optInBox button {
+  margin-top: 0.8rem;
+  width: 100%;
+  max-width: 280px;
+  border-radius: 8px;
+}
+
+.optInBox label {
+  font-weight: 500;
+  display: block;
+  margin-bottom: 0.3rem;
+  text-align: left;
+  max-width: 280px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.optInBox input,
+.optInBox button {
+  max-width: none; /* Let MemberAuth.module.css handle it */
+}
+
+/* === MOBILE === */
+@media (max-width: 480px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .goalButtons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .goalButtons button {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .buttonGroup {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .buttonGroup button {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+
+
+
+
+  
+
+
+  
+  

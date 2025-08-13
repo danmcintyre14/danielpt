@@ -1,0 +1,119 @@
+.pageContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* === HERO SECTION === */
+.hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4rem 0;
+}
+
+.heroContent {
+  flex: 1;
+  min-width: 320px;
+  padding-right: 2rem;
+}
+
+.heroContent h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+.heroContent p {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  color: #444;
+}
+
+.heroBtns {
+  display: flex;
+  gap: 1rem;
+}
+
+.heroImage {
+  flex: 1;
+  min-width: 280px;
+  display: flex;
+  justify-content: center;
+}
+
+.heroImage img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+
+/* === CALCULATOR SECTION === */
+.calculatorSection {
+  padding: 3rem 0;
+  text-align: center;
+}
+
+.calculatorSection h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+/* === BENEFITS SECTION === */
+.benefits {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2rem;
+  margin: 4rem 0;
+}
+
+.benefitCard {
+  text-align: center;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.benefitCard h3 {
+  margin-top: 1rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.benefitCard p {
+  font-size: 1rem;
+  color: #555;
+}
+
+.icon {
+  font-size: 2.5rem;
+  color: #4166f5; /* brand blue */
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .hero {
+    flex-direction: column;
+    text-align: center;
+  }
+  .heroContent {
+    padding-right: 0;
+    margin-bottom: 2rem;
+  }
+  .heroBtns {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+
+
+
+
+
+
+
+

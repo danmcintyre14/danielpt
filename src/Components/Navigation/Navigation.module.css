@@ -1,0 +1,33 @@
+.navbar {
+    display: flex;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,.2);
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em 1em;
+    width: 100%;
+}
+
+.logo img {
+    width: 5em;
+}
+
+.navLinks {
+    display: flex;
+    gap: 1em;           /* space between links */
+    list-style: none;   /* remove default bullets */
+    margin: 0;
+    padding-right: 1em;
+}
+
+.navLinks li a {
+    color: black;
+    text-decoration: none;
+    padding: 1em;
+    font-weight: 500;
+}
+
+.navLinks li a.active {
+    border-bottom: 2px solid black; /* optional active link indicator */
+}
+
+

@@ -1,0 +1,90 @@
+.pageContainer {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.hero {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.hero h1 span {
+  color: #4166f5; /* your main brand blue */
+}
+
+.hero p {
+  font-size: 1.2rem;
+  max-width: 700px;
+  margin: 0.5rem auto 0;
+}
+
+.benefits {
+  margin: 3rem 0;
+}
+
+.benefits h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.benefitsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2rem;
+}
+
+.benefitCard {
+  text-align: center;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.benefitCard p {
+  margin-top: 1rem;
+  font-size: 1rem;
+}
+
+.icon {
+  font-size: 2rem;
+  color: #4166f5;
+}
+
+.signup {
+  margin-top: 4rem;
+  display: flex;
+  justify-content: center;
+}
+
+.signupBox {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  max-width: 500px;
+  width: 100%;
+}
+
+.signupBox h2 {
+  margin-bottom: 1rem;
+}
+
+.signupBox p {
+  margin-bottom: 1.5rem;
+}
+
+
+
+
+
+
+
+
+

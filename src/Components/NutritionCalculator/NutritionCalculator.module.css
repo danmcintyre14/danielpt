@@ -1,0 +1,201 @@
+.container {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1em;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+/* ✅ Bold, gradient open button */
+.openBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 160px;
+  font-size: 1.2em;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, #007bff, #00a2ff);
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.openBtn:hover {
+  background: linear-gradient(135deg, #0056b3, #007bff);
+  transform: translateY(-2px);
+}
+
+.icon {
+  font-size: 2.2em;
+  margin-bottom: 0.3em;
+}
+
+/* ✅ Apple-like close button */
+.closeBtn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(240, 240, 240, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease;
+}
+
+.closeBtn:hover {
+  background: rgba(220, 220, 220, 1);
+  transform: scale(1.08);
+}
+
+/* ✅ Responsive rows */
+.formRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+  margin-bottom: 1em;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 200px;
+}
+
+.formGroup label {
+  font-size: 0.95em;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 0.4em;
+}
+
+/* ✅ Bold input & select style matching buttons */
+.formGroup input,
+.formGroup select {
+  padding: 0.7em;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  font-size: 1em;
+  background: linear-gradient(#fff, #f9f9f9);
+  font-weight: 500;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.formGroup input:focus,
+.formGroup select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
+  outline: none;
+}
+
+/* ✅ Slider group */
+.sliderGroup {
+  margin: 1em 0;
+  text-align: left;
+}
+
+.sliderGroup label {
+  font-weight: 600;
+  font-size: 0.95em;
+  color: #222;
+  display: block;
+  margin-bottom: 0.5em;
+}
+
+/* ✅ Base Slider Track */
+.sliderGroup input[type="range"] {
+  width: 100%;
+  appearance: none;
+  height: 10px;
+  border-radius: 5px;
+  background: #ddd;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+/* ✅ Blue Protein Slider */
+.proteinSlider {
+  background: linear-gradient(90deg, #007bff, #3399ff);
+}
+
+.proteinSlider::-webkit-slider-thumb {
+  background: #007bff;
+}
+
+/* ✅ Red Fat Slider */
+.fatSlider {
+  background: linear-gradient(90deg, #e63946, #ff6b6b);
+}
+
+.fatSlider::-webkit-slider-thumb {
+  background: #e63946;
+}
+
+/* ✅ Green Carbs Slider */
+.carbsSlider {
+  background: linear-gradient(90deg, #2ecc71, #58d68d);
+}
+
+.carbsSlider::-webkit-slider-thumb {
+  background: #2ecc71;
+}
+
+/* ✅ Thumb Styling */
+.sliderGroup input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.sliderGroup input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+}
+
+/* ✅ Colored labels for sliders */
+.proteinLabel {
+  color: #007bff;
+}
+
+.fatLabel {
+  color: #e63946;
+}
+
+.carbsLabel {
+  color: #2ecc71;
+}
+
+/* ✅ Results */
+.results {
+  margin-top: 1.5em;
+  padding: 1em;
+  background: #f7f7f7;
+  border-radius: 12px;
+  border: 2px solid #eee;
+  text-align: center;
+  font-weight: 600;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+/* ✅ For positioning close button properly */
+.calculatorCard {
+  position: relative;
+  padding-top: 2em;
+}

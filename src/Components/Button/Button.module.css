@@ -1,0 +1,36 @@
+.button {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+  border: 2px solid transparent;
+}
+
+.filled {
+  background-color: #4166f5; /* brand blue */
+  color: #fff;
+  border-color: #4166f5;
+}
+
+.filled:hover {
+  background-color: #2f4fcc;
+  border-color: #2f4fcc;
+}
+
+.outline {
+  background-color: transparent;
+  color: #4166f5;
+  border-color: #4166f5;
+}
+
+.outline:hover {
+  background-color: #4166f5;
+  color: #fff;
+}
+
+
