@@ -1,36 +1,56 @@
+/* src/Components/Button/Button.module.css */
+
 .button {
-  display: inline-block;
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.2;
+  padding: 0.8rem 1.6rem;
   border-radius: 8px;
   cursor: pointer;
-  text-align: center;
+  transition: all 0.25s ease;
   text-decoration: none;
-  transition: all 0.2s ease-in-out;
-  border: 2px solid transparent;
+  user-select: none;
+  min-height: 48px; /* touch-friendly size */
+  white-space: nowrap;
 }
 
+/* FILLED BUTTON */
 .filled {
-  background-color: #4166f5; /* brand blue */
+  background-color: #4166f5;
   color: #fff;
-  border-color: #4166f5;
+  border: 2px solid #4166f5;
 }
 
 .filled:hover {
-  background-color: #2f4fcc;
-  border-color: #2f4fcc;
+  background-color: #3652c9; /* darker blue */
+  border-color: #3652c9;
+  box-shadow: 0 4px 12px rgba(65, 102, 245, 0.4);
 }
 
+/* OUTLINE BUTTON */
 .outline {
   background-color: transparent;
   color: #4166f5;
-  border-color: #4166f5;
+  border: 2px solid #4166f5;
 }
 
 .outline:hover {
   background-color: #4166f5;
   color: #fff;
+  box-shadow: 0 4px 12px rgba(65, 102, 245, 0.3);
 }
+
+/* DISABLED STATE */
+.button:disabled,
+.button[aria-disabled="true"] {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+  pointer-events: none;
+}
+
 
 

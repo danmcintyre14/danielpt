@@ -11,7 +11,7 @@ export default function MembersPage() {
       {/* Hero */}
       <section className={styles.hero}>
         <h1>
-          Start Your Journey with <span>Fit Foundations</span>
+          Start Your Journey with the <span>FitBlueprint</span>
         </h1>
         <p>
           Build confidence, learn the fundamentals, and create a strong base for long-term fitness success.

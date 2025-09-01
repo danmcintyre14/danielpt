@@ -1,20 +1,38 @@
-import './App.css';
-import Homepage from './Pages/HomePage/Homepage';
-import MembersPage from './Pages/Members/MembersPage';
-import MembersArea from './Pages/MembersArea/MembersArea';
-import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
-import Root from './Root/Root';
+// src/App.jsx
+import "./App.css";
+import Homepage from "./Pages/HomePage/Homepage";
+import MembersPage from "./Pages/Members/MembersPage";
+import MembersArea from "./Pages/MembersArea/MembersArea";
+import Root from "./Root/Root";
+import {
+  Route,
+  RouterProvider,
+  createBrowserRouter,
+  createRoutesFromElements,
+  Navigate,
+} from "react-router-dom";
 
 function App() {
+  const router = createBrowserRouter(
+    createRoutesFromElements(
+      <Route path="/" element={<Root />}>
+        <Route index element={<Homepage />} />
+        <Route path="homePage" element={<Homepage />} />
 
-  const router = createBrowserRouter(createRoutesFromElements(
-    <Route path="/" element={ <Root /> }>
-      <Route path='homePage' element={ <Homepage /> } />
-      <Route path='membersPage' element={ <MembersPage />} />
-      <Route path="/membersArea" element={<MembersArea />} />
-    </Route>
-  ))
+        {/* New branded routes */}
+        <Route path="fitblueprint" element={<MembersPage />} />
+        <Route path="fitblueprint/hub" element={<MembersArea />} />
 
+        {/* Legacy redirects (cover both spellings just in case) */}
+        <Route path="membersPage" element={<Navigate to="/fitblueprint" replace />} />
+        <Route path="membersArea" element={<Navigate to="/fitblueprint/hub" replace />} />
+        <Route path="memberArea" element={<Navigate to="/fitblueprint/hub" replace />} />
+
+        {/* Optional: catch-all */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Route>
+    )
+  );
 
   return (
     <div className="App">
@@ -24,3 +42,4 @@ function App() {
 }
 
 export default App;
+

@@ -1,84 +1,201 @@
+/* ============ MembersPage.module.css ============ */
+
+/* CSS variables (scoped to this page for safety) */
+:root {
+  --mp-bg: #ffffff;
+  --mp-surface: #ffffff;
+  --mp-text: #0f172a;            /* slate-900 */
+  --mp-muted: #475569;           /* slate-600 */
+  --mp-brand: #4166f5;           /* your brand blue */
+  --mp-border: rgba(15, 23, 42, 0.08);
+  --mp-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+
+/* Page wrapper */
 .pageContainer {
-  padding: 2rem;
+  background: var(--mp-bg);
+  color: var(--mp-text);
+  padding: clamp(1.25rem, 2vw, 2rem);
   max-width: 1200px;
   margin: 0 auto;
 }
 
+/* Ensure images inside this page are responsive,
+   and override any accidental global img rules */
+.pageContainer img {
+  max-width: 100%;
+  height: auto;
+  width: auto;
+  display: block;
+}
+
+/* -------- Hero -------- */
 .hero {
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: clamp(2rem, 6vw, 3.5rem);
+  padding: clamp(1.5rem, 5vw, 3rem) clamp(1rem, 3vw, 2rem);
+  border-radius: 16px;
+  background: linear-gradient(
+      180deg,
+      rgba(65, 102, 245, 0.06),
+      rgba(65, 102, 245, 0.02)
+    ),
+    var(--mp-surface);
+  border: 1px solid var(--mp-border);
+  box-shadow: var(--mp-shadow);
 }
 
 .hero h1 {
-  font-size: 2.5rem;
-  font-weight: 700;
+  font-size: clamp(1.9rem, 3.5vw, 2.75rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.5rem;
 }
 
 .hero h1 span {
-  color: #4166f5; /* your main brand blue */
+  color: var(--mp-brand);
 }
 
 .hero p {
-  font-size: 1.2rem;
-  max-width: 700px;
+  font-size: clamp(1rem, 1.3vw, 1.15rem);
+  color: var(--mp-muted);
+  max-width: 720px;
   margin: 0.5rem auto 0;
 }
 
+/* -------- Benefits -------- */
 .benefits {
-  margin: 3rem 0;
+  margin: clamp(2rem, 6vw, 3.5rem) 0;
 }
 
 .benefits h2 {
   text-align: center;
-  margin-bottom: 2rem;
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  margin: 0 0 1.75rem;
+  letter-spacing: -0.01em;
 }
 
 .benefitsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: clamp(1rem, 2.5vw, 2rem);
 }
 
 .benefitCard {
   text-align: center;
-  background: #fff;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  background: var(--mp-surface);
+  padding: clamp(1.25rem, 2.5vw, 2rem);
+  border-radius: 14px;
+  border: 1px solid var(--mp-border);
+  box-shadow: var(--mp-shadow);
+  transition: transform 180ms ease, box-shadow 180ms ease;
 }
 
-.benefitCard p {
-  margin-top: 1rem;
-  font-size: 1rem;
+.benefitCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.benefitCard:focus-within {
+  outline: 2px solid var(--mp-brand);
+  outline-offset: 2px;
 }
 
 .icon {
-  font-size: 2rem;
-  color: #4166f5;
+  font-size: clamp(1.6rem, 2.4vw, 2rem);
+  color: var(--mp-brand);
+  margin-bottom: 0.75rem;
 }
 
+.benefitCard p {
+  margin: 0.25rem 0 0;
+  font-size: 1rem;
+  color: var(--mp-text);
+}
+
+/* -------- Google Reviews & Join Now sections -------- */
+/* If those components render images or cards, they’ll inherit the safe image rule above.
+   You can add wrappers here if you want spacing around them. */
+:global(.googleReviewsWrapper),
+:global(.joinNowWrapper) {
+  margin: clamp(1.5rem, 4vw, 2.5rem) 0;
+}
+
+/* -------- Signup -------- */
 .signup {
-  margin-top: 4rem;
+  margin-top: clamp(2.5rem, 6vw, 4rem);
   display: flex;
   justify-content: center;
 }
 
 .signupBox {
-  background: #fff;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  max-width: 500px;
+  background: var(--mp-surface);
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border-radius: 14px;
+  box-shadow: var(--mp-shadow);
+  border: 1px solid var(--mp-border);
+  max-width: 560px;
   width: 100%;
+  text-align: center;
 }
 
 .signupBox h2 {
-  margin-bottom: 1rem;
+  font-size: clamp(1.3rem, 2.2vw, 1.6rem);
+  margin: 0 0 0.75rem;
 }
 
 .signupBox p {
-  margin-bottom: 1.5rem;
+  margin: 0 0 1.25rem;
+  color: var(--mp-muted);
 }
+
+/* Buttons inside MemberAuth can inherit focus/hover styles */
+.signupBox :is(button, a[role="button"]) {
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.signupBox :is(button, a[role="button"]):focus-visible {
+  outline: 2px solid var(--mp-brand);
+  outline-offset: 3px;
+}
+
+/* -------- Utilities / Accessibility -------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .benefitCard {
+    transition: none;
+  }
+}
+
+/* Small screens tweaks */
+@media (max-width: 640px) {
+  .pageContainer {
+    padding: 1rem;
+  }
+
+  .signupBox {
+    padding: 1.25rem;
+  }
+}
+
+/* Medium+ screens enhancements if needed */
+@media (min-width: 900px) {
+  .hero {
+    padding: 3rem 3rem;
+  }
+}
+
+
+/* ============ End MembersPage.module.css ============ */
+
 
 
 

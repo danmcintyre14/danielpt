@@ -5,7 +5,7 @@ import styles from './Navigation.module.css';
 function Navigation() {
     return (
         <nav className={styles.navbar}>
-            <div className={styles.logo}>
+            <div className={styles.navbarLogo}>
                 <img alt='logoBlack' src={logoBlack} />
             </div>
             <ul className={styles.navLinks}>
@@ -13,7 +13,7 @@ function Navigation() {
                     <NavLink to="/homePage">Home</NavLink>
                 </li>
                 <li>
-                    <NavLink to="/membersPage">Members</NavLink>
+                    <NavLink to="/fitblueprint">FitBlueprint</NavLink>
                 </li>
             </ul>
         </nav>
