@@ -4,7 +4,6 @@ import { onAuthStateChanged, signOut, reload } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../../firebase";
 import Button from "../../Components/Button/Button";
-
 import NutritionCalculator from "../../Components/NutritionCalculator/NutritionCalculator";
 import EnergyExpenditureCalculator from "../../Components/EnergyExpenditureCalculator/EnergyExpenditureCalculator";
 import VideoLibrary from "../../Components/VideoLibrary/VideoLibrary";

@@ -1,4 +1,4 @@
-import caloriesImage from '../assets/Images/trackCalories.jpg';
+import caloriesImage from '../assets/images/trackCalories.jpg';
 
 export const videoData = [
     {
