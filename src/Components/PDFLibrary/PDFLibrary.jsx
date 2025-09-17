@@ -1,8 +1,8 @@
 import PDFSection from '../PDFSection/PDFSection';
 import styles from './PDFLibrary.module.css';
 import macroThumb from '../../assets/images/macronutrient-thumb.png';
-import myFitnessPalThumb from '../../assets/Thumbnails/trackingGuide-thumb.png';
-import flexibleDietingThumb from '../../assets/Thumbnails/flexibleDieting-thumb.png';
+import myFitnessPalThumb from '../../assets/thumbnails/trackingGuide-thumb.png';
+import flexibleDietingThumb from '../../assets/thumbnails/flexibleDieting-thumb.png';
 
 export default function PDFLibrary() {
   const pdfs = [

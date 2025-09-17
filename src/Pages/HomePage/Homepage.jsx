@@ -4,7 +4,7 @@ import GoogleReviews from "../../Components/GoogleReview/GoogleReviews";
 import JoinNow from "../../Components/JoinNowSection/JoinNowSection";
 import StepCalculator from "../../Components/StepCalculator/StepCalculator";
 import WhatsAppContact from "../../Components/WhatsAppContact/WhatsAppContact";
-import heroImage from "../../assets/Images/smallBanner.png";
+import heroImage from "../../assets/images/smallBanner.png";
 import { FaDumbbell, FaAppleAlt, FaHeartbeat } from "react-icons/fa";
 import WhatsAppIcon from "../../Components/WhatsAppContact/WhatsAppIcon";
 

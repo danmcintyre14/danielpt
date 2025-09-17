@@ -1,8 +1,8 @@
 import PDFSection from '../PDFSection/PDFSection';
 import styles from './RecipeLibrary.module.css';
-import highProteinLowCarbDinner from '../../assets/Thumbnails/HighProteinLowCarbDinner-thumb.png';
-import highProteinSnacks from '../../assets/Thumbnails/HighProteinSnacks-thumb.png';
-import fakeAwayDinners from '../../assets/Thumbnails/fakeAwayDinners-thumb.png';
+import highProteinLowCarbDinner from '../../assets/thumbnails/HighProteinLowCarbDinner-thumb.png';
+import highProteinSnacks from '../../assets/thumbnails/HighProteinSnacks-thumb.png';
+import fakeAwayDinners from '../../assets/thumbnails/fakeAwayDinners-thumb.png';
 
 
 
