@@ -2,6 +2,8 @@
 import MemberAuth from "../../Components/MemberAuth/MemberAuth";
 import GoogleReviews from "../../Components/GoogleReview/GoogleReviews";
 import JoinNow from "../../Components/JoinNowSection/JoinNowSection";
+import WhatsAppContact from "../../Components/WhatsAppContact/WhatsAppContact";
+import WhatsAppIcon from "../../Components/WhatsAppContact/WhatsAppIcon";
 import styles from "./MembersPage.module.css";
 import { FiVideo, FiBarChart2, FiCalendar, FiBookOpen } from "react-icons/fi";
 
@@ -42,7 +44,13 @@ export default function MembersPage() {
       </section>
 
       <GoogleReviews />
-      <JoinNow />
+      <WhatsAppContact
+              phone="9715XXXXXXXX"
+              message="Hey Dan! I’d like to learn more about coaching."
+              headline="Need quick help?"
+              subhead="Message me on WhatsApp and I’ll reply as soon as possible."
+              buttonText="Chat on WhatsApp"
+      />
 
       {/* Auth */}
       <section id="signup" className={styles.signup}>

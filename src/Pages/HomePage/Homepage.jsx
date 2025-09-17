@@ -6,6 +6,7 @@ import StepCalculator from "../../Components/StepCalculator/StepCalculator";
 import WhatsAppContact from "../../Components/WhatsAppContact/WhatsAppContact";
 import heroImage from "../../assets/Images/smallBanner.png";
 import { FaDumbbell, FaAppleAlt, FaHeartbeat } from "react-icons/fa";
+import WhatsAppIcon from "../../Components/WhatsAppContact/WhatsAppIcon";
 
 export default function Homepage() {
   return (
@@ -13,13 +14,22 @@ export default function Homepage() {
       {/* ===== HERO ===== */}
       <section className={styles.hero}>
         <div className={styles.heroContent}>
-          <h1>Redefine Life. Transform Into a Fitter, Stronger, Healthier You!</h1>
+          <h1>Redefine Your Life. Transform Into a Fitter, Stronger, Healthier You!</h1>
           <p>
             Step-by-step personal training to help you take control of your health,
              build strength, and create lasting change - without feeling lost.
           </p>
           <div className={styles.heroBtns}>
-            <Button mode="filled">Book a Consultation</Button>
+            <Button
+               href="https://wa.me/9715XXXXXXXX?text=Hi%20Dan!%20I%27d%20like%20to%20learn%20more%20about%20coaching."
+               mode="whatsapp"
+              onClick={() =>
+              console.log("User clicked WhatsApp from hero section")
+              }
+               >
+        <WhatsAppIcon className={styles.inlineIcon} />
+        Chat on WhatsApp
+      </Button>
             <Button mode="outline" to="/fitblueprint">
               Join The FitBlueprint – Free Access
             </Button>
@@ -65,12 +75,12 @@ export default function Homepage() {
 
       {/* ===== STEP CALCULATOR ===== */}
       <section className={styles.section}>
+        <div className={styles.sectionHeader}>
+          <h2>Start By Calculating Your Calorie Needs!</h2>
+          <p>Takes less than 60 seconds. Just click the calculator to start.</p>
+        </div>
         <div className={styles.twoCol}>
           <div className={styles.card}>
-            <h2 className="sr-only">Calculate Your Calories</h2>
-            <p className={styles.mb3}>
-              Not sure where to start? Use the quick calculator below to estimate your daily calories. Takes less than 60 seconds.
-            </p>
             <div className={styles.calculatorWrap}>
               <StepCalculator />
             </div>
@@ -100,7 +110,6 @@ export default function Homepage() {
         subhead="Message me on WhatsApp and I’ll reply as soon as possible."
         buttonText="Chat on WhatsApp"
       />
-       <JoinNow />
         </div>
       </section>
     </div>

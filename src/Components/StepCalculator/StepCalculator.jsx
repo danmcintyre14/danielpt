@@ -246,7 +246,8 @@ export default function StepCalculator({ isLoggedIn, onLogin, onCalorieCalculate
               {!isLoggedIn ? (
                 <div className={styles.optInBox}>
                   <p>
-                    Get macros, starter plan, and guides inside <strong>FitBlueprint</strong>.
+                    Join the <strong>FitBlueprint</strong> and kickstart your fitness journey.
+                    Access exercise tutorials, nutrition guidance, starter plans, and more.
                   </p>
                    <div className={styles.optInInner}>
                     <MemberAuth onLogin={onLogin} />

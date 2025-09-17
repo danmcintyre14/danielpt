@@ -77,3 +77,17 @@
   box-shadow: none;
   pointer-events: none;
 }
+
+/* WhatsApp button */
+.whatsapp {
+  background-color: #25d366;
+  color: #fff;
+  border: 2px solid #25d366;
+}
+
+.whatsapp:hover {
+  background-color: #1ebe5c; /* darker green */
+  border-color: #1ebe5c;
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+}
+
