@@ -1,0 +1,64 @@
+/* WhatsAppContact.module.css */
+
+.section {
+  width: 100%;
+  margin: 0; /* consistent vertical spacing */
+}
+
+.card {
+  width: min(1100px, 92%);   /* match JoinNowSection */
+  margin: 10px auto;
+  padding: clamp(2rem, 5vw, 3rem) 1rem;
+  border-radius: 20px;       /* same as var(--radius-lg) in homepage */
+  background: #25d366;       /* WhatsApp green */
+  text-align: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  box-sizing: border-box;
+}
+
+.title {
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  font-weight: 700;
+  color: #fff; /* white like JoinNow */
+  margin-bottom: 0.5rem;
+}
+
+.subhead {
+  font-size: 1rem;
+  color: #e8f9f0; /* softer white-green */
+  margin-bottom: 1.5rem;
+  max-width: 60ch;
+  margin-inline: auto;
+}
+
+/* Button styled like JoinNow (inverted) */
+.whatsappButton {
+  background-color: #fff !important;
+  border-color: #fff !important;
+  color: #25d366 !important; /* WhatsApp green text + icon */
+  border-radius: 8px !important; /* match JoinNow button */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding-inline: 1.25rem;
+  height: 48px;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.whatsappButton:hover {
+  background-color: #f5f5f5 !important;
+  border-color: #f5f5f5 !important;
+}
+
+/* WhatsApp icon inside button */
+.inlineIcon {
+  width: 18px;
+  height: 18px;
+  margin-right: 0.5rem;
+  flex-shrink: 0;
+  color: #25d366; /* green icon */
+}
+
+

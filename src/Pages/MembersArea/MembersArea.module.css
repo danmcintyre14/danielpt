@@ -1,36 +1,95 @@
-.pageContainer {
-  padding: 2rem;
-  max-width: 1200px;
+/* src/pages/MembersArea/MembersArea.module.css */
+
+.container {
+  --brand: #4166f5;
+  --brand-dark: #3652c9;
+  --ink: #222;
+  --muted: #666;
+  --bg: #f9f9f9;
+  --surface: #ffffff;
+  --radius: 16px;
+  --container: 1100px; /* shared site-wide max width */
+
+  padding: clamp(1.25rem, 2vw, 2rem) 1rem 3rem;
+  width: 100%;
+  max-width: var(--container);
   margin: 0 auto;
 }
 
-.header {
+/* ===== Top bar ===== */
+.topbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
 }
 
-.heading {
-  font-size: 1.8rem;
-  font-weight: 700;
+.greeting h1 {
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-weight: 800;
+  color: var(--ink);
+  line-height: 1.2;
 }
 
+.greeting p {
+  color: var(--muted);
+  margin-top: 0.25rem;
+  font-size: 1.05rem;
+}
+
+/* ===== Calculators grid ===== */
 .calculatorsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 2rem;
   margin-bottom: 3rem;
 }
 
+/* ===== Section wrappers ===== */
 .section {
-  margin-bottom: 3rem;
+  width: min(100%, var(--container));
+  margin: 0 auto 2.5rem;
+  background: var(--surface);
+  border-radius: var(--radius);
   padding: 2rem;
-  background-color: #fff;
-  border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
 .section h2 {
+  font-size: clamp(1.3rem, 2.5vw, 1.6rem);
+  font-weight: 700;
   margin-bottom: 1rem;
+  color: var(--ink);
 }
+
+/* ===== Mobile optimizations (MembersArea only) ===== */
+@media (max-width: 768px) {
+  .container { padding: 1rem 0.75rem 2rem; }
+
+  /* Stack greeting + logout, make logout easy to tap */
+  .topbar { flex-direction: column; align-items: stretch; gap: 0.75rem; }
+  .topbar :global(button) { width: 100%; min-height: 44px; }
+
+  /* Stack calculators */
+  .calculatorsGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Lighter cards on mobile */
+  .section { padding: 1rem; border-radius: 14px; margin-bottom: 1.25rem; }
+}
+
+/* Tighten typography on very small phones (iPhone Mini widths) */
+@media (max-width: 390px) {
+  .greeting h1 { font-size: 1.4rem; }
+  .greeting p  { font-size: 0.95rem; }
+}
+
+/* Helpful defaults just for this page */
+:where(img, video, canvas, svg) { max-width: 100%; height: auto; display: block; }
+
+

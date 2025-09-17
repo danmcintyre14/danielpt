@@ -14,7 +14,8 @@ export default function Button({
   rel,
   className = "",
 }) {
-  const classNames = `${styles.button} ${mode === "outline" ? styles.outline : styles.filled} ${className}`;
+  const variantClass = styles[mode] || styles.filled;
+  const classNames = `${styles.button} ${variantClass} ${className}`;
 
   if (to) {
     // SPA navigation (React Router)

@@ -64,10 +64,19 @@ export default function MembersArea() {
         <NutritionCalculator />
         <EnergyExpenditureCalculator />
       </div>
+      
+      <section className={styles.section}>
+        <VideoLibrary />
+      </section>
 
-      <VideoLibrary />
-      <PDFLibrary />
-      <RecipeLibrary />
+      <section className={styles.section}>
+        <PDFLibrary />
+      </section>
+
+      <section className={styles.section}>
+        <RecipeLibrary />
+      </section>
+      
     </div>
   );
 }

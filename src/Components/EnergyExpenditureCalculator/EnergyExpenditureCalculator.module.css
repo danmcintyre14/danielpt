@@ -1,18 +1,17 @@
+/* EnergyExpenditureCalculator.module.css */
+
+/* Wrapper */
 .container {
-  background: #fff;
-  border-radius: 12px;
-  padding: 1em;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  text-align: center;
+  max-width: 720px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 1rem;
+  box-sizing: border-box;
+  /* Safety: if a child misbehaves, don't let it stretch the page */
+  overflow-x: hidden;
 }
 
-.title {
-  color: #ff5722; /* Orange theme */
-  font-weight: 700;
-  margin-bottom: 1em;
-}
-
-/* ✅ Bold, gradient open button (Orange theme) */
+/* Open button */
 .openBtn {
   display: flex;
   flex-direction: column;
@@ -23,7 +22,7 @@
   font-size: 1.2em;
   font-weight: 600;
   color: #fff;
-  background: linear-gradient(135deg, #ff5722, #ff784e);
+  background: linear-gradient(135deg, #ff4d4d, #ff7a00);
   border: none;
   border-radius: 16px;
   cursor: pointer;
@@ -32,139 +31,141 @@
 }
 
 .openBtn:hover {
-  background: linear-gradient(135deg, #e64a19, #ff5722);
+  background: linear-gradient(135deg, #ff5c5c, #ff8c1a);
   transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+}
+
+.openBtn:active {
+  background: linear-gradient(135deg, #e64545, #e67300);
+  transform: translateY(0);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}
+
+.openBtn:focus-visible {
+  outline: 3px solid #80d4ff;
+  outline-offset: 3px;
 }
 
 .icon {
-  font-size: 2.2em;
-  margin-bottom: 0.3em;
+  font-size: 1.25rem;
+  margin-bottom: 0.35rem;
+  color: inherit; /* stays white */
 }
 
-/* ✅ Apple-like close button */
+/* Card */
+.calculatorCard {
+  position: relative;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.06);
+  padding: 1rem;
+}
+
 .closeBtn {
   position: absolute;
-  top: 12px;
-  right: 12px;
-  background: rgba(240, 240, 240, 0.9);
-  border: none;
-  border-radius: 50%;
-  width: 34px;
-  height: 34px;
-  font-size: 1.2em;
-  font-weight: bold;
-  color: #333;
+  right: .6rem;
+  top: .6rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: #f8fafc;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-  transition: all 0.2s ease;
 }
 
-.closeBtn:hover {
-  background: rgba(220, 220, 220, 1);
-  transform: scale(1.08);
+.title {
+  font-size: clamp(1.15rem, 2.5vw, 1.5rem);
+  font-weight: 800;
+  margin: .25rem 2rem 1rem .25rem; /* leave space near closeBtn */
 }
 
-/* ✅ Responsive form rows */
+/* Rows: grid that collapses on mobile */
 .formRow {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1em;
-  margin-bottom: 1em;
+  display: grid;
+  grid-template-columns: 1fr; /* mobile: single column */
+  gap: 0.9rem;
+  margin-bottom: 0.9rem;
+}
+
+/* On wider screens, 2 columns that can shrink without overflow */
+@media (min-width: 640px) {
+  .formRow {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
 }
 
 .formGroup {
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 200px;
+  display: grid;
+  gap: .35rem;
+  min-width: 0; /* critical to allow children to shrink in grid */
 }
 
+/* Labels */
 .formGroup label {
-  font-size: 0.95em;
+  font-size: .95rem;
   font-weight: 600;
-  color: #222;
-  margin-bottom: 0.4em;
+  color: #334155;
 }
 
-/* ✅ Bold input & select style with Orange accent */
-.formGroup input,
-.formGroup select {
-  padding: 0.7em;
-  border: 2px solid #ddd;
-  border-radius: 10px;
-  font-size: 1em;
-  background: linear-gradient(#fff, #f9f9f9);
-  font-weight: 500;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-}
-
-.formGroup input:focus,
-.formGroup select:focus {
-  border-color: #ff5722;
-  box-shadow: 0 0 8px rgba(255, 87, 34, 0.3);
-  outline: none;
-}
-
-/* ✅ Slider group (if you add duration sliders later) */
-.sliderGroup {
-  margin: 1em 0;
-  text-align: left;
-}
-
-.sliderGroup label {
-  font-weight: 600;
-  font-size: 0.95em;
-  color: #222;
-  display: block;
-  margin-bottom: 0.5em;
-}
-
-.sliderGroup input[type="range"] {
+/* Controls (iOS anti-zoom + no overflow) */
+.formGroup select,
+.formGroup input {
   width: 100%;
-  appearance: none;
-  height: 10px;
-  border-radius: 5px;
-  background: #ddd;
-  cursor: pointer;
-  transition: background 0.2s ease;
+  max-width: 100%;
+  min-width: 0;               /* prevents stretching the grid */
+  font-size: 16px;            /* ✅ prevents iOS auto-zoom */
+  line-height: 1.4;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #fff;
+  box-sizing: border-box;
 }
 
-.sliderGroup input[type="range"]::-webkit-slider-thumb {
-  appearance: none;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: #ff5722;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-  cursor: pointer;
-  transition: transform 0.2s ease, background 0.2s ease;
+/* Make long activity names safe */
+.formGroup select {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
-.sliderGroup input[type="range"]::-webkit-slider-thumb:hover {
-  transform: scale(1.1);
-  background: #e64a19;
+/* Focus states */
+.formGroup :is(select, input):focus-visible,
+.openBtn:focus-visible,
+.closeBtn:focus-visible {
+  outline: 2px solid #4166f5;
+  outline-offset: 2px;
 }
 
-/* ✅ Results box */
+/* Results */
 .results {
-  margin-top: 1.5em;
-  padding: 1em;
-  background: #f7f7f7;
+  margin-top: 0.75rem;
+  padding: 1rem;
+  border: 1px solid #e5e7eb;
   border-radius: 12px;
-  border: 2px solid #eee;
-  text-align: center;
-  font-weight: 600;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  background: #f8fafc;
+  overflow-wrap: anywhere;     /* long numbers won't force width */
+  word-break: break-word;
 }
 
-/* ✅ For positioning close button properly */
-.calculatorCard {
-  position: relative;
-  padding-top: 2em;
+.results h3 {
+  margin: 0 0 .25rem 0;
+  font-size: 1.05rem;
 }
+
+.results p {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+/* Reduce motion if user prefers */
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
+
 
 
 

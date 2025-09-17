@@ -1,201 +1,223 @@
+/* NutritionCalculator.module.css */
+
+/* Wrapper (prevents horizontal stretch on mobile) */
 .container {
-  background: #fff;
-  border-radius: 12px;
-  padding: 1em;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  text-align: center;
+  max-width: 720px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 1rem;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
-/* ✅ Bold, gradient open button */
+/* Big gradient "card" button – same blue as Energy calc */
 .openBtn {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
   width: 100%;
   height: 160px;
+
   font-size: 1.2em;
   font-weight: 600;
   color: #fff;
+
   background: linear-gradient(135deg, #007bff, #00a2ff);
   border: none;
   border-radius: 16px;
   cursor: pointer;
   box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-  transition: background 0.2s ease, transform 0.2s ease;
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.openBtn:hover {
-  background: linear-gradient(135deg, #0056b3, #007bff);
-  transform: translateY(-2px);
-}
-
+/* Icon inside the button */
 .icon {
-  font-size: 2.2em;
-  margin-bottom: 0.3em;
+  font-size: 1.4em;
+  margin-bottom: 0.35rem;
+  color: inherit; /* stays white */
 }
 
-/* ✅ Apple-like close button */
+/* Hover / Active / Focus states */
+.openBtn:hover {
+  background: linear-gradient(135deg, #0a86ff, #18adff);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+}
+.openBtn:active {
+  background: linear-gradient(135deg, #006fe0, #0093e6);
+  transform: translateY(0);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+.openBtn:focus-visible {
+  outline: 3px solid #80d4ff;
+  outline-offset: 3px;
+}
+
+/* Calculator card */
+.calculatorCard {
+  position: relative;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+  padding: 1rem;
+}
+
+/* Close button (neutral) */
 .closeBtn {
   position: absolute;
-  top: 12px;
-  right: 12px;
-  background: rgba(240, 240, 240, 0.9);
-  border: none;
-  border-radius: 50%;
-  width: 34px;
-  height: 34px;
-  font-size: 1.2em;
-  font-weight: bold;
-  color: #333;
+  right: .6rem;
+  top: .6rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: #f8fafc;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-  transition: all 0.2s ease;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+.closeBtn:hover { background: #eef2f7; }
+.closeBtn:focus-visible { outline: 2px solid #4166f5; outline-offset: 2px; }
+
+/* Title */
+.title {
+  font-size: clamp(1.15rem, 2.5vw, 1.5rem);
+  font-weight: 800;
+  margin: .25rem 2rem 1rem .25rem; /* space for closeBtn */
 }
 
-.closeBtn:hover {
-  background: rgba(220, 220, 220, 1);
-  transform: scale(1.08);
-}
-
-/* ✅ Responsive rows */
+/* Responsive rows (match Energy calc) */
 .formRow {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1em;
-  margin-bottom: 1em;
+  display: grid;
+  grid-template-columns: 1fr; /* mobile: single column */
+  gap: 0.9rem;
+  margin-bottom: 0.9rem;
+}
+@media (min-width: 640px) {
+  .formRow {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
 }
 
 .formGroup {
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 200px;
+  display: grid;
+  gap: .35rem;
+  min-width: 0; /* prevent overflow in grid */
 }
 
+/* Labels */
 .formGroup label {
-  font-size: 0.95em;
+  font-size: .95rem;
   font-weight: 600;
-  color: #222;
-  margin-bottom: 0.4em;
+  color: #334155;
 }
 
-/* ✅ Bold input & select style matching buttons */
-.formGroup input,
-.formGroup select {
-  padding: 0.7em;
-  border: 2px solid #ddd;
+/* Inputs / selects – iOS anti-zoom (16px) + safe widths */
+.formGroup select,
+.formGroup input {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  font-size: 16px; /* ✅ prevents iOS auto-zoom */
+  line-height: 1.4;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid #e5e7eb;
   border-radius: 10px;
-  font-size: 1em;
-  background: linear-gradient(#fff, #f9f9f9);
-  font-weight: 500;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  background: #fff;
+  box-sizing: border-box;
+}
+.formGroup :is(select, input):focus-visible {
+  outline: 2px solid #4166f5;
+  outline-offset: 2px;
 }
 
-.formGroup input:focus,
-.formGroup select:focus {
-  border-color: #007bff;
-  box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
+/* Slider groups */
+.sliderGroup {
+  display: grid;
+  gap: .4rem;
+  margin: 0.75rem 0;
+}
+.proteinLabel,
+.fatLabel {
+  font-size: .95rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+/* Custom slider styles — blue track, round thumb */
+.proteinSlider,
+.fatSlider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  background: #e6f0ff; /* light blue bg */
   outline: none;
 }
 
-/* ✅ Slider group */
-.sliderGroup {
-  margin: 1em 0;
-  text-align: left;
-}
-
-.sliderGroup label {
-  font-weight: 600;
-  font-size: 0.95em;
-  color: #222;
-  display: block;
-  margin-bottom: 0.5em;
-}
-
-/* ✅ Base Slider Track */
-.sliderGroup input[type="range"] {
-  width: 100%;
-  appearance: none;
-  height: 10px;
-  border-radius: 5px;
-  background: #ddd;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-/* ✅ Blue Protein Slider */
-.proteinSlider {
-  background: linear-gradient(90deg, #007bff, #3399ff);
-}
-
-.proteinSlider::-webkit-slider-thumb {
-  background: #007bff;
-}
-
-/* ✅ Red Fat Slider */
-.fatSlider {
-  background: linear-gradient(90deg, #e63946, #ff6b6b);
-}
-
+/* WebKit thumb */
+.proteinSlider::-webkit-slider-thumb,
 .fatSlider::-webkit-slider-thumb {
-  background: #e63946;
-}
-
-/* ✅ Green Carbs Slider */
-.carbsSlider {
-  background: linear-gradient(90deg, #2ecc71, #58d68d);
-}
-
-.carbsSlider::-webkit-slider-thumb {
-  background: #2ecc71;
-}
-
-/* ✅ Thumb Styling */
-.sliderGroup input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
   appearance: none;
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  background: #007bff;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,.2);
   cursor: pointer;
-  transition: transform 0.2s ease, background 0.2s ease;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+.proteinSlider::-webkit-slider-thumb:hover,
+.fatSlider::-webkit-slider-thumb:hover {
+  transform: scale(1.06);
+  background: #0a86ff;
 }
 
-.sliderGroup input[type="range"]::-webkit-slider-thumb:hover {
-  transform: scale(1.1);
+/* Firefox track & thumb */
+.proteinSlider::-moz-range-track,
+.fatSlider::-moz-range-track {
+  height: 8px;
+  border-radius: 999px;
+  background: #e6f0ff;
+}
+.proteinSlider::-moz-range-thumb,
+.fatSlider::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: #007bff;
+  box-shadow: 0 2px 8px rgba(0,0,0,.2);
+  cursor: pointer;
 }
 
-/* ✅ Colored labels for sliders */
-.proteinLabel {
-  color: #007bff;
-}
-
-.fatLabel {
-  color: #e63946;
-}
-
-.carbsLabel {
-  color: #2ecc71;
-}
-
-/* ✅ Results */
+/* Results */
 .results {
-  margin-top: 1.5em;
-  padding: 1em;
-  background: #f7f7f7;
+  margin-top: 0.75rem;
+  padding: 1rem;
+  border: 1px solid #e5e7eb;
   border-radius: 12px;
-  border: 2px solid #eee;
-  text-align: center;
-  font-weight: 600;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  background: #f8fafc;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.results h3 {
+  margin: 0 0 .25rem 0;
+  font-size: 1.05rem;
+}
+.results p {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
 }
 
-/* ✅ For positioning close button properly */
-.calculatorCard {
-  position: relative;
-  padding-top: 2em;
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
 }
+

@@ -3,6 +3,7 @@ import Button from "../../Components/Button/Button";
 import GoogleReviews from "../../Components/GoogleReview/GoogleReviews";
 import JoinNow from "../../Components/JoinNowSection/JoinNowSection";
 import StepCalculator from "../../Components/StepCalculator/StepCalculator";
+import WhatsAppContact from "../../Components/WhatsAppContact/WhatsAppContact";
 import heroImage from "../../assets/Images/smallBanner.png";
 import { FaDumbbell, FaAppleAlt, FaHeartbeat } from "react-icons/fa";
 
@@ -12,15 +13,15 @@ export default function Homepage() {
       {/* ===== HERO ===== */}
       <section className={styles.hero}>
         <div className={styles.heroContent}>
-          <h1>Defy Age. Redefine Life. Transform Into a Fitter, Stronger, Healthier You!</h1>
+          <h1>Redefine Life. Transform Into a Fitter, Stronger, Healthier You!</h1>
           <p>
-            Expert coaching designed for those who want to regain mobility, rebuild strength,
-            and rediscover peak fitness.
+            Step-by-step personal training to help you take control of your health,
+             build strength, and create lasting change - without feeling lost.
           </p>
           <div className={styles.heroBtns}>
             <Button mode="filled">Book a Consultation</Button>
             <Button mode="outline" to="/fitblueprint">
-              Join Fit Foundations – Free Access
+              Join The FitBlueprint – Free Access
             </Button>
           </div>
         </div>
@@ -37,7 +38,7 @@ export default function Homepage() {
       {/* ===== QUICK VALUE PROPS / FEATURES ===== */}
       <section className={styles.section}>
         <div className={styles.sectionHeader}>
-          <h2>What You’ll Get</h2>
+          <h2>How I'll Help You Succeed</h2>
           <p>Simple, effective coaching tools to help you build momentum fast.</p>
         </div>
 
@@ -45,19 +46,19 @@ export default function Homepage() {
           <div className={`${styles.card} ${styles.feature}`}>
             <div className={styles.featureIcon}><FaDumbbell size={20} /></div>
             <h3>Smart Training</h3>
-            <p>Progressive workouts tailored to your ability and equipment.</p>
+            <p>Workouts designed for your body, goals, and lifestyle—so you always know exactly what to do.</p>
           </div>
 
           <div className={`${styles.card} ${styles.feature}`}>
             <div className={styles.featureIcon}><FaAppleAlt size={20} /></div>
             <h3>Nutrition Made Easy</h3>
-            <p>Calorie & macro targets with flexible, real‑world food guidance.</p>
+            <p>Simple nutrition guidance with flexible meal options—no fad diets, just real food that fits your life.</p>
           </div>
 
           <div className={`${styles.card} ${styles.feature}`}>
             <div className={styles.featureIcon}><FaHeartbeat size={20} /></div>
             <h3>Accountability</h3>
-            <p>Check‑ins, tracking, and nudges to keep you consistent.</p>
+            <p>Stay consistent with check-ins, progress tracking, and the accountability you need to keep moving forward.</p>
           </div>
         </div>
       </section>
@@ -68,24 +69,13 @@ export default function Homepage() {
           <div className={styles.card}>
             <h2 className="sr-only">Calculate Your Calories</h2>
             <p className={styles.mb3}>
-              Not sure where to start? Use the quick calculator below to estimate your daily calories.
+              Not sure where to start? Use the quick calculator below to estimate your daily calories. Takes less than 60 seconds.
             </p>
             <div className={styles.calculatorWrap}>
               <StepCalculator />
             </div>
           </div>
 
-          <div className={styles.card}>
-            <h3 className={styles.mt2}>Why this works</h3>
-            <p className={styles.mt2}>
-              Simple inputs, smart outputs. Get a realistic target you can actually stick to,
-              then adjust based on weekly progress.
-            </p>
-            <div className={`${styles.mt3} ${styles.heroBtns}`}>
-              <Button mode="filled">Start Coaching</Button>
-              <Button mode="outline" to="/membersPage">Access Members Area</Button>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -100,25 +90,17 @@ export default function Homepage() {
         </div>
       </section>
 
-      {/* ===== CTA BAND ===== */}
-      <section className={styles.section}>
-        <div className={styles.ctaBand}>
-          <h3 className={styles.ctaTitle}>Ready to build momentum?</h3>
-          <p className={styles.ctaText}>
-            Get instant access to the Members Area with starter resources, then book a consult if you
-            want a personalised plan.
-          </p>
-          <div className={styles.ctaActions}>
-            <Button mode="filled">Book a Consultation</Button>
-            <Button mode="outline" to="/membersPage">Join Fit Foundations – Free</Button>
-          </div>
-        </div>
-      </section>
-
-      {/* ===== Secondary CTA (your existing JoinNow section) ===== */}
+      {/* ===== CTA (WhatsappContact) ===== */}
       <section className={styles.section}>
         <div className={styles.container}>
-          <JoinNow />
+            <WhatsAppContact
+        phone="9715XXXXXXXX"
+        message="Hey Dan! I’d like to learn more about coaching."
+        headline="Need quick help?"
+        subhead="Message me on WhatsApp and I’ll reply as soon as possible."
+        buttonText="Chat on WhatsApp"
+      />
+       <JoinNow />
         </div>
       </section>
     </div>

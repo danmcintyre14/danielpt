@@ -1,201 +1,134 @@
-/* ============ MembersPage.module.css ============ */
+/* src/pages/MembersPage/MembersPage.module.css */
 
-/* CSS variables (scoped to this page for safety) */
-:root {
-  --mp-bg: #ffffff;
-  --mp-surface: #ffffff;
-  --mp-text: #0f172a;            /* slate-900 */
-  --mp-muted: #475569;           /* slate-600 */
-  --mp-brand: #4166f5;           /* your brand blue */
-  --mp-border: rgba(15, 23, 42, 0.08);
-  --mp-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-}
-
-
-/* Page wrapper */
 .pageContainer {
-  background: var(--mp-bg);
-  color: var(--mp-text);
-  padding: clamp(1.25rem, 2vw, 2rem);
+  /* tokens (mirror your homepage) */
+  --brand: #4166f5;
+  --brand-dark: #3652c9;
+  --ink: #222;
+  --muted: #666;
+  --bg: #f9f9f9;
+  --surface: #ffffff;
+  --radius: 16px;
+  --radius-lg: 24px;
+
+  padding: clamp(1.25rem, 2vw, 2rem) 1rem 3rem;
   max-width: 1200px;
   margin: 0 auto;
 }
 
-/* Ensure images inside this page are responsive,
-   and override any accidental global img rules */
-.pageContainer img {
-  max-width: 100%;
-  height: auto;
-  width: auto;
-  display: block;
-}
-
-/* -------- Hero -------- */
+/* ===== Hero ===== */
 .hero {
   text-align: center;
-  margin-bottom: clamp(2rem, 6vw, 3.5rem);
-  padding: clamp(1.5rem, 5vw, 3rem) clamp(1rem, 3vw, 2rem);
-  border-radius: 16px;
-  background: linear-gradient(
-      180deg,
-      rgba(65, 102, 245, 0.06),
-      rgba(65, 102, 245, 0.02)
-    ),
-    var(--mp-surface);
-  border: 1px solid var(--mp-border);
-  box-shadow: var(--mp-shadow);
+  margin: 0 auto 2.5rem;
+  max-width: 900px;
 }
 
 .hero h1 {
-  font-size: clamp(1.9rem, 3.5vw, 2.75rem);
+  font-size: clamp(2rem, 4.8vw, 2.8rem);
+  line-height: 1.1;
   font-weight: 800;
-  line-height: 1.15;
+  color: var(--ink);
   letter-spacing: -0.01em;
-  margin: 0 0 0.5rem;
 }
 
 .hero h1 span {
-  color: var(--mp-brand);
+  color: var(--brand);
 }
 
 .hero p {
-  font-size: clamp(1rem, 1.3vw, 1.15rem);
-  color: var(--mp-muted);
-  max-width: 720px;
-  margin: 0.5rem auto 0;
+  margin-top: 0.75rem;
+  color: var(--muted);
+  font-size: clamp(1rem, 1.4vw, 1.125rem);
 }
 
-/* -------- Benefits -------- */
+/* ===== Benefits ===== */
 .benefits {
-  margin: clamp(2rem, 6vw, 3.5rem) 0;
+  margin: 2.5rem 0;
 }
 
 .benefits h2 {
   text-align: center;
-  font-size: clamp(1.5rem, 2.5vw, 2rem);
-  margin: 0 0 1.75rem;
-  letter-spacing: -0.01em;
+  font-size: clamp(1.4rem, 2.6vw, 1.75rem);
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: var(--ink);
 }
 
 .benefitsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: clamp(1rem, 2.5vw, 2rem);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: clamp(1rem, 2vw, 1.5rem);
 }
 
 .benefitCard {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 1.25rem;
   text-align: center;
-  background: var(--mp-surface);
-  padding: clamp(1.25rem, 2.5vw, 2rem);
-  border-radius: 14px;
-  border: 1px solid var(--mp-border);
-  box-shadow: var(--mp-shadow);
-  transition: transform 180ms ease, box-shadow 180ms ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  border: 1px solid rgba(0,0,0,0.06);
+  transition: transform 120ms ease, box-shadow 120ms ease;
 }
 
 .benefitCard:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-}
-
-.benefitCard:focus-within {
-  outline: 2px solid var(--mp-brand);
-  outline-offset: 2px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
 }
 
 .icon {
-  font-size: clamp(1.6rem, 2.4vw, 2rem);
-  color: var(--mp-brand);
-  margin-bottom: 0.75rem;
+  width: 36px;
+  height: 36px;
+  margin: 0 auto 0.75rem;
+  color: var(--brand);
 }
 
 .benefitCard p {
-  margin: 0.25rem 0 0;
-  font-size: 1rem;
-  color: var(--mp-text);
+  color: var(--ink);
+  font-weight: 600;
+  line-height: 1.35;
 }
 
-/* -------- Google Reviews & Join Now sections -------- */
-/* If those components render images or cards, they’ll inherit the safe image rule above.
-   You can add wrappers here if you want spacing around them. */
+/* ===== Reviews & CTA spacing helpers (for your components) ===== */
 :global(.googleReviewsWrapper),
 :global(.joinNowWrapper) {
-  margin: clamp(1.5rem, 4vw, 2.5rem) 0;
+  /* if your child components expose wrappers, this will add consistent spacing */
+  margin: 2.5rem 0;
 }
 
-/* -------- Signup -------- */
+/* ===== Signup ===== */
 .signup {
-  margin-top: clamp(2.5rem, 6vw, 4rem);
-  display: flex;
-  justify-content: center;
+  margin-top: 2.5rem;
 }
 
 .signupBox {
-  background: var(--mp-surface);
-  padding: clamp(1.25rem, 3vw, 2rem);
-  border-radius: 14px;
-  box-shadow: var(--mp-shadow);
-  border: 1px solid var(--mp-border);
-  max-width: 560px;
-  width: 100%;
-  text-align: center;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: clamp(1.25rem, 2.5vw, 2rem);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  border: 1px solid rgba(0,0,0,0.06);
+  max-width: 760px;
+  margin: 0 auto;
 }
 
 .signupBox h2 {
-  font-size: clamp(1.3rem, 2.2vw, 1.6rem);
-  margin: 0 0 0.75rem;
+  font-size: clamp(1.25rem, 2.4vw, 1.75rem);
+  font-weight: 800;
+  color: var(--ink);
+  margin-bottom: 0.5rem;
 }
 
 .signupBox p {
-  margin: 0 0 1.25rem;
-  color: var(--mp-muted);
-}
-
-/* Buttons inside MemberAuth can inherit focus/hover styles */
-.signupBox :is(button, a[role="button"]) {
-  border-radius: 10px;
-  font-weight: 600;
-}
-
-.signupBox :is(button, a[role="button"]):focus-visible {
-  outline: 2px solid var(--mp-brand);
-  outline-offset: 3px;
-}
-
-/* -------- Utilities / Accessibility -------- */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .benefitCard {
-    transition: none;
-  }
-}
-
-/* Small screens tweaks */
-@media (max-width: 640px) {
-  .pageContainer {
-    padding: 1rem;
-  }
-
-  .signupBox {
-    padding: 1.25rem;
-  }
-}
-
-/* Medium+ screens enhancements if needed */
-@media (min-width: 900px) {
-  .hero {
-    padding: 3rem 3rem;
-  }
+  color: var(--muted);
+  margin-bottom: 1rem;
 }
 
 
-/* ============ End MembersPage.module.css ============ */
 
+/* ===== Small screens ===== */
+@media (max-width: 420px) {
+  .icon { width: 32px; height: 32px; }
+  .benefitCard { padding: 1rem; }
+}
 
 
 

@@ -34,6 +34,8 @@
   color: var(--ink);
 }
 
+
+
 /* Use this on inner wrappers if needed */
 .container {
   width: min(1200px, 92%);
@@ -53,28 +55,13 @@
               linear-gradient(180deg, rgba(215,212,231,0.25), rgba(255,255,255,0));
 }
 
-/* Optional background image support:
-   Place your hero image in the markup with <img className={styles.heroImage} />
-   or keep this pseudo-element if you're setting it via inline style on .hero
-*/
 .hero::before {
   content: "";
   position: absolute;
   inset: 0;
   z-index: -1;
-  /* If you want an image, uncomment and set the URL inline on .hero */
-  /* background: url('/path/to/hero.jpg') center/cover no-repeat; */
+  /* Optionally set a background image on .hero instead */
   filter: saturate(1) contrast(1);
-}
-
-.hero::after {
-  /* vignette overlay to keep text readable on busy images */
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.05) 40%, rgba(0,0,0,0) 100%);
-  pointer-events: none;
 }
 
 .heroContent {
@@ -160,8 +147,6 @@
 .twoCol {
   width: min(1100px, 92%);
   margin-inline: auto;
-  display: grid;
-  gap: var(--space-4);
 }
 
 @media (min-width: 880px) {
@@ -214,7 +199,7 @@
   line-height: 1.7;
 }
 
-/* ====== SPECIAL SECTIONS (examples you likely have) ====== */
+/* ====== SPECIAL SECTIONS ====== */
 
 /* Reviews wrapper (GoogleReviews) */
 .reviews {
@@ -230,11 +215,11 @@
   margin: 0 auto;
 }
 
-/* JoinNow promo band */
+/* JoinNow promo band (CTA) */
 .ctaBand {
   position: relative;
-  width: min(1100px, 92%);
-  margin: 0 auto;
+  width: min(1100px, 92%);      /* controls max width */
+  margin: clamp(2.5rem, 6vw, 4rem) auto; /* spacing added to match sections */
   border-radius: var(--radius-lg);
   padding: var(--space-5);
   background:
@@ -242,31 +227,34 @@
     linear-gradient(180deg, rgba(215,212,231,0.45), rgba(255,255,255,0.7));
   border: 1px solid rgba(65,102,245,0.25);
   overflow: clip;
+  text-align: center;
 }
 
 .ctaTitle {
   font-size: clamp(1.25rem, 2.5vw, 1.75rem);
   margin-bottom: 0.25rem;
+  color: #fff;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.25);
 }
 
 .ctaText {
-  color: var(--muted);
+  color: #e8ecff; /* softer on blue gradient */
   margin-bottom: var(--space-3);
   max-width: 60ch;
+  margin-inline: auto;
 }
 
 /* Buttons container inside CTA (layout only) */
 .ctaActions {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: var(--space-2);
 }
 
 /* ====== UTILITIES ====== */
 
-.center {
-  text-align: center;
-}
+.center { text-align: center; }
 
 .mt2 { margin-top: var(--space-2); }
 .mt3 { margin-top: var(--space-3); }
@@ -309,3 +297,4 @@
     padding-block: var(--space-5);
   }
 }
+

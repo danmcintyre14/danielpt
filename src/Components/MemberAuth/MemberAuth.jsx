@@ -123,6 +123,7 @@ export default function MemberAuth() {
               onChange={(e) => setName(e.target.value)}
               required
               autoComplete="name"
+              inputMode="text"
             />
           </div>
         )}
@@ -136,6 +137,7 @@ export default function MemberAuth() {
             onChange={(e) => setEmail(e.target.value)}
             required
             autoComplete="email"
+            inputMode="email"
           />
         </div>
 
@@ -149,6 +151,7 @@ export default function MemberAuth() {
             required
             autoComplete={isLogin ? "current-password" : "new-password"}
             minLength={6}
+            inputMode="text"
           />
         </div>
 

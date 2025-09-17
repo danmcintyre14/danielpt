@@ -1,24 +1,96 @@
+/* === Wrapper === */
 .container {
-  max-width: 500px;
+  max-width: 720px;
+  width: 100%;
   margin: 0 auto;
-  background: #fff;
-  padding: 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  padding: 1rem;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
-.closeContainer {
-  text-align: right;
-}
+/* === Open button (matches Nutrition/Energy) === */
+.openBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
-.closeButton {
-  background: transparent;
+  width: 100%;
+  height: 160px;
+
+  font-size: 1.2em;
+  font-weight: 600;
+  color: #fff;
+
+  background: linear-gradient(135deg, #007bff, #00a2ff);
   border: none;
-  font-size: 1.2rem;
+  border-radius: 16px;
   cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* === STEP INDICATOR & PROGRESS BAR === */
+.icon {
+  font-size: 1.4em;
+  margin-bottom: 0.35rem;
+  color: inherit;
+}
+
+.openBtn:hover {
+  background: linear-gradient(135deg, #0a86ff, #18adff);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+}
+
+.openBtn:active {
+  background: linear-gradient(135deg, #006fe0, #0093e6);
+  transform: translateY(0);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+.openBtn:focus-visible {
+  outline: 3px solid #80d4ff;
+  outline-offset: 3px;
+}
+
+/* === Calculator card === */
+.calculatorCard {
+  position: relative;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+  padding: 1rem;
+}
+
+/* === Close button === */
+.closeBtn {
+  position: absolute;
+  right: .6rem;
+  top: .6rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: #f8fafc;
+  cursor: pointer;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+.closeBtn:hover { background: #eef2f7; }
+.closeBtn:focus-visible { outline: 2px solid #4166f5; outline-offset: 2px; }
+
+/* === Titles & intro === */
+.title {
+  font-size: clamp(1.15rem, 2.5vw, 1.5rem);
+  font-weight: 800;
+  margin: .25rem 2rem 0.25rem .25rem;
+}
+.sub {
+  color: #64748b;
+  margin-bottom: 0.75rem;
+}
+
+/* === Step indicator & progress bar === */
 .stepIndicator {
   text-align: center;
   font-size: 0.95rem;
@@ -29,55 +101,69 @@
 
 .progressBar {
   width: 100%;
-  max-width: 400px;
   height: 8px;
-  background: #eee;
-  border-radius: 5px;
+  background: #eef2ff;
+  border-radius: 6px;
   margin: 0 auto 1.2rem auto;
   overflow: hidden;
 }
-
 .progressFill {
   height: 100%;
-  background: #2ecc71; /* Brand color */
-  border-radius: 5px;
+  background: #4166f5;
+  border-radius: 6px;
   transition: width 0.3s ease;
 }
 
-/* === FORM INPUTS === */
+/* === Form grid === */
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.9rem;
+  margin-bottom: 0.9rem;
+}
+@media (min-width: 640px) {
+  .formRow {
+    grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+  }
+}
+
+.formGroup {
+  display: grid;
+  gap: .35rem;
+  min-width: 0;
+}
+.label {
+  font-size: 0.95rem;
+  color: #334155;
+}
+
+/* === Inputs (16px to avoid iOS zoom) === */
 .form input {
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
   padding: 0.9rem;
-  margin-bottom: 0.8rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 1rem;
-  transition: border 0.3s ease;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 16px;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box;
 }
-
 .form input:focus {
-  border-color: #2ecc71;
+  border-color: #4166f5;
   outline: none;
-  box-shadow: 0 0 0 2px rgba(46, 204, 113, 0.2);
+  box-shadow: 0 0 0 2px rgba(65, 102, 245, 0.15);
 }
 
-/* === GENDER SELECTION === */
-.form fieldset {
-  border: none;
-  padding: 0;
-  margin: 0;
-}
-
+/* === Gender group === */
 .genderGroup {
   display: flex;
   justify-content: space-around;
   padding: 0.8rem;
-  background: #f9f9f9;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  margin-bottom: 1rem;
+  background: #f8fafc;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
 }
-
 .genderOption {
   display: flex;
   align-items: center;
@@ -85,130 +171,111 @@
   font-size: 1rem;
   cursor: pointer;
 }
-
 .genderOption input[type="radio"] {
-  accent-color: #2ecc71;
+  accent-color: #4166f5;
   width: 1.1rem;
   height: 1.1rem;
 }
 
-/* === STEPS HEADING === */
-.step h3 {
-  font-size: 1.4rem;
-  font-weight: 600;
+/* === Section headings & buttons === */
+.stepTitle {
+  font-size: 1.2rem;
+  font-weight: 700;
   margin-bottom: 1rem;
   text-align: center;
 }
-
-/* === GOAL & ACTIVITY BUTTONS === */
 .goalButtons {
   display: flex;
   flex-wrap: wrap;
   gap: 0.8rem;
   justify-content: center;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
 }
-
-.goalButtons button {
-  min-width: 150px;
-  font-weight: 600;
-}
-
 .buttonGroup {
   display: flex;
   justify-content: center;
   gap: 0.8rem;
-  margin-top: 1.5rem;
+  margin-top: 1.2rem;
 }
 
-.buttonGroup button {
-  min-width: 120px;
+/* === Results === */
+.results {
+  margin: 0.75rem 0 0.5rem;
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1rem;
 }
+.results h3 { margin: 0 0 .5rem 0; }
 
-/* === OPT-IN BOX === */
+/* === Opt-in box (brand-blue) === */
 .optInBox {
-  margin-top: 1.5rem;
-  padding: 1.5rem;
-  background: #f0fdf4;
+  width: 100%;
+  max-width: 420px;
+  margin: 1rem auto 0;
+  padding: 1.2rem;
+  background: #eef4ff;
+  border: 1px solid #c7d7ff;
   border-radius: 12px;
   text-align: center;
-  border: 1px solid #d3f3e3;
+  box-sizing: border-box;
+  word-break: break-word;
 }
-
-.optInBox p {
-  font-size: 1rem;
-  margin-bottom: 1rem;
-  color: #333;
-}
-
-.optInBox strong {
-  color: #2ecc71;
-}
-
-.optInBox input {
-  padding: 0.7rem;
-  margin-bottom: 0.8rem;
-  border-radius: 8px;
-  border: 1px solid #ccc;
+.optInInner {
   width: 100%;
-  max-width: 280px;
-  font-size: 1rem;
+  max-width: 100%;
+  overflow: hidden;
 }
 
-.optInBox button {
-  margin-top: 0.8rem;
-  width: 100%;
-  max-width: 280px;
-  border-radius: 8px;
-}
-
-.optInBox label {
-  font-weight: 500;
+/* === Scoped global overrides for MemberAuth inside opt-in === */
+.optInBox :global(input),
+.optInBox :global(select),
+.optInBox :global(textarea),
+.optInBox :global(button) {
   display: block;
-  margin-bottom: 0.3rem;
-  text-align: left;
-  max-width: 280px;
-  margin-left: auto;
-  margin-right: auto;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
-
-.optInBox input,
-.optInBox button {
-  max-width: none; /* Let MemberAuth.module.css handle it */
+.optInBox :global(.formGroup),
+.optInBox :global(.actions) {
+  max-width: 100%;
 }
+.optInBox :global(*) { min-width: 0; }
 
-/* === MOBILE === */
+/* === Mobile adjustments === */
 @media (max-width: 480px) {
   .container {
+    max-width: none;
+    width: 100%;
+    padding: 0.1rem;
+  }
+
+  .calculatorCard { padding: 1rem; border-radius: 12px; }
+  .openBtn { height: 140px; }
+
+  .formRow { grid-template-columns: 1fr; gap: 0.75rem; }
+
+  .goalButtons { flex-direction: column; align-items: center; }
+  .goalButtons > * { width: 100%; max-width: 100%; }
+
+  .buttonGroup { flex-direction: column; align-items: center; }
+  .buttonGroup > * { width: 100%; max-width: 100%; }
+
+  /* Full-width opt-in box */
+  .optInBox {
+    width: 100%;
+    max-width: 480px;
+    margin: 1rem auto 0;
     padding: 1rem;
+    border-radius: 12px;
   }
 
-  .goalButtons {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .goalButtons button {
+  .optInBox :global(.authCard) {
     width: 100%;
-    max-width: 300px;
-  }
-
-  .buttonGroup {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .buttonGroup button {
-    width: 100%;
-    max-width: 300px;
+    max-width: 100%;
   }
 }
-
-
-
-
-
-  
 
 
   

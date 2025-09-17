@@ -47,7 +47,7 @@ export default function MembersPage() {
       {/* Auth */}
       <section id="signup" className={styles.signup}>
         <div className={styles.signupBox}>
-          <h2>Access Fit Foundations</h2>
+          <h2>Access FitBlueprint</h2>
           <p>Sign up to get instant access. Verify your email and start today.</p>
           {/* MemberAuth handles redirect to /membersArea internally */}
           <MemberAuth />
