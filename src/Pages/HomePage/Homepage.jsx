@@ -21,7 +21,7 @@ export default function Homepage() {
           </p>
           <div className={styles.heroBtns}>
             <Button
-               href="https://wa.me/9715XXXXXXXX?text=Hi%20Dan!%20I%27d%20like%20to%20learn%20more%20about%20coaching."
+               href="https://wa.me/971526497126?text=Hi%20Dan!%20I%27d%20like%20to%20learn%20more%20about%20coaching."
                mode="whatsapp"
               onClick={() =>
               console.log("User clicked WhatsApp from hero section")
@@ -104,7 +104,7 @@ export default function Homepage() {
       <section className={styles.section}>
         <div className={styles.container}>
             <WhatsAppContact
-        phone="9715XXXXXXXX"
+        phone="971526497126"
         message="Hey Dan! I’d like to learn more about coaching."
         headline="Need quick help?"
         subhead="Message me on WhatsApp and I’ll reply as soon as possible."

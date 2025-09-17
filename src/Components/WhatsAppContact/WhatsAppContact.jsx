@@ -4,7 +4,7 @@ import WhatsAppIcon from "./WhatsAppIcon";
 import styles from "./WhatsAppContact.module.css";
 
 export default function WhatsAppContact({
-  phone = "9715XXXXXXXX",
+  phone = "971526497126",
   message = "Hi Dan! I’d like to learn more about coaching.",
   headline = "Need quick help?",
   subhead = "Message me on WhatsApp and I’ll reply as soon as possible.",

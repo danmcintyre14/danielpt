@@ -45,7 +45,7 @@ export default function MembersPage() {
 
       <GoogleReviews />
       <WhatsAppContact
-              phone="9715XXXXXXXX"
+              phone="971526497126"
               message="Hey Dan! I’d like to learn more about coaching."
               headline="Need quick help?"
               subhead="Message me on WhatsApp and I’ll reply as soon as possible."
