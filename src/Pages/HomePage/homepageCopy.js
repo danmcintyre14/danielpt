@@ -1,4 +1,4 @@
-import calorieImage from '../../assets/Images/trackCalories.jpg'
+import calorieImage from '../../assets/images/trackCalories.jpg'
 
 export const homePageCopy = [
     {
