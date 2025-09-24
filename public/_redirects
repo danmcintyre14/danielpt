@@ -1,1 +1,5 @@
-/*    /index.html   200
+# Redirect www to non-www
+https://www.daniel-mcintyre.com/*  https://daniel-mcintyre.com/:splat  301!
+
+# SPA fallback (for React Router)
+/*  /index.html  200
