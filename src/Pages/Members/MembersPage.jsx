@@ -3,12 +3,41 @@ import MemberAuth from "../../Components/MemberAuth/MemberAuth";
 import GoogleReviews from "../../Components/GoogleReview/GoogleReviews";
 import JoinNow from "../../Components/JoinNowSection/JoinNowSection";
 import WhatsAppContact from "../../Components/WhatsAppContact/WhatsAppContact";
+import SEO from "../../Components/SEO/SEO"
 import WhatsAppIcon from "../../Components/WhatsAppContact/WhatsAppIcon";
 import styles from "./MembersPage.module.css";
 import { FiVideo, FiBarChart2, FiCalendar, FiBookOpen } from "react-icons/fi";
 
 export default function MembersPage() {
   return (
+    <div>
+
+      <SEO
+        title="FitBlueprint — Free Fitness & Nutrition Tools | Daniel McIntyre"
+        description="Join the FitBlueprint for free and get access to workout videos, calorie calculators, training plans, and nutrition guides. Start building confidence and lasting fitness results today."
+        canonical="https://daniel-mcintyre.com/members"
+        siteName="Daniel McIntyre Personal Training"
+        image="https://daniel-mcintyre.com/logo512.png"
+        locale="en_GB"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "name": "FitBlueprint Members Page",
+          "url": "https://daniel-mcintyre.com/members",
+          "description": "Free access to Daniel McIntyre’s FitBlueprint — beginner-friendly workouts, calorie calculators, and guides.",
+          "publisher": {
+            "@type": "Organization",
+            "name": "Daniel McIntyre Personal Training",
+            "logo": "https://daniel-mcintyre.com/logo512.png"
+          },
+          "potentialAction": {
+            "@type": "RegisterAction",
+            "target": "https://daniel-mcintyre.com/members#signup",
+            "name": "Sign up for free FitBlueprint access"
+          }
+        }}
+      />
+      
     <div className={styles.pageContainer}>
       {/* Hero */}
       <section className={styles.hero}>
@@ -61,6 +90,7 @@ export default function MembersPage() {
           <MemberAuth />
         </div>
       </section>
+    </div>
     </div>
   );
 }

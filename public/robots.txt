@@ -3,3 +3,4 @@ Allow: /
 
 Sitemap: https://daniel-mcintyre.com/sitemap.xml
 
+Disallow: /membersArea

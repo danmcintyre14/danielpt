@@ -6,9 +6,11 @@ import { auth } from "../../firebase";
 import Button from "../../Components/Button/Button";
 import NutritionCalculator from "../../Components/NutritionCalculator/NutritionCalculator";
 import EnergyExpenditureCalculator from "../../Components/EnergyExpenditureCalculator/EnergyExpenditureCalculator";
+import ModularMealBuilder from "../../Components/ModularMealBuilder/ModularMealBuilder";
 import VideoLibrary from "../../Components/VideoLibrary/VideoLibrary";
 import PDFLibrary from "../../Components/PDFLibrary/PDFLibrary";
 import RecipeLibrary from "../../Components/RecipeLibrary/RecipeLibrary";
+import SEO from "../../Components/SEO/SEO"
 
 import styles from "./MembersArea.module.css";
 
@@ -50,6 +52,29 @@ export default function MembersArea() {
   }
 
   return (
+    <div>
+
+      <SEO
+        title="FitBlueprint — Members Area"
+        description="Your private FitBlueprint dashboard: workouts, calculators, training plan, and guides."
+        canonical="https://daniel-mcintyre.com/membersArea"
+        robots="noindex,nofollow,noarchive"
+        siteName="Daniel McIntyre Personal Training"
+        image="https://daniel-mcintyre.com/logo512.png"
+        locale="en_GB"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "name": "FitBlueprint Members Area",
+          "url": "https://daniel-mcintyre.com/membersArea",
+          "isPartOf": {
+            "@type": "WebSite",
+            "name": "Daniel McIntyre Personal Training",
+            "url": "https://daniel-mcintyre.com/"
+          }
+        }}
+      />
+      
     <div className={styles.container}>
       <div className={styles.topbar}>
         <div className={styles.greeting}>
@@ -62,6 +87,7 @@ export default function MembersArea() {
       <div className={styles.calculatorsGrid}>
         <NutritionCalculator />
         <EnergyExpenditureCalculator />
+        <ModularMealBuilder />
       </div>
       
       <section className={styles.section}>
@@ -76,6 +102,7 @@ export default function MembersArea() {
         <RecipeLibrary />
       </section>
       
+    </div>
     </div>
   );
 }

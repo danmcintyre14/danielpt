@@ -1,0 +1,305 @@
+/* src/Components/ModularMealBuilder/ModularMealBuilder.module.css */
+
+/* ===== Wrapper ===== */
+.container {
+  max-width: 720px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 1rem;
+  box-sizing: border-box;
+  overflow-x: hidden;
+
+  /* design tokens */
+  --ink: #222;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+}
+
+/* ===== Big gradient "Open" button ===== */
+.openBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 160px;
+
+  font-size: 1.2em;
+  font-weight: 600;
+  color: #fff;
+
+  background: linear-gradient(135deg, #007bff, #00a2ff);
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  transition: background .2s, transform .2s, box-shadow .2s;
+}
+.openBtn:hover {
+  background: linear-gradient(135deg, #0a86ff, #18adff);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+}
+.openBtn:active { transform: translateY(0); }
+.openBtn:focus-visible { outline: 3px solid #80d4ff; outline-offset: 3px; }
+.icon { font-size: 1.4em; margin-bottom: .35rem; color: inherit; }
+
+/* Green variant (nice for the Meal Builder) */
+.openBtn.green { background: linear-gradient(135deg, #00c853, #4caf50); }
+.openBtn.green:hover { background: linear-gradient(135deg, #00d95b, #56c45a); }
+
+/* ===== Calculator card ===== */
+.calculatorCard {
+  position: relative;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+  padding: 1rem;
+
+  /* Enable container queries so the inner layout adapts to card width */
+  container-type: inline-size;
+}
+.closeBtn {
+  position: absolute;
+  right: .6rem;
+  top: .6rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #f8fafc;
+  cursor: pointer;
+}
+.closeBtn:hover { background: #eef2f7; }
+.closeBtn:focus-visible { outline: 2px solid #4166f5; outline-offset: 2px; }
+
+/* Headings / copy */
+.title {
+  font-size: clamp(1.15rem, 2.5vw, 1.5rem);
+  font-weight: 800;
+  margin: .25rem 2rem .25rem .25rem;
+}
+.subtitle { margin: 0 0 1rem; color: var(--muted); font-size: .95rem; }
+.section { margin-top: 1rem; }
+.h3 { font-size: 1.05rem; margin: 0 0 .6rem; color: var(--ink); }
+
+/* ===== LIVE STATS BAR (robust, overflow-safe) ===== */
+.statsBar {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) minmax(0,1fr) auto auto; /* chips | chips | toggle | reset */
+  gap: .6rem;
+  align-items: center;
+  padding: .75rem;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: #f8fafc;
+  margin: .25rem 0 .75rem;
+  position: relative;
+  overflow: hidden; /* clip any rogue overflow from globals */
+}
+
+/* Each chip is a mini grid: label | (value stacked) */
+.statChip {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  column-gap: .6rem;
+  align-items: center;
+  min-height: 48px;
+}
+.chipLabel {
+  grid-column: 1 / 2;
+  grid-row: 1 / 3;
+  color: #475569;
+  font-size: .9rem;
+  white-space: nowrap;
+  align-self: center;
+}
+.chipValueWrap {
+  grid-column: 2 / 3;
+  grid-row: 1 / 3;
+  display: grid;
+  align-content: center;
+  line-height: 1.05;
+}
+.chipValueWrap strong { font-size: 1.4rem; font-weight: 800; }
+.chipUnit { font-size: .85rem; color: #475569; white-space: nowrap; }
+.ok { color: #0f9d58; }
+
+/* Neutralize global label/input leaks (from page-level CSS) */
+.targetsToggle {
+  all: unset;
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  color: #334155;
+  font-size: .9rem;
+  justify-self: end;
+  white-space: nowrap;
+  padding: .25rem .4rem;
+  border-radius: 8px;
+  line-height: 1;
+}
+.targetsToggle > input {
+  all: unset;
+  appearance: auto;
+  -webkit-appearance: checkbox;
+  width: auto;
+  height: auto;
+  transform: translateY(1px);
+}
+
+/* Reset button (compact so it doesn't cause wrap) */
+.resetBtn {
+  justify-self: end;
+  padding: .4rem .6rem;
+  font-size: .9rem;
+  border: 1px solid var(--border);
+  background: #ffffff;
+  color: #334155;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .15s, box-shadow .15s, border-color .15s;
+}
+.resetBtn:hover {
+  background: #f8fafc;
+  border-color: #d5d8de;
+  box-shadow: 0 1px 6px rgba(0,0,0,.06);
+}
+
+/* — Container queries: reflow when the CARD is narrow — */
+@container (max-width: 520px) {
+  .statsBar {
+    grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+  }
+  .targetsToggle { grid-column: 1 / 2; justify-self: start; }
+  .resetBtn      { grid-column: 2 / 3; justify-self: end; }
+}
+@container (max-width: 380px) {
+  .statsBar { grid-template-columns: 1fr; }
+  .targetsToggle, .resetBtn { grid-column: 1 / -1; justify-self: end; }
+}
+
+/* ===== Progress ===== */
+.progressWrap { display:flex; align-items:center; gap:.6rem; margin:.25rem 0 .75rem; }
+.progressTrack { flex:1; height:8px; background:#eef2f7; border-radius:999px; overflow:hidden; }
+.progressFill { height:100%; background:#00c853; }
+.stepLabel { font-size:.9rem; color:#475569; white-space:nowrap; }
+
+/* ===== Form rows / groups ===== */
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: .9rem;
+  margin-bottom: .9rem;
+}
+@media (min-width: 640px) { .formRow { grid-template-columns: 1fr 1fr; } }
+.formGroup { display: grid; gap: .35rem; min-width: 0; }
+.formGroup label { font-size: .95rem; font-weight: 600; color: #334155; }
+
+/* Inputs / selects */
+.input, .select {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  font-size: 16px;      /* prevents iOS zoom */
+  line-height: 1.4;
+  padding: .75rem .9rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+  box-sizing: border-box;
+}
+.input:hover, .select:hover { border-color: #d5d8de; }
+.input:focus-visible, .select:focus-visible { outline: 2px solid #4166f5; outline-offset: 2px; }
+.input::placeholder { color: #94a3b8; }
+
+/* Carb/Fat toggle */
+.toggle {
+  display: inline-flex;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: .75rem;
+  background: #f9fafb;
+}
+.toggleBtn {
+  padding: .5rem .9rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  color: #374151;
+  line-height: 1;
+}
+.toggleBtn + .toggleBtn { border-left: 1px solid var(--border); }
+.active { background: #4166f5; color: #fff; }
+.badge { font-weight: 800; }
+
+/* ===== Summary stats grid ===== */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: .75rem;
+  margin-bottom: .75rem;
+}
+@media (max-width: 640px) { .grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+.stat {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: .9rem;
+  background: #fafafa;
+}
+.statLabel { color: var(--muted); font-size: .95rem; margin-bottom: .35rem; }
+.statValue { font-weight: 800; font-size: 1.15rem; }
+
+/* Suggestion */
+.suggestion {
+  background: #f3f7ff;
+  border-left: 4px solid #4166f5;
+  padding: .75rem;
+  border-radius: 8px;
+  color: #1f2937;
+}
+
+/* Table */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: .5rem;
+  font-size: .95rem;
+}
+.table th, .table td {
+  padding: .6rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+
+/* Step nav */
+.stepNav {
+  display: flex;
+  justify-content: space-between;
+  gap: .75rem;
+  margin-top: .75rem;
+}
+.primaryBtn, .secondaryBtn {
+  padding: .7rem 1rem;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+.primaryBtn { background: #00c853; color: #fff; }
+.primaryBtn:disabled { opacity:.5; cursor:not-allowed; }
+.secondaryBtn { background:#f8fafc; border-color:#e5e7eb; }
+.secondaryBtn:disabled { opacity:.5; cursor:not-allowed; }
+
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
+
+
