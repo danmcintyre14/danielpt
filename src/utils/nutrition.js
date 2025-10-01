@@ -1,5 +1,5 @@
 // src/utils/nutrition.js
-import { COOKED_TO_RAW_FACTOR } from "../data/yields";
+import { COOKED_TO_RAW } from "../data/yields";
 
 const round = (n, dp = 1) => Math.round(n * 10 ** dp) / 10 ** dp;
 // Assume edible oil density ≈ 0.91 g/ml (close enough for client estimates)
@@ -67,7 +67,7 @@ export function gramsToCloseKcalGap(food, kcalGap) {
 
 /** Estimate RAW grams required for the given cooked grams (uses COOKED_TO_RAW_FACTOR) */
 export function cookedToRaw(foodId, cookedGrams) {
-  const factor = COOKED_TO_RAW_FACTOR[foodId] ?? 1.0;
+  const factor = COOKED_TO_RAW[foodId] ?? 1.0;
   return Math.round(cookedGrams * factor);
 }
 

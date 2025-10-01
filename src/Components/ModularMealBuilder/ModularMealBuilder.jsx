@@ -18,7 +18,7 @@ export default function ModularMealBuilder({
   const [isOpen, setIsOpen] = useState(false);
 
   // Wizard steps
-  const steps = ["Protein", "Vegetables", "Carb or Fat", "Cooking Oil", "Summary"];
+  const steps = ["Protein", "Fruits & Vegetables", "Carb or Fat (optional)", "Cooking Oil", "Summary"];
   const [step, setStep] = useState(0);
 
   // Optional coaching targets
@@ -27,15 +27,16 @@ export default function ModularMealBuilder({
   const [proteinMin, setProteinMin] = useState(defaultTargets.proteinMin);
   const [proteinMax, setProteinMax] = useState(defaultTargets.proteinMax);
 
-  // Step 1: Protein (placeholder first)
-  const [proteinId, setProteinId] = useState("");   // "" means not chosen yet
-  const [proteinAmount, setProteinAmount] = useState(""); // keep as string
+  // Step 1: Proteins (dynamic rows)
+  const [proteins, setProteins] = useState([{ id: "", amount: "" }]); // {id, amount}[]
 
-  // Step 2: Veg
+  // Step 2: Fruits & Vegetables
   const [vegId, setVegId] = useState("");
   const [vegAmount, setVegAmount] = useState("");
+  const [fruitId, setFruitId] = useState("");
+  const [fruitAmount, setFruitAmount] = useState("");
 
-  // Step 3: Carb or Fat
+  // Step 3: Carb or Fat (optional)
   const [path, setPath] = useState("carb");
   const [carbId, setCarbId] = useState("");
   const [carbAmount, setCarbAmount] = useState("");
@@ -44,21 +45,37 @@ export default function ModularMealBuilder({
 
   // Step 4: Oil (optional)
   const [usedOil, setUsedOil] = useState(false);
-  const [oilId, setOilId] = useState("olive_oil"); // default is fine; step is optional
+  const [oilId, setOilId] = useState("olive_oil");
   const [oilGrams, setOilGrams] = useState("");
 
   // Step 5: Grocery multiplier
   const [mealCount, setMealCount] = useState(1);
 
+  // Fruit options are tagged under carb group
+  const fruitOptions = useMemo(
+    () => FOODS_BY_GROUP.carb.filter((f) => Array.isArray(f.tags) && f.tags.includes("fruit")),
+    []
+  );
+
+  // --------- calculations ---------
   const calc = useMemo(() => {
-    const pFood = proteinId ? FOOD_BY_ID[proteinId] : null;
+    // proteins: scale each selected protein and sum
+    const proteinScaledItems = proteins.map((row) => {
+      if (!row.id || toNum(row.amount) <= 0) return empty();
+      const food = FOOD_BY_ID[row.id];
+      return scaleFood(food, toNum(row.amount));
+    });
+
+    const pSum = sumItems(proteinScaledItems);
+
     const vFood = vegId ? FOOD_BY_ID[vegId] : null;
+    const fruitFood = fruitId ? FOOD_BY_ID[fruitId] : null;
     const cFood = carbId ? FOOD_BY_ID[carbId] : null;
     const fFood = fatId ? FOOD_BY_ID[fatId] : null;
     const oilFood = oilId ? FOOD_BY_ID[oilId] : null;
 
-    const p = pFood ? scaleFood(pFood, toNum(proteinAmount)) : empty();
     const v = vFood ? scaleFood(vFood, toNum(vegAmount)) : empty();
+    const fruit = fruitFood ? scaleFood(fruitFood, toNum(fruitAmount)) : empty();
     const c = path === "carb" ? (cFood ? scaleFood(cFood, toNum(carbAmount)) : empty()) : empty();
     const f = path === "fat" ? (fFood ? scaleFood(fFood, toNum(fatAmount)) : empty()) : empty();
 
@@ -75,18 +92,23 @@ export default function ModularMealBuilder({
       }
     }
 
-    const total = sumItems([p, v, c, f, oil]);
+    const total = sumItems([pSum, v, fruit, c, f, oil]);
 
-    // coaching only when enabled AND we have at least a protein chosen
+    // coaching suggestion
     let suggestion = null;
-    if (useTargets && (pFood || vFood || cFood || fFood || (usedOil && oilFood))) {
+    const somethingChosen =
+      proteinScaledItems.some((x) => x.kcal > 0) ||
+      v.kcal > 0 || fruit.kcal > 0 || c.kcal > 0 || f.kcal > 0 || oil.kcal > 0;
+    if (useTargets && somethingChosen) {
       const kcalGap = targetKcal - total.kcal;
       if (Math.abs(kcalGap) <= 30 && total.p >= proteinMin && total.p <= proteinMax) {
         suggestion = "Perfect! You’re right on target for calories and protein.";
       } else {
         if (kcalGap > 0) {
           const adjFood =
-            path === "carb" ? (cFood || pFood || vFood) : (usedOil ? oilFood : (fFood || pFood || vFood));
+            path === "carb"
+              ? (cFood || fruitFood || vFood || firstProteinFood(proteins))
+              : (usedOil ? oilFood : (fFood || firstProteinFood(proteins) || vFood || fruitFood));
           if (adjFood) {
             const addGrams = gramsToCloseKcalGap(adjFood, kcalGap);
             suggestion = `Add ~${roundTo(addGrams, path === "carb" ? 5 : 2)}g ${adjFood.name.toLowerCase()} to hit ~${targetKcal} kcal.`;
@@ -97,7 +119,7 @@ export default function ModularMealBuilder({
             const reduce = gramsToCloseKcalGap(oilFood, overBy);
             suggestion = `Reduce cooking oil by ~${roundTo(reduce, 2)}g.`;
           } else {
-            const adjFood = path === "carb" ? cFood : fFood;
+            const adjFood = path === "carb" ? (cFood || fruitFood) : fFood;
             if (adjFood) {
               const reduce = gramsToCloseKcalGap(adjFood, overBy);
               suggestion = `Reduce ${adjFood.name.toLowerCase()} by ~${roundTo(reduce, path === "carb" ? 5 : 2)}g.`;
@@ -112,10 +134,19 @@ export default function ModularMealBuilder({
       }
     }
 
-    // grocery: convert cooked to raw if a food is chosen
+    // grocery/raw
+    // Sum raw protein across all protein rows
+    const rawProtein = proteins.reduce((acc, row) => {
+      if (!row.id || toNum(row.amount) <= 0) return acc;
+      const food = FOOD_BY_ID[row.id];
+      const scaled = scaleFood(food, toNum(row.amount));
+      return acc + cookedToRaw(food.id, scaled.grams);
+    }, 0);
+
     const raw = {
-      protein: pFood ? cookedToRaw(pFood.id, p.grams) : 0,
+      protein: rawProtein,
       veg: vFood ? cookedToRaw(vFood.id, v.grams) : 0,
+      fruit: fruitFood ? cookedToRaw(fruitFood.id, fruit.grams) : 0,
       carb: path === "carb" && cFood ? cookedToRaw(cFood.id, c.grams) : 0,
       fat: path === "fat" && fFood ? cookedToRaw(fFood.id, f.grams) : 0,
       oil: usedOil ? Math.round(oil.grams) : 0,
@@ -123,16 +154,37 @@ export default function ModularMealBuilder({
     const list = {
       protein: raw.protein * mealCount,
       veg: raw.veg * mealCount,
+      fruit: raw.fruit * mealCount,
       carb: raw.carb * mealCount,
       fat: raw.fat * mealCount,
       oil: raw.oil * mealCount,
     };
     const oilVol = usedOil ? oilVolumeFromGrams(list.oil) : null;
 
-    return { items: { p, v, c, f, oil }, total, suggestion, raw, list, oilVol, names: { pFood, vFood, cFood, fFood } };
+    // Protein label list (for summary table)
+    const proteinNames = proteins
+      .map((r) => (r.id ? FOOD_BY_ID[r.id]?.name : ""))
+      .filter(Boolean);
+
+    return {
+      items: { pSum, v, fruit, c, f, oil },
+      total,
+      suggestion,
+      raw,
+      list,
+      oilVol,
+      names: {
+        proteinNames,
+        vFood,
+        fruitFood,
+        cFood,
+        fFood,
+      },
+    };
   }, [
-    proteinId, proteinAmount,
+    proteins,
     vegId, vegAmount,
+    fruitId, fruitAmount,
     path, carbId, carbAmount,
     fatId, fatAmount,
     usedOil, oilId, oilGrams,
@@ -140,13 +192,20 @@ export default function ModularMealBuilder({
     useTargets, targetKcal, proteinMin, proteinMax,
   ]);
 
-  // Guards (require a selection + amount > 0)
+  // ---------- step guards ----------
   const canNext = () => {
-    if (step === 0) return !!proteinId && toNum(proteinAmount) > 0;
-    if (step === 1) return !!vegId && toNum(vegAmount) > 0;
+    if (step === 0) {
+      // need at least one valid protein row
+      return proteins.some((r) => !!r.id && toNum(r.amount) > 0);
+    }
+    if (step === 1) {
+      const vegOk = !!vegId && toNum(vegAmount) > 0;
+      const fruitOk = !!fruitId && toNum(fruitAmount) > 0;
+      return vegOk || fruitOk; // veg OR fruit
+    }
     if (step === 2) {
-      if (path === "carb") return !!carbId && toNum(carbAmount) > 0;
-      return !!fatId && toNum(fatAmount) > 0;
+      // Carb/Fat optional now
+      return true;
     }
     if (step === 3) return usedOil ? toNum(oilGrams) >= 0 : true;
     return true;
@@ -154,11 +213,12 @@ export default function ModularMealBuilder({
 
   function handleReset() {
     setStep(0);
-    setProteinId("");   setProteinAmount("");
-    setVegId("");       setVegAmount("");
-    setCarbId("");      setCarbAmount("");
-    setFatId("");       setFatAmount("");
-    setUsedOil(false);  setOilGrams("");
+    setProteins([{ id: "", amount: "" }]);
+    setVegId(""); setVegAmount("");
+    setFruitId(""); setFruitAmount("");
+    setCarbId(""); setCarbAmount("");
+    setFatId(""); setFatAmount("");
+    setUsedOil(false); setOilGrams("");
     setMealCount(1);
     setUseTargets(false);
     setTargetKcal(defaultTargets.kcal);
@@ -166,19 +226,20 @@ export default function ModularMealBuilder({
     setProteinMax(defaultTargets.proteinMax);
   }
 
+  // ---------- UI ----------
   return (
     <div className={styles.container}>
       {!isOpen && (
         <button className={`${styles.openBtn} ${styles.green}`} onClick={() => setIsOpen(true)}>
           <FaUtensils className={styles.icon} />
-          <span>Open Modular Meal Builder</span>
+          <span>Meal Builder</span>
         </button>
       )}
 
       {isOpen && (
         <div className={styles.calculatorCard}>
           <button className={styles.closeBtn} onClick={() => setIsOpen(false)}>✕</button>
-          <h2 className={styles.title}>Modular Meal Builder</h2>
+          <h2 className={styles.title}>Meal Builder</h2>
           <p className={styles.subtitle}>Build a meal in 5 quick steps.</p>
 
           {/* Live stats + coaching toggle + reset */}
@@ -211,7 +272,7 @@ export default function ModularMealBuilder({
             <button type="button" className={styles.resetBtn} onClick={handleReset}>Reset</button>
           </div>
 
-          {/* Targets form (only when enabled) */}
+          {/* Targets form */}
           {useTargets && (
             <div className={styles.section}>
               <h3 className={styles.h3}>Targets</h3>
@@ -231,57 +292,128 @@ export default function ModularMealBuilder({
             <div className={styles.stepLabel}>{step + 1} / {steps.length} — {steps[step]}</div>
           </div>
 
-          {/* Steps */}
+          {/* Step 1: Dynamic Proteins */}
           {step === 0 && (
             <section className={styles.section}>
-              <h3 className={styles.h3}>Step 1: Choose Protein</h3>
+              <h3 className={styles.h3}>Step 1: Choose Protein(s)</h3>
+
+              {proteins.map((row, idx) => (
+                <div key={idx} className={styles.formRow}>
+                  <SelectField
+                    label={`Protein ${proteins.length > 1 ? idx + 1 : ""}`.trim()}
+                    value={row.id}
+                    onChange={(val) => updateProtein(idx, { id: val })}
+                    options={FOODS_BY_GROUP.protein}
+                    placeholder="Choose protein…"
+                  />
+                  <AmountField
+                    label={usesUnits(row.id) ? "Amount (units)" : "Amount (g)"}
+                    value={row.amount}
+                    onChange={(val) => updateProtein(idx, { amount: val })}
+                    step={usesUnits(row.id) ? 1 : 10}
+                    placeholder={usesUnits(row.id) ? "1" : "150"}
+                  />
+                  {proteins.length > 1 && (
+                    <div className={styles.formGroup}>
+                      <span style={{ visibility: "hidden" }}>remove label spacer</span>
+                      <button
+                        type="button"
+                        className={styles.secondaryBtn}
+                        onClick={() => removeProtein(idx)}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ))}
+
               <div className={styles.formRow}>
-                <SelectField
-                  label="Protein"
-                  value={proteinId}
-                  onChange={setProteinId}
-                  options={FOODS_BY_GROUP.protein}
-                  placeholder="Choose protein…"
-                />
-                <AmountField
-                  label={usesUnits(proteinId) ? "Amount (units)" : "Amount (g)"}
-                  value={proteinAmount}
-                  onChange={setProteinAmount}
-                  step={usesUnits(proteinId) ? 1 : 10}
-                  placeholder="150"
-                />
+                <div className={styles.formGroup}>
+                  <button type="button" className={styles.primaryBtn} onClick={addProtein}>
+                    + Add Protein
+                  </button>
+                </div>
               </div>
             </section>
           )}
 
+          {/* Step 2: Fruits & Vegetables */}
           {step === 1 && (
             <section className={styles.section}>
-              <h3 className={styles.h3}>Step 2: Add Vegetables</h3>
+              <h3 className={styles.h3}>Step 2: Fruits & Vegetables</h3>
+
               <div className={styles.formRow}>
                 <SelectField
-                  label="Vegetable"
+                  label="Vegetable (optional)"
                   value={vegId}
                   onChange={setVegId}
                   options={FOODS_BY_GROUP.veg}
                   placeholder="Choose vegetable…"
                 />
-                <AmountField label="Amount (g)" value={vegAmount} onChange={setVegAmount} step={25} placeholder="150" />
+                <AmountField
+                  label="Veg amount (g)"
+                  value={vegAmount}
+                  onChange={setVegAmount}
+                  step={25}
+                  placeholder="150"
+                />
               </div>
+
+              <div className={styles.formRow}>
+                <SelectField
+                  label="Fruit (optional)"
+                  value={fruitId}
+                  onChange={setFruitId}
+                  options={fruitOptions}
+                  placeholder="Choose fruit…"
+                />
+                <AmountField
+                  label="Fruit amount (g)"
+                  value={fruitAmount}
+                  onChange={setFruitAmount}
+                  step={25}
+                  placeholder="100"
+                />
+              </div>
+
+              <p className={styles.subtitle} style={{ marginTop: "-.25rem" }}>
+                Add vegetables, fruit, or both—your calories, carbs, and fiber update live above.
+              </p>
             </section>
           )}
 
+          {/* Step 3: Carb or Fat (optional) */}
           {step === 2 && (
             <section className={styles.section}>
-              <h3 className={styles.h3}>Step 3: Choose <span className={styles.badge}>Carb</span> or <span className={styles.badge}>Fat</span></h3>
+              <h3 className={styles.h3}>
+                Step 3 (optional): Choose <span className={styles.badge}>Carb</span> or <span className={styles.badge}>Fat</span>
+              </h3>
+              <p className={styles.subtitle} style={{ marginTop: "-.25rem" }}>
+                You can skip this step if you only want protein and fruits/vegetables.
+              </p>
+
               <div className={styles.toggle}>
-                <button type="button" className={`${styles.toggleBtn} ${path === "carb" ? styles.active : ""}`} onClick={() => setPath("carb")}>Carbohydrate</button>
-                <button type="button" className={`${styles.toggleBtn} ${path === "fat" ? styles.active : ""}`} onClick={() => setPath("fat")}>Fat</button>
+                <button
+                  type="button"
+                  className={`${styles.toggleBtn} ${path === "carb" ? styles.active : ""}`}
+                  onClick={() => setPath("carb")}
+                >
+                  Carbohydrate
+                </button>
+                <button
+                  type="button"
+                  className={`${styles.toggleBtn} ${path === "fat" ? styles.active : ""}`}
+                  onClick={() => setPath("fat")}
+                >
+                  Fat
+                </button>
               </div>
 
               {path === "carb" ? (
                 <div className={styles.formRow}>
                   <SelectField
-                    label="Carb"
+                    label="Carb (optional)"
                     value={carbId}
                     onChange={setCarbId}
                     options={FOODS_BY_GROUP.carb}
@@ -298,7 +430,7 @@ export default function ModularMealBuilder({
               ) : (
                 <div className={styles.formRow}>
                   <SelectField
-                    label="Fat"
+                    label="Fat (optional)"
                     value={fatId}
                     onChange={setFatId}
                     options={FOODS_BY_GROUP.fat}
@@ -316,13 +448,18 @@ export default function ModularMealBuilder({
             </section>
           )}
 
+          {/* Step 4: Cooking Oil (optional) */}
           {step === 3 && (
             <section className={styles.section}>
               <h3 className={styles.h3}>Step 4: Cooking Oil (optional)</h3>
               <div className={styles.formRow}>
                 <div className={styles.formGroup}>
                   <label>Used oil?</label>
-                  <select className={styles.select} value={usedOil ? "yes" : "no"} onChange={(e) => setUsedOil(e.target.value === "yes")}>
+                  <select
+                    className={styles.select}
+                    value={usedOil ? "yes" : "no"}
+                    onChange={(e) => setUsedOil(e.target.value === "yes")}
+                  >
                     <option value="no">No</option>
                     <option value="yes">Yes</option>
                   </select>
@@ -331,7 +468,11 @@ export default function ModularMealBuilder({
                   <>
                     <div className={styles.formGroup}>
                       <label>Oil type</label>
-                      <select className={styles.select} value={oilId} onChange={(e) => setOilId(e.target.value)}>
+                      <select
+                        className={styles.select}
+                        value={oilId}
+                        onChange={(e) => setOilId(e.target.value)}
+                      >
                         <option value="olive_oil">Olive oil</option>
                       </select>
                     </div>
@@ -346,7 +487,9 @@ export default function ModularMealBuilder({
                         value={oilGrams}
                         placeholder="10"
                         onChange={(e) => setOilGrams(e.target.value)}
-                        onBlur={(e) => setOilGrams(e.target.value === "" ? "" : String(toNum(e.target.value)))}
+                        onBlur={(e) =>
+                          setOilGrams(e.target.value === "" ? "" : String(toNum(e.target.value)))
+                        }
                       />
                     </div>
                   </>
@@ -355,6 +498,7 @@ export default function ModularMealBuilder({
             </section>
           )}
 
+          {/* Step 5: Summary & Grocery */}
           {step === 4 && (
             <>
               <section className={styles.section}>
@@ -367,7 +511,9 @@ export default function ModularMealBuilder({
                   <Stat label="Fiber" value={`${calc.total.fiber} g`} />
                   <Stat label="Total Weight" value={`${calc.total.grams} g`} />
                 </div>
-                {useTargets && calc.suggestion && <p className={styles.suggestion}>{calc.suggestion}</p>}
+                {useTargets && calc.suggestion && (
+                  <p className={styles.suggestion}>{calc.suggestion}</p>
+                )}
               </section>
 
               <section className={styles.section}>
@@ -381,27 +527,65 @@ export default function ModularMealBuilder({
                       min={1}
                       step={1}
                       value={mealCount}
-                      onChange={(e) => setMealCount(Math.max(1, parseInt(e.target.value || "1", 10)))}
+                      onChange={(e) =>
+                        setMealCount(Math.max(1, parseInt(e.target.value || "1", 10)))
+                      }
                     />
                   </div>
                 </div>
 
                 <table className={styles.table} style={{ marginTop: ".5rem" }}>
                   <thead>
-                    <tr><th>Item</th><th>Raw for 1 meal</th><th>Raw × {mealCount}</th></tr>
+                    <tr>
+                      <th>Item</th>
+                      <th>Raw for 1 meal</th>
+                      <th>Raw × {mealCount}</th>
+                    </tr>
                   </thead>
                   <tbody>
-                    <GroceryRow label={`Protein (${calc.names.pFood?.name ?? "—"})`} one={calc.raw.protein} many={calc.list.protein} />
-                    <GroceryRow label={`Vegetable (${calc.names.vFood?.name ?? "—"})`} one={calc.raw.veg} many={calc.list.veg} />
-                    {path === "carb" && <GroceryRow label={`Carb (${calc.names.cFood?.name ?? "—"})`} one={calc.raw.carb} many={calc.list.carb} />}
-                    {path === "fat" && <GroceryRow label={`Fat (${calc.names.fFood?.name ?? "—"})`} one={calc.raw.fat} many={calc.list.fat} />}
+                    <GroceryRow
+                      label={`Protein (${calc.names.proteinNames.length ? calc.names.proteinNames.join(", ") : "—"})`}
+                      one={calc.raw.protein}
+                      many={calc.list.protein}
+                    />
+                    <GroceryRow
+                      label={`Vegetable (${calc.names.vFood?.name ?? "—"})`}
+                      one={calc.raw.veg}
+                      many={calc.list.veg}
+                    />
+                    {(fruitId && toNum(fruitAmount) > 0) && (
+                      <GroceryRow
+                        label={`Fruit (${calc.names.fruitFood?.name ?? "—"})`}
+                        one={calc.raw.fruit}
+                        many={calc.list.fruit}
+                      />
+                    )}
+                    {path === "carb" && (
+                      <GroceryRow
+                        label={`Carb (${calc.names.cFood?.name ?? "—"})`}
+                        one={calc.raw.carb}
+                        many={calc.list.carb}
+                      />
+                    )}
+                    {path === "fat" && (
+                      <GroceryRow
+                        label={`Fat (${calc.names.fFood?.name ?? "—"})`}
+                        one={calc.raw.fat}
+                        many={calc.list.fat}
+                      />
+                    )}
                     {usedOil && (
                       <tr>
                         <td>Cooking oil</td>
                         <td>{calc.raw.oil} g</td>
                         <td>
                           {calc.list.oil} g
-                          {calc.oilVol && <> · ~{calc.oilVol.ml} ml (≈ {calc.oilVol.tbsp} tbsp)</>}
+                          {calc.oilVol && (
+                            <>
+                              {" "}
+                              · ~{calc.oilVol.ml} ml (≈ {calc.oilVol.tbsp} tbsp)
+                            </>
+                          )}
                         </td>
                       </tr>
                     )}
@@ -413,21 +597,42 @@ export default function ModularMealBuilder({
 
           {/* Nav buttons */}
           <div className={styles.stepNav}>
-            <button className={styles.secondaryBtn} disabled={step === 0} onClick={() => setStep((s) => Math.max(0, s - 1))}>
+            <button
+              className={styles.secondaryBtn}
+              disabled={step === 0}
+              onClick={() => setStep((s) => Math.max(0, s - 1))}
+            >
               Back
             </button>
             {step < steps.length - 1 ? (
-              <button className={styles.primaryBtn} disabled={!canNext()} onClick={() => setStep((s) => Math.min(steps.length - 1, s + 1))}>
+              <button
+                className={styles.primaryBtn}
+                disabled={!canNext()}
+                onClick={() => setStep((s) => Math.min(steps.length - 1, s + 1))}
+              >
                 Next
               </button>
             ) : (
-              <button className={styles.primaryBtn} onClick={() => setIsOpen(false)}>Done</button>
+              <button className={styles.primaryBtn} onClick={() => setIsOpen(false)}>
+                Done
+              </button>
             )}
           </div>
         </div>
       )}
     </div>
   );
+
+  // ---- local helpers for proteins ----
+  function addProtein() {
+    setProteins((rows) => [...rows, { id: "", amount: "" }]);
+  }
+  function updateProtein(index, patch) {
+    setProteins((rows) => rows.map((r, i) => (i === index ? { ...r, ...patch } : r)));
+  }
+  function removeProtein(index) {
+    setProteins((rows) => rows.filter((_, i) => i !== index));
+  }
 }
 
 /* ---------- Subcomponents ---------- */
@@ -444,7 +649,7 @@ function AmountField({ label, value, onChange, step = 10, placeholder = "150" })
         step={step}
         value={value}
         placeholder={placeholder}
-        onChange={(e) => onChange(e.target.value)}  // keep as string
+        onChange={(e) => onChange(e.target.value)} // keep as string
         onBlur={(e) => onChange(e.target.value === "" ? "" : String(toNum(e.target.value)))}
       />
     </label>
@@ -515,20 +720,23 @@ function usesUnits(foodId) {
   const food = FOOD_BY_ID[foodId];
   return food?.unit?.kind === "perUnit" || food?.unit?.kind === "per10g";
 }
-
+function firstProteinFood(proteins) {
+  const first = proteins.find((r) => r.id);
+  return first ? FOOD_BY_ID[first.id] : null;
+}
 function empty() {
   return { kcal: 0, p: 0, c: 0, f: 0, fiber: 0, grams: 0 };
 }
-
 function roundTo(n, step) {
   if (!n || !step) return 0;
   return Math.round(n / step) * step;
 }
-
 function toNum(v) {
   const n = parseFloat(v);
-  return Number.isFinite(n) ? Math.max(0, n) : 0; // treat ""/NaN as 0, clamp ≥ 0
+  return Number.isFinite(n) ? Math.max(0, n) : 0;
 }
+
+
 
 
 

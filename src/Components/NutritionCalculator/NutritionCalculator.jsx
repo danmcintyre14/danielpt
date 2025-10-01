@@ -51,7 +51,7 @@ export default function NutritionCalculator() {
       {!isOpen && (
         <button className={styles.openBtn} onClick={() => setIsOpen(true)}>
           <FaAppleAlt className={styles.icon} />
-          <span>Open Nutrition Calculator</span>
+          <span>Nutrition Calculator</span>
         </button>
       )}
 
