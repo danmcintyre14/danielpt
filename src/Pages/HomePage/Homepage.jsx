@@ -13,7 +13,7 @@ export default function Homepage() {
     <>
       <SEO
         title="Personal Trainer Dubai | Daniel McIntyre"
-        description="1:1 coaching in Dubai—smart training, simple nutrition, real accountability. Start your FitBlueprint free."
+        description="1:1 coaching in Dubai smart training, simple nutrition, real accountability. Start your FitBlueprint free."
         canonical="https://daniel-mcintyre.com/"
         siteName="Daniel McIntyre Personal Training"
         image="https://daniel-mcintyre.com/logo512.png"

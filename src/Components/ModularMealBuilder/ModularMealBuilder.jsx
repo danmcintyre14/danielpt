@@ -18,7 +18,13 @@ export default function ModularMealBuilder({
   const [isOpen, setIsOpen] = useState(false);
 
   // Wizard steps
-  const steps = ["Protein", "Fruits & Vegetables", "Carb or Fat (optional)", "Cooking Oil", "Summary"];
+  const steps = [
+    "Protein",
+    "Fruits & Vegetables",
+    "Carb or Fat (optional)",
+    "Cooking Oil",
+    "Summary",
+  ];
   const [step, setStep] = useState(0);
 
   // Optional coaching targets
@@ -49,11 +55,15 @@ export default function ModularMealBuilder({
   const [oilGrams, setOilGrams] = useState("");
 
   // Step 5: Grocery multiplier
-  const [mealCount, setMealCount] = useState(1);
+  const [mealCountStr, setMealCountStr] = useState("1");
+  const mealCount = Math.max(1, parseInt(mealCountStr || "1", 10));
 
   // Fruit options are tagged under carb group
   const fruitOptions = useMemo(
-    () => FOODS_BY_GROUP.carb.filter((f) => Array.isArray(f.tags) && f.tags.includes("fruit")),
+    () =>
+      FOODS_BY_GROUP.carb.filter(
+        (f) => Array.isArray(f.tags) && f.tags.includes("fruit")
+      ),
     []
   );
 
@@ -75,9 +85,21 @@ export default function ModularMealBuilder({
     const oilFood = oilId ? FOOD_BY_ID[oilId] : null;
 
     const v = vFood ? scaleFood(vFood, toNum(vegAmount)) : empty();
-    const fruit = fruitFood ? scaleFood(fruitFood, toNum(fruitAmount)) : empty();
-    const c = path === "carb" ? (cFood ? scaleFood(cFood, toNum(carbAmount)) : empty()) : empty();
-    const f = path === "fat" ? (fFood ? scaleFood(fFood, toNum(fatAmount)) : empty()) : empty();
+    const fruit = fruitFood
+      ? scaleFood(fruitFood, toNum(fruitAmount))
+      : empty();
+    const c =
+      path === "carb"
+        ? cFood
+          ? scaleFood(cFood, toNum(carbAmount))
+          : empty()
+        : empty();
+    const f =
+      path === "fat"
+        ? fFood
+          ? scaleFood(fFood, toNum(fatAmount))
+          : empty()
+        : empty();
 
     // oil entered in grams
     let oil = empty();
@@ -98,20 +120,34 @@ export default function ModularMealBuilder({
     let suggestion = null;
     const somethingChosen =
       proteinScaledItems.some((x) => x.kcal > 0) ||
-      v.kcal > 0 || fruit.kcal > 0 || c.kcal > 0 || f.kcal > 0 || oil.kcal > 0;
+      v.kcal > 0 ||
+      fruit.kcal > 0 ||
+      c.kcal > 0 ||
+      f.kcal > 0 ||
+      oil.kcal > 0;
     if (useTargets && somethingChosen) {
       const kcalGap = targetKcal - total.kcal;
-      if (Math.abs(kcalGap) <= 30 && total.p >= proteinMin && total.p <= proteinMax) {
-        suggestion = "Perfect! You’re right on target for calories and protein.";
+      if (
+        Math.abs(kcalGap) <= 30 &&
+        total.p >= proteinMin &&
+        total.p <= proteinMax
+      ) {
+        suggestion =
+          "Perfect! You’re right on target for calories and protein.";
       } else {
         if (kcalGap > 0) {
           const adjFood =
             path === "carb"
-              ? (cFood || fruitFood || vFood || firstProteinFood(proteins))
-              : (usedOil ? oilFood : (fFood || firstProteinFood(proteins) || vFood || fruitFood));
+              ? cFood || fruitFood || vFood || firstProteinFood(proteins)
+              : usedOil
+              ? oilFood
+              : fFood || firstProteinFood(proteins) || vFood || fruitFood;
           if (adjFood) {
             const addGrams = gramsToCloseKcalGap(adjFood, kcalGap);
-            suggestion = `Add ~${roundTo(addGrams, path === "carb" ? 5 : 2)}g ${adjFood.name.toLowerCase()} to hit ~${targetKcal} kcal.`;
+            suggestion = `Add ~${roundTo(
+              addGrams,
+              path === "carb" ? 5 : 2
+            )}g ${adjFood.name.toLowerCase()} to hit ~${targetKcal} kcal.`;
           }
         } else if (kcalGap < 0) {
           const overBy = Math.abs(kcalGap);
@@ -119,17 +155,24 @@ export default function ModularMealBuilder({
             const reduce = gramsToCloseKcalGap(oilFood, overBy);
             suggestion = `Reduce cooking oil by ~${roundTo(reduce, 2)}g.`;
           } else {
-            const adjFood = path === "carb" ? (cFood || fruitFood) : fFood;
+            const adjFood = path === "carb" ? cFood || fruitFood : fFood;
             if (adjFood) {
               const reduce = gramsToCloseKcalGap(adjFood, overBy);
-              suggestion = `Reduce ${adjFood.name.toLowerCase()} by ~${roundTo(reduce, path === "carb" ? 5 : 2)}g.`;
+              suggestion = `Reduce ${adjFood.name.toLowerCase()} by ~${roundTo(
+                reduce,
+                path === "carb" ? 5 : 2
+              )}g.`;
             }
           }
         }
         if (total.p < proteinMin) {
-          suggestion = (suggestion ? suggestion + " " : "") + `Tip: increase protein to ≥${proteinMin}g.`;
+          suggestion =
+            (suggestion ? suggestion + " " : "") +
+            `Tip: increase protein to ≥${proteinMin}g.`;
         } else if (total.p > proteinMax) {
-          suggestion = (suggestion ? suggestion + " " : "") + `Tip: slightly reduce protein to ≤${proteinMax}g (optional).`;
+          suggestion =
+            (suggestion ? suggestion + " " : "") +
+            `Tip: slightly reduce protein to ≤${proteinMax}g (optional).`;
         }
       }
     }
@@ -183,13 +226,23 @@ export default function ModularMealBuilder({
     };
   }, [
     proteins,
-    vegId, vegAmount,
-    fruitId, fruitAmount,
-    path, carbId, carbAmount,
-    fatId, fatAmount,
-    usedOil, oilId, oilGrams,
+    vegId,
+    vegAmount,
+    fruitId,
+    fruitAmount,
+    path,
+    carbId,
+    carbAmount,
+    fatId,
+    fatAmount,
+    usedOil,
+    oilId,
+    oilGrams,
     mealCount,
-    useTargets, targetKcal, proteinMin, proteinMax,
+    useTargets,
+    targetKcal,
+    proteinMin,
+    proteinMax,
   ]);
 
   // ---------- step guards ----------
@@ -214,12 +267,17 @@ export default function ModularMealBuilder({
   function handleReset() {
     setStep(0);
     setProteins([{ id: "", amount: "" }]);
-    setVegId(""); setVegAmount("");
-    setFruitId(""); setFruitAmount("");
-    setCarbId(""); setCarbAmount("");
-    setFatId(""); setFatAmount("");
-    setUsedOil(false); setOilGrams("");
-    setMealCount(1);
+    setVegId("");
+    setVegAmount("");
+    setFruitId("");
+    setFruitAmount("");
+    setCarbId("");
+    setCarbAmount("");
+    setFatId("");
+    setFatAmount("");
+    setUsedOil(false);
+    setOilGrams("");
+    setMealCountStr("1");
     setUseTargets(false);
     setTargetKcal(defaultTargets.kcal);
     setProteinMin(defaultTargets.proteinMin);
@@ -230,7 +288,10 @@ export default function ModularMealBuilder({
   return (
     <div className={styles.container}>
       {!isOpen && (
-        <button className={`${styles.openBtn} ${styles.green}`} onClick={() => setIsOpen(true)}>
+        <button
+          className={`${styles.openBtn} ${styles.green}`}
+          onClick={() => setIsOpen(true)}
+        >
           <FaUtensils className={styles.icon} />
           <span>Meal Builder</span>
         </button>
@@ -238,7 +299,9 @@ export default function ModularMealBuilder({
 
       {isOpen && (
         <div className={styles.calculatorCard}>
-          <button className={styles.closeBtn} onClick={() => setIsOpen(false)}>✕</button>
+          <button className={styles.closeBtn} onClick={() => setIsOpen(false)}>
+            ✕
+          </button>
           <h2 className={styles.title}>Meal Builder</h2>
           <p className={styles.subtitle}>Build a meal in 5 quick steps.</p>
 
@@ -247,29 +310,57 @@ export default function ModularMealBuilder({
             <div className={styles.statChip}>
               <span className={styles.chipLabel}>Calories</span>
               <div className={styles.chipValueWrap}>
-                <strong className={useTargets && Math.abs(targetKcal - calc.total.kcal) <= 30 ? styles.ok : ""}>
+                <strong
+                  className={
+                    useTargets && Math.abs(targetKcal - calc.total.kcal) <= 30
+                      ? styles.ok
+                      : ""
+                  }
+                >
                   {calc.total.kcal}
                 </strong>
-                <small className={styles.chipUnit}>{useTargets ? ` / ${targetKcal} ` : ""}kcal</small>
+                <small className={styles.chipUnit}>
+                  {useTargets ? ` / ${targetKcal} ` : ""}kcal
+                </small>
               </div>
             </div>
 
             <div className={styles.statChip}>
               <span className={styles.chipLabel}>Protein</span>
               <div className={styles.chipValueWrap}>
-                <strong className={useTargets && calc.total.p >= proteinMin && calc.total.p <= proteinMax ? styles.ok : ""}>
+                <strong
+                  className={
+                    useTargets &&
+                    calc.total.p >= proteinMin &&
+                    calc.total.p <= proteinMax
+                      ? styles.ok
+                      : ""
+                  }
+                >
                   {calc.total.p}
                 </strong>
-                <small className={styles.chipUnit}>{useTargets ? ` / ${proteinMin}–${proteinMax} ` : ""}g</small>
+                <small className={styles.chipUnit}>
+                  {useTargets ? ` / ${proteinMin}–${proteinMax} ` : ""}g
+                </small>
               </div>
             </div>
 
             <label className={styles.targetsToggle}>
-              <input type="checkbox" checked={useTargets} onChange={(e) => setUseTargets(e.target.checked)} />
+              <input
+                type="checkbox"
+                checked={useTargets}
+                onChange={(e) => setUseTargets(e.target.checked)}
+              />
               <span>Targets</span>
             </label>
 
-            <button type="button" className={styles.resetBtn} onClick={handleReset}>Reset</button>
+            <button
+              type="button"
+              className={styles.resetBtn}
+              onClick={handleReset}
+            >
+              Reset
+            </button>
           </div>
 
           {/* Targets form */}
@@ -277,9 +368,21 @@ export default function ModularMealBuilder({
             <div className={styles.section}>
               <h3 className={styles.h3}>Targets</h3>
               <div className={styles.formRow}>
-                <NumberField label="Target kcal" value={String(targetKcal)} onChange={(v) => setTargetKcal(toNum(v))} />
-                <NumberField label="Protein min" value={String(proteinMin)} onChange={(v) => setProteinMin(toNum(v))} />
-                <NumberField label="Protein max" value={String(proteinMax)} onChange={(v) => setProteinMax(toNum(v))} />
+                <NumberField
+                  label="Target kcal"
+                  value={String(targetKcal)}
+                  onChange={(v) => setTargetKcal(toNum(v))}
+                />
+                <NumberField
+                  label="Protein min"
+                  value={String(proteinMin)}
+                  onChange={(v) => setProteinMin(toNum(v))}
+                />
+                <NumberField
+                  label="Protein max"
+                  value={String(proteinMax)}
+                  onChange={(v) => setProteinMax(toNum(v))}
+                />
               </div>
             </div>
           )}
@@ -287,9 +390,14 @@ export default function ModularMealBuilder({
           {/* Progress */}
           <div className={styles.progressWrap}>
             <div className={styles.progressTrack}>
-              <div className={styles.progressFill} style={{ width: `${((step + 1) / steps.length) * 100}%` }} />
+              <div
+                className={styles.progressFill}
+                style={{ width: `${((step + 1) / steps.length) * 100}%` }}
+              />
             </div>
-            <div className={styles.stepLabel}>{step + 1} / {steps.length} — {steps[step]}</div>
+            <div className={styles.stepLabel}>
+              {step + 1} / {steps.length} — {steps[step]}
+            </div>
           </div>
 
           {/* Step 1: Dynamic Proteins */}
@@ -300,7 +408,9 @@ export default function ModularMealBuilder({
               {proteins.map((row, idx) => (
                 <div key={idx} className={styles.formRow}>
                   <SelectField
-                    label={`Protein ${proteins.length > 1 ? idx + 1 : ""}`.trim()}
+                    label={`Protein ${
+                      proteins.length > 1 ? idx + 1 : ""
+                    }`.trim()}
                     value={row.id}
                     onChange={(val) => updateProtein(idx, { id: val })}
                     options={FOODS_BY_GROUP.protein}
@@ -315,7 +425,9 @@ export default function ModularMealBuilder({
                   />
                   {proteins.length > 1 && (
                     <div className={styles.formGroup}>
-                      <span style={{ visibility: "hidden" }}>remove label spacer</span>
+                      <span style={{ visibility: "hidden" }}>
+                        remove label spacer
+                      </span>
                       <button
                         type="button"
                         className={styles.secondaryBtn}
@@ -330,7 +442,11 @@ export default function ModularMealBuilder({
 
               <div className={styles.formRow}>
                 <div className={styles.formGroup}>
-                  <button type="button" className={styles.primaryBtn} onClick={addProtein}>
+                  <button
+                    type="button"
+                    className={styles.primaryBtn}
+                    onClick={addProtein}
+                  >
                     + Add Protein
                   </button>
                 </div>
@@ -378,7 +494,8 @@ export default function ModularMealBuilder({
               </div>
 
               <p className={styles.subtitle} style={{ marginTop: "-.25rem" }}>
-                Add vegetables, fruit, or both—your calories, carbs, and fiber update live above.
+                Add vegetables, fruit, or both—your calories, carbs, and fiber
+                update live above.
               </p>
             </section>
           )}
@@ -387,23 +504,30 @@ export default function ModularMealBuilder({
           {step === 2 && (
             <section className={styles.section}>
               <h3 className={styles.h3}>
-                Step 3 (optional): Choose <span className={styles.badge}>Carb</span> or <span className={styles.badge}>Fat</span>
+                Step 3 (optional): Choose{" "}
+                <span className={styles.badge}>Carb</span> or{" "}
+                <span className={styles.badge}>Fat</span>
               </h3>
               <p className={styles.subtitle} style={{ marginTop: "-.25rem" }}>
-                You can skip this step if you only want protein and fruits/vegetables.
+                You can skip this step if you only want protein and
+                fruits/vegetables.
               </p>
 
               <div className={styles.toggle}>
                 <button
                   type="button"
-                  className={`${styles.toggleBtn} ${path === "carb" ? styles.active : ""}`}
+                  className={`${styles.toggleBtn} ${
+                    path === "carb" ? styles.active : ""
+                  }`}
                   onClick={() => setPath("carb")}
                 >
                   Carbohydrate
                 </button>
                 <button
                   type="button"
-                  className={`${styles.toggleBtn} ${path === "fat" ? styles.active : ""}`}
+                  className={`${styles.toggleBtn} ${
+                    path === "fat" ? styles.active : ""
+                  }`}
                   onClick={() => setPath("fat")}
                 >
                   Fat
@@ -488,7 +612,11 @@ export default function ModularMealBuilder({
                         placeholder="10"
                         onChange={(e) => setOilGrams(e.target.value)}
                         onBlur={(e) =>
-                          setOilGrams(e.target.value === "" ? "" : String(toNum(e.target.value)))
+                          setOilGrams(
+                            e.target.value === ""
+                              ? ""
+                              : String(toNum(e.target.value))
+                          )
                         }
                       />
                     </div>
@@ -524,12 +652,23 @@ export default function ModularMealBuilder({
                     <input
                       className={styles.input}
                       type="number"
-                      min={1}
-                      step={1}
-                      value={mealCount}
-                      onChange={(e) =>
-                        setMealCount(Math.max(1, parseInt(e.target.value || "1", 10)))
-                      }
+                      inputMode="numeric"
+                      min="1"
+                      step="1"
+                      value={mealCountStr}
+                      onChange={(e) => {
+                        // allow empty while typing; keep only digits
+                        const v = e.target.value.replace(/[^\d]/g, "");
+                        setMealCountStr(v);
+                      }}
+                      onBlur={(e) => {
+                        // normalize on blur to at least 1
+                        const n = Math.max(
+                          1,
+                          parseInt(e.target.value || "1", 10)
+                        );
+                        setMealCountStr(String(n));
+                      }}
                     />
                   </div>
                 </div>
@@ -544,7 +683,11 @@ export default function ModularMealBuilder({
                   </thead>
                   <tbody>
                     <GroceryRow
-                      label={`Protein (${calc.names.proteinNames.length ? calc.names.proteinNames.join(", ") : "—"})`}
+                      label={`Protein (${
+                        calc.names.proteinNames.length
+                          ? calc.names.proteinNames.join(", ")
+                          : "—"
+                      })`}
                       one={calc.raw.protein}
                       many={calc.list.protein}
                     />
@@ -553,7 +696,7 @@ export default function ModularMealBuilder({
                       one={calc.raw.veg}
                       many={calc.list.veg}
                     />
-                    {(fruitId && toNum(fruitAmount) > 0) && (
+                    {fruitId && toNum(fruitAmount) > 0 && (
                       <GroceryRow
                         label={`Fruit (${calc.names.fruitFood?.name ?? "—"})`}
                         one={calc.raw.fruit}
@@ -608,12 +751,17 @@ export default function ModularMealBuilder({
               <button
                 className={styles.primaryBtn}
                 disabled={!canNext()}
-                onClick={() => setStep((s) => Math.min(steps.length - 1, s + 1))}
+                onClick={() =>
+                  setStep((s) => Math.min(steps.length - 1, s + 1))
+                }
               >
                 Next
               </button>
             ) : (
-              <button className={styles.primaryBtn} onClick={() => setIsOpen(false)}>
+              <button
+                className={styles.primaryBtn}
+                onClick={() => setIsOpen(false)}
+              >
                 Done
               </button>
             )}
@@ -628,7 +776,9 @@ export default function ModularMealBuilder({
     setProteins((rows) => [...rows, { id: "", amount: "" }]);
   }
   function updateProtein(index, patch) {
-    setProteins((rows) => rows.map((r, i) => (i === index ? { ...r, ...patch } : r)));
+    setProteins((rows) =>
+      rows.map((r, i) => (i === index ? { ...r, ...patch } : r))
+    );
   }
   function removeProtein(index) {
     setProteins((rows) => rows.filter((_, i) => i !== index));
@@ -637,7 +787,13 @@ export default function ModularMealBuilder({
 
 /* ---------- Subcomponents ---------- */
 
-function AmountField({ label, value, onChange, step = 10, placeholder = "150" }) {
+function AmountField({
+  label,
+  value,
+  onChange,
+  step = 10,
+  placeholder = "150",
+}) {
   return (
     <label className={styles.formGroup}>
       <span>{label}</span>
@@ -650,7 +806,9 @@ function AmountField({ label, value, onChange, step = 10, placeholder = "150" })
         value={value}
         placeholder={placeholder}
         onChange={(e) => onChange(e.target.value)} // keep as string
-        onBlur={(e) => onChange(e.target.value === "" ? "" : String(toNum(e.target.value)))}
+        onBlur={(e) =>
+          onChange(e.target.value === "" ? "" : String(toNum(e.target.value)))
+        }
       />
     </label>
   );
@@ -672,7 +830,13 @@ function NumberField({ label, value, onChange }) {
   );
 }
 
-function SelectField({ label, value, onChange, options, placeholder = "Choose…" }) {
+function SelectField({
+  label,
+  value,
+  onChange,
+  options,
+  placeholder = "Choose…",
+}) {
   return (
     <label className={styles.formGroup}>
       <span>{label}</span>
@@ -735,10 +899,3 @@ function toNum(v) {
   const n = parseFloat(v);
   return Number.isFinite(n) ? Math.max(0, n) : 0;
 }
-
-
-
-
-
-
-

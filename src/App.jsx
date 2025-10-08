@@ -3,6 +3,9 @@ import "./App.css";
 import Homepage from "./Pages/HomePage/Homepage";
 import MembersPage from "./Pages/Members/MembersPage";
 import MembersArea from "./Pages/MembersArea/MembersArea";
+import Terms from "./Pages/Terms/Terms"
+import PrivacyPolicy from "./Pages/PrivacyPolicy/PrivacyPolicy"
+import Footer from "./Components/Footer/Footer";
 import Root from "./Root/Root";
 import { trackPageView } from "./utils/analytics"; // 👈 add this
 import {
@@ -30,6 +33,7 @@ function RootWithTracking() {
     <>
       <PageViewTracker />
       <Root />
+      <Footer />
     </>
   );
 }
@@ -44,6 +48,9 @@ function App() {
         {/* New branded routes */}
         <Route path="fitblueprint" element={<MembersPage />} />
         <Route path="fitblueprint/hub" element={<MembersArea />} />
+        <Route path="privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="terms" element={<Terms />} />
+
 
         {/* Legacy redirects */}
         <Route path="membersPage" element={<Navigate to="/fitblueprint" replace />} />

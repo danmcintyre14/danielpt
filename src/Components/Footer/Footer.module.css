@@ -1,0 +1,35 @@
+/* src/Components/Footer/Footer.module.css */
+
+.footer {
+  padding: 1.5rem 1rem;
+  background: var(--surface, #fff);
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  text-align: center;
+  font-size: 0.95rem;
+  color: var(--muted, #666);
+}
+
+.links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.links a {
+  color: var(--brand, #4166f5);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.links a:hover {
+  color: var(--brand-dark, #3652c9);
+  text-decoration: underline;
+}
+
+.copy {
+  font-size: 0.85rem;
+  color: var(--muted, #888);
+}
