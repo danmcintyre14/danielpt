@@ -5,7 +5,7 @@ export function initGA(measurementId) {
   window.dataLayer = window.dataLayer || [];
   window.gtag = function gtag(){ window.dataLayer.push(arguments); };
 
-  // Optional: default-deny consent until user accepts
+  // Default consent (deny until user accepts)
   window.gtag('consent', 'default', {
     ad_user_data: 'denied',
     ad_personalization: 'denied',
@@ -13,6 +13,7 @@ export function initGA(measurementId) {
     analytics_storage: 'denied',
   });
 
+  // Load GA4 script
   const s = document.createElement('script');
   s.async = true;
   s.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
@@ -22,11 +23,13 @@ export function initGA(measurementId) {
   window.gtag('config', measurementId, { send_page_view: false });
 }
 
+// Call this when user accepts cookies
 export function grantAnalyticsConsent() {
   if (!window.gtag) return;
   window.gtag('consent', 'update', { analytics_storage: 'granted' });
 }
 
+// Track SPA page views
 export function trackPageView(path, measurementId = import.meta.env.VITE_GA_MEASUREMENT_ID) {
   if (!window.gtag || import.meta.env.DEV) return;
   window.gtag('event', 'page_view', {
@@ -37,8 +40,10 @@ export function trackPageView(path, measurementId = import.meta.env.VITE_GA_MEAS
   });
 }
 
+// Track custom events
 export function trackEvent(action, params = {}) {
   if (!window.gtag || import.meta.env.DEV) return;
   window.gtag('event', action, params);
 }
+
 
