@@ -20,6 +20,6 @@ export const videoData = [
      {
         title: 'Leg Press',
         description: 'A video guide on how to track your calories properly for your goals',
-        youtubeId: "qrpRLDKwa3Q"
+        youtubeId: "Ew0KOpqvYTE"
     }
 ]
