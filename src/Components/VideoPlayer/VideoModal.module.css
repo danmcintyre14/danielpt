@@ -1,0 +1,94 @@
+/* src/Components/VideoPlayer/VideoModal.module.css */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal {
+  background: #0d0f14;
+  padding: 16px;
+  border-radius: 18px;
+  width: min(960px, 95vw);        /* wider modal */
+  max-height: 85vh;
+  position: relative;
+  color: white;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.6);
+}
+
+/* keeps proper 16:9 and makes it big */
+.playerWrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.player {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.player:focus,
+.player:focus-visible {
+  outline: none;
+}
+
+.close {
+  position: absolute;
+  top: 8px;
+  right: 14px;
+  font-size: 26px;
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+}
+
+.closeButton {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(4px);
+  color: #fff;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  font-size: 22px;
+  line-height: 36px;
+  text-align: center;
+  transition: background 0.2s ease, transform 0.2s ease;
+  z-index: 10;
+}
+
+.closeButton:hover {
+  background: rgba(0,0,0,0.75);
+  transform: scale(1.07);
+}
+
+
+@media (max-width: 600px) {
+  .modal {
+    padding: 10px;
+    width: 100vw;
+    border-radius: 0;
+  }
+
+  .playerWrapper {
+    border-radius: 0;
+  }
+}
+
