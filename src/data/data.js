@@ -25,5 +25,15 @@ export const videoData = [
         title: 'Shoulder Press Plate Loaded',
         description: 'Basic exercise technique and common faults',
         youtubeId: "kzQifoVGAOo"
+    },
+      {
+        title: 'Cable Tricep Pushdown',
+        description: 'Basic exercise technique and common faults',
+        youtubeId: "OVNhsh_70Do"
+    },
+      {
+        title: 'Cable Bicep Curl',
+        description: 'Basic exercise technique and common faults',
+        youtubeId: "dOkaW3b5qok"
     }
 ]

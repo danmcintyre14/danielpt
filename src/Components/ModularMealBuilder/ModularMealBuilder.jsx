@@ -58,14 +58,18 @@ export default function ModularMealBuilder({
   const [mealCountStr, setMealCountStr] = useState("1");
   const mealCount = Math.max(1, parseInt(mealCountStr || "1", 10));
 
-  // Fruit options are tagged under carb group
-  const fruitOptions = useMemo(
-    () =>
-      FOODS_BY_GROUP.carb.filter(
-        (f) => Array.isArray(f.tags) && f.tags.includes("fruit")
-      ),
-    []
-  );
+  // Fruit options (already in step 2)
+const fruitOptions = useMemo(
+  () => FOODS_BY_GROUP.carb.filter((f) => (f.tags || []).includes("fruit")),
+  []
+);
+
+// ✅ Carb options for Step 3 (exclude fruit items)
+const carbOnlyOptions = useMemo(
+  () => FOODS_BY_GROUP.carb.filter((f) => !(f.tags || []).includes("fruit")),
+  []
+);
+
 
   // --------- calculations ---------
   const calc = useMemo(() => {
@@ -540,7 +544,7 @@ export default function ModularMealBuilder({
                     label="Carb (optional)"
                     value={carbId}
                     onChange={setCarbId}
-                    options={FOODS_BY_GROUP.carb}
+                    options={carbOnlyOptions}
                     placeholder="Choose carbohydrate…"
                   />
                   <AmountField
