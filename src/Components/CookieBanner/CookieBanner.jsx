@@ -1,17 +1,15 @@
 // src/Components/CookieBanner/CookieBanner.jsx
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import Button from "../Button/Button";
-import {
-  grantAnalyticsConsent,
-  denyAnalyticsConsent,
-} from "../../utils/analytics";
+import { grantAnalyticsConsent, denyAnalyticsConsent } from "../../utils/analytics";
 import styles from "./CookieBanner.module.css";
 
 export default function CookieBanner() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const consent = localStorage.getItem("analytics_consent");
+    // Show banner only if no decision has been made yet
+    const consent = localStorage.getItem("analytics_consent"); // or use getAnalyticsConsent + separate "hasDecision"
     if (!consent) setVisible(true);
   }, []);
 
@@ -27,7 +25,7 @@ export default function CookieBanner() {
         <Button
           mode="filled"
           onClick={() => {
-            grantAnalyticsConsent();
+            grantAnalyticsConsent(); // ✅ also fires a page_view immediately
             setVisible(false);
           }}
         >
@@ -47,4 +45,5 @@ export default function CookieBanner() {
     </div>
   );
 }
+
 
