@@ -51,7 +51,7 @@ export default function NutritionCalculator() {
       {!isOpen && (
         <button className={styles.openBtn} onClick={() => setIsOpen(true)}>
           <FaAppleAlt className={styles.icon} />
-          <span>Nutrition Calculator</span>
+          <span>Calorie & Macro Calculator</span>
         </button>
       )}
 
@@ -87,11 +87,11 @@ export default function NutritionCalculator() {
             <div className={styles.formGroup}>
               <label>Activity Level:</label>
               <select value={activity} onChange={(e) => setActivity(parseFloat(e.target.value))}>
-                <option value={1.2}>Sedentary</option>
-                <option value={1.375}>Lightly Active</option>
-                <option value={1.55}>Moderately Active</option>
-                <option value={1.725}>Very Active</option>
-                <option value={1.9}>Extra Active</option>
+                <option value={1.2}>Sedentary (little or no exercise)</option>
+                <option value={1.375}>Lightly Active (exercise 1-3 days/week)</option>
+                <option value={1.55}>Moderately Active (exercise 3-5 days/week)</option>
+                <option value={1.725}>Very Active (exercise 6-7 days/week)</option>
+                <option value={1.9}>Extra Active (physical job + Intense daily exercise)</option>
               </select>
             </div>
 
