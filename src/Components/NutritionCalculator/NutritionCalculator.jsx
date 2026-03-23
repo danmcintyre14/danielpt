@@ -58,7 +58,7 @@ export default function NutritionCalculator() {
       {isOpen && (
         <div className={styles.calculatorCard}>
           <button className={styles.closeBtn} onClick={() => setIsOpen(false)}>✕</button>
-          <h2 className={styles.title}>Nutrition Calculator</h2>
+          <h2 className={styles.title}>Calorie & Macro Calculator</h2>
 
           {/* Inputs grouped for responsive layout */}
           <div className={styles.formRow}>
