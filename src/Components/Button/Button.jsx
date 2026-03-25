@@ -1,34 +1,45 @@
-// src/Components/Button/Button.jsx
 import styles from "./Button.module.css";
 import { Link } from "react-router-dom";
 
 export default function Button({
   children,
   mode = "filled",
-  href,         // external or internal URL (falls back to <a>)
-  to,           // React Router path (renders <Link>)
+  href,
+  to,
   onClick,
   type = "button",
-  disabled,
+  disabled = false,
   target,
   rel,
   className = "",
 }) {
-  const variantClass = styles[mode] || styles.filled;
-  const classNames = `${styles.button} ${variantClass} ${className}`;
+  // 👉 allow multiple modes like "filled small"
+  const modes = mode.split(" ");
+  const variantClasses = modes
+    .map((m) => styles[m])
+    .filter(Boolean)
+    .join(" ");
 
+  const classNames = `${styles.button} ${variantClasses} ${className}`.trim();
+
+  // 👉 SPA navigation
   if (to) {
-    // SPA navigation (React Router)
     return (
-      <Link to={to} className={classNames} onClick={onClick} aria-disabled={disabled}>
+      <Link
+        to={to}
+        className={classNames}
+        onClick={onClick}
+        aria-disabled={disabled}
+      >
         {children}
       </Link>
     );
   }
 
+  // 👉 External / internal link
   if (href) {
-    // External/internal traditional link
     const isExternal = /^https?:\/\//i.test(href);
+
     return (
       <a
         href={href}
@@ -43,9 +54,14 @@ export default function Button({
     );
   }
 
-  // Default button
+  // 👉 Default button
   return (
-    <button type={type} onClick={onClick} className={classNames} disabled={disabled}>
+    <button
+      type={type}
+      onClick={onClick}
+      className={classNames}
+      disabled={disabled}
+    >
       {children}
     </button>
   );

@@ -1,23 +1,27 @@
 // src/Components/VideoLibrary/VideoLibrary.jsx
 import { useState } from "react";
-import { videoData } from "../../data/data";
 import VideoCard from "../VideoCard/VideoCard";
 import VideoModal from "../VideoPlayer/VideoModal";
 import styles from "./VideoLibrary.module.css";
 
-const MAX_VISIBLE = 3; // how many cards to show before "Show more"
+const MAX_VISIBLE = 3;
 
-export default function VideoLibrary() {
+export default function VideoLibrary({
+  title = "Video Tutorials",
+  subtitle = "",
+  videos = [],
+}) {
   const [selected, setSelected] = useState(null);
   const [showAll, setShowAll] = useState(false);
 
-  const visibleVideos = showAll
-    ? videoData
-    : videoData.slice(0, MAX_VISIBLE);
+  const visibleVideos = showAll ? videos : videos.slice(0, MAX_VISIBLE);
+
+  if (!videos.length) return null;
 
   return (
     <div>
-      <h2 className={styles.heading}>Video Tutorials</h2>
+      <h2 className={styles.heading}>{title}</h2>
+      {subtitle && <p className={styles.subtitle}>{subtitle}</p>}
 
       <div className={styles.videoGrid}>
         {visibleVideos.map((video, index) => (
@@ -29,12 +33,12 @@ export default function VideoLibrary() {
         ))}
       </div>
 
-      {videoData.length > MAX_VISIBLE && (
+      {videos.length > MAX_VISIBLE && (
         <div className={styles.loadMoreWrapper}>
           <button
             type="button"
             className={styles.loadMoreButton}
-            onClick={() => setShowAll(prev => !prev)}
+            onClick={() => setShowAll((prev) => !prev)}
           >
             {showAll ? "Show fewer videos" : "Show more videos"}
           </button>

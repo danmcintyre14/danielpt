@@ -1,41 +1,69 @@
-.heading {
-  text-align: center;
-  font-size: 1.6rem;
-  margin-bottom: 16px;
+.section {
+  margin-bottom: 48px;
 }
 
-/* keep your existing grid, but ensure it's responsive */
+.heading {
+  text-align: center;
+  font-size: clamp(1.8rem, 2.8vw, 2.5rem);
+  font-weight: 800;
+  color: #222;
+  margin-bottom: 12px;
+}
+
+.subtitle {
+  max-width: 760px;
+  margin: 0 auto 2rem;
+  text-align: center;
+  color: #666;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
 .videoGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 16px;
+  gap: 24px;
 }
 
-/* Center the Show more button */
 .loadMoreWrapper {
-  margin-top: 16px;
+  margin-top: 24px;
   text-align: center;
 }
 
 .loadMoreButton {
   border-radius: 999px;
   border: none;
-  padding: 8px 18px;
-  font-size: 0.9rem;
+  padding: 10px 22px;
+  font-size: 0.95rem;
+  font-weight: 500;
   cursor: pointer;
-  background: #e5e7f9;
-  color: #1e2433;
-  transition: background 0.15s ease;
+  background: #dfe2f7;
+  color: #2c3242;
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .loadMoreButton:hover {
-  background: #d7dbf7;
+  background: #d3d8f5;
+  transform: translateY(-1px);
 }
 
-/* Mobile: 1 card per row */
+.loadMoreButton:focus-visible {
+  outline: 3px solid rgba(65, 102, 245, 0.2);
+  outline-offset: 3px;
+}
+
 @media (max-width: 600px) {
   .videoGrid {
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: 1fr;
+  }
+
+  .heading {
+    font-size: 1.6rem;
+  }
+
+  .subtitle {
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
   }
 }
 
