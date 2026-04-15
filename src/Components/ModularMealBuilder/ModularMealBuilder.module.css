@@ -183,6 +183,132 @@
   .targetsToggle, .resetBtn { grid-column: 1 / -1; justify-self: end; }
 }
 
+/* ===== Macro bar ===== */
+.macroBarCard {
+  background: #f5f7fb;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1rem;
+  margin: 0 0 1rem;
+}
+
+.macroBarHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.85rem;
+}
+
+.macroBarTitle {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.macroTotals {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  color: #475569;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.macroBarTrack {
+  width: 100%;
+  height: 16px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+  display: flex;
+  margin-bottom: 0.85rem;
+}
+
+.macroProtein {
+  height: 100%;
+  background: #16a34a;
+}
+
+.macroCarb {
+  height: 100%;
+  background: #3b82f6;
+}
+
+.macroFat {
+  height: 100%;
+  background: #f59e0b;
+}
+
+.macroLegend {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  color: #475569;
+  font-size: 0.92rem;
+}
+
+.legendDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  display: inline-block;
+  margin-right: 0.45rem;
+  vertical-align: middle;
+}
+
+.proteinDot {
+  background: #16a34a;
+}
+
+.carbDot {
+  background: #3b82f6;
+}
+
+.fatDot {
+  background: #f59e0b;
+}
+
+.macroEmpty {
+  margin: 0;
+  color: #667085;
+  font-size: 0.95rem;
+}
+
+.builderTools {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.85rem;
+}
+
+.targetsToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: #334155;
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
+.targetsToggle input {
+  width: auto;
+}
+
+.resetBtn {
+  padding: 0.45rem 0.8rem;
+  font-size: 0.95rem;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: #334155;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
 /* ===== Progress ===== */
 .progressWrap { display:flex; align-items:center; gap:.6rem; margin:.25rem 0 .75rem; }
 .progressTrack { flex:1; height:8px; background:#eef2f7; border-radius:999px; overflow:hidden; }

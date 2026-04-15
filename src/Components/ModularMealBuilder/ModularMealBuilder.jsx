@@ -1,4 +1,3 @@
-// src/Components/ModularMealBuilder/ModularMealBuilder.jsx
 import { useMemo, useState } from "react";
 import { FaUtensils } from "react-icons/fa";
 import styles from "./ModularMealBuilder.module.css";
@@ -7,120 +6,104 @@ import {
   scaleFood,
   sumItems,
   gramsToCloseKcalGap,
-  cookedToRaw,
   oilVolumeFromGrams,
 } from "../../utils/nutrition";
 
 export default function ModularMealBuilder({
   defaultTargets = { kcal: 550, proteinMin: 35, proteinMax: 50 },
 }) {
-  // Collapsible
   const [isOpen, setIsOpen] = useState(false);
-
-  // Wizard steps
   const steps = [
     "Protein",
     "Fruits & Vegetables",
-    "Carb or Fat (optional)",
+    "Carbohydrate",
+    "Fat",
     "Cooking Oil",
     "Summary",
   ];
   const [step, setStep] = useState(0);
 
-  // Optional coaching targets
   const [useTargets, setUseTargets] = useState(false);
   const [targetKcal, setTargetKcal] = useState(defaultTargets.kcal);
   const [proteinMin, setProteinMin] = useState(defaultTargets.proteinMin);
   const [proteinMax, setProteinMax] = useState(defaultTargets.proteinMax);
 
-  // Step 1: Proteins (dynamic rows)
-  const [proteins, setProteins] = useState([{ id: "", amount: "" }]); // {id, amount}[]
+  const [proteins, setProteins] = useState([{ id: "", amount: "" }]);
 
-  // Step 2: Fruits & Vegetables
   const [vegId, setVegId] = useState("");
   const [vegAmount, setVegAmount] = useState("");
   const [fruitId, setFruitId] = useState("");
   const [fruitAmount, setFruitAmount] = useState("");
 
-  // Step 3: Carb or Fat (optional)
-  const [path, setPath] = useState("carb");
   const [carbId, setCarbId] = useState("");
   const [carbAmount, setCarbAmount] = useState("");
+
   const [fatId, setFatId] = useState("");
   const [fatAmount, setFatAmount] = useState("");
 
-  // Step 4: Oil (optional)
   const [usedOil, setUsedOil] = useState(false);
   const [oilId, setOilId] = useState("olive_oil");
   const [oilGrams, setOilGrams] = useState("");
 
-  // Step 5: Grocery multiplier
   const [mealCountStr, setMealCountStr] = useState("1");
   const mealCount = Math.max(1, parseInt(mealCountStr || "1", 10));
 
-  // Fruit options (already in step 2)
-const fruitOptions = useMemo(
-  () => FOODS_BY_GROUP.carb.filter((f) => (f.tags || []).includes("fruit")),
-  []
-);
+  const fruitOptions = useMemo(
+    () => FOODS_BY_GROUP.carb.filter((f) => (f.tags || []).includes("fruit")),
+    []
+  );
 
-// ✅ Carb options for Step 3 (exclude fruit items)
-const carbOnlyOptions = useMemo(
-  () => FOODS_BY_GROUP.carb.filter((f) => !(f.tags || []).includes("fruit")),
-  []
-);
+  const carbOnlyOptions = useMemo(
+    () => FOODS_BY_GROUP.carb.filter((f) => !(f.tags || []).includes("fruit")),
+    []
+  );
 
-
-  // --------- calculations ---------
   const calc = useMemo(() => {
-    // proteins: scale each selected protein and sum
     const proteinScaledItems = proteins.map((row) => {
       if (!row.id || toNum(row.amount) <= 0) return empty();
+
       const food = FOOD_BY_ID[row.id];
-      return scaleFood(food, toNum(row.amount));
+      if (!food) return empty();
+
+      return safeScaleFood(food, toNum(row.amount));
     });
 
     const pSum = sumItems(proteinScaledItems);
 
-    const vFood = vegId ? FOOD_BY_ID[vegId] : null;
-    const fruitFood = fruitId ? FOOD_BY_ID[fruitId] : null;
-    const cFood = carbId ? FOOD_BY_ID[carbId] : null;
-    const fFood = fatId ? FOOD_BY_ID[fatId] : null;
-    const oilFood = oilId ? FOOD_BY_ID[oilId] : null;
+    const vFood = vegId && FOOD_BY_ID[vegId] ? FOOD_BY_ID[vegId] : null;
+    const fruitFood =
+      fruitId && FOOD_BY_ID[fruitId] ? FOOD_BY_ID[fruitId] : null;
+    const cFood = carbId && FOOD_BY_ID[carbId] ? FOOD_BY_ID[carbId] : null;
+    const fFood = fatId && FOOD_BY_ID[fatId] ? FOOD_BY_ID[fatId] : null;
+    const oilFood = oilId && FOOD_BY_ID[oilId] ? FOOD_BY_ID[oilId] : null;
 
-    const v = vFood ? scaleFood(vFood, toNum(vegAmount)) : empty();
-    const fruit = fruitFood
-      ? scaleFood(fruitFood, toNum(fruitAmount))
-      : empty();
+    const v =
+      vFood && toNum(vegAmount) > 0
+        ? safeScaleFood(vFood, toNum(vegAmount))
+        : empty();
+
+    const fruit =
+      fruitFood && toNum(fruitAmount) > 0
+        ? safeScaleFood(fruitFood, toNum(fruitAmount))
+        : empty();
+
     const c =
-      path === "carb"
-        ? cFood
-          ? scaleFood(cFood, toNum(carbAmount))
-          : empty()
-        : empty();
-    const f =
-      path === "fat"
-        ? fFood
-          ? scaleFood(fFood, toNum(fatAmount))
-          : empty()
+      cFood && toNum(carbAmount) > 0
+        ? safeScaleFood(cFood, toNum(carbAmount))
         : empty();
 
-    // oil entered in grams
+    const f =
+      fFood && toNum(fatAmount) > 0
+        ? safeScaleFood(fFood, toNum(fatAmount))
+        : empty();
+
     let oil = empty();
-    if (usedOil && oilFood) {
-      const grams = toNum(oilGrams);
-      if (oilFood.unit.kind === "per10g") {
-        oil = scaleFood(oilFood, grams / oilFood.unit.grams);
-      } else if (oilFood.unit.kind === "per100g") {
-        oil = scaleFood(oilFood, grams);
-      } else {
-        oil = scaleFood(oilFood, grams / (oilFood.unit.grams || 1));
-      }
+    if (usedOil && oilFood && toNum(oilGrams) > 0) {
+      oil = safeScaleFood(oilFood, toNum(oilGrams));
     }
 
     const total = sumItems([pSum, v, fruit, c, f, oil]);
 
-    // coaching suggestion
     let suggestion = null;
     const somethingChosen =
       proteinScaledItems.some((x) => x.kcal > 0) ||
@@ -129,8 +112,10 @@ const carbOnlyOptions = useMemo(
       c.kcal > 0 ||
       f.kcal > 0 ||
       oil.kcal > 0;
+
     if (useTargets && somethingChosen) {
       const kcalGap = targetKcal - total.kcal;
+
       if (
         Math.abs(kcalGap) <= 30 &&
         total.p >= proteinMin &&
@@ -141,63 +126,54 @@ const carbOnlyOptions = useMemo(
       } else {
         if (kcalGap > 0) {
           const adjFood =
-            path === "carb"
-              ? cFood || fruitFood || vFood || firstProteinFood(proteins)
-              : usedOil
-              ? oilFood
-              : fFood || firstProteinFood(proteins) || vFood || fruitFood;
+            cFood ||
+            fFood ||
+            oilFood ||
+            fruitFood ||
+            vFood ||
+            firstProteinFood(proteins);
+
           if (adjFood) {
-            const addGrams = gramsToCloseKcalGap(adjFood, kcalGap);
+            const addAmount = gramsToCloseKcalGap(adjFood, kcalGap);
             suggestion = `Add ~${roundTo(
-              addGrams,
-              path === "carb" ? 5 : 2
-            )}g ${adjFood.name.toLowerCase()} to hit ~${targetKcal} kcal.`;
+              addAmount,
+              adjFood.unit.kind === "per100g" ? 5 : 1
+            )}${adjFood.unit.kind === "perUnit" ? " units" : "g"} ${adjFood.name.toLowerCase()} to move closer to ~${targetKcal} kcal.`;
           }
         } else if (kcalGap < 0) {
           const overBy = Math.abs(kcalGap);
-          if (usedOil && oilFood && toNum(oilGrams) > 0) {
-            const reduce = gramsToCloseKcalGap(oilFood, overBy);
-            suggestion = `Reduce cooking oil by ~${roundTo(reduce, 2)}g.`;
-          } else {
-            const adjFood = path === "carb" ? cFood || fruitFood : fFood;
-            if (adjFood) {
-              const reduce = gramsToCloseKcalGap(adjFood, overBy);
-              suggestion = `Reduce ${adjFood.name.toLowerCase()} by ~${roundTo(
-                reduce,
-                path === "carb" ? 5 : 2
-              )}g.`;
-            }
+          const adjFood = oilFood || fFood || cFood || fruitFood;
+
+          if (adjFood) {
+            const reduceAmount = gramsToCloseKcalGap(adjFood, overBy);
+            suggestion = `Reduce ${adjFood.name.toLowerCase()} by ~${roundTo(
+              reduceAmount,
+              adjFood.unit.kind === "per100g" ? 5 : 1
+            )}${adjFood.unit.kind === "perUnit" ? " units" : "g"}.`;
           }
         }
+
         if (total.p < proteinMin) {
           suggestion =
             (suggestion ? suggestion + " " : "") +
-            `Tip: increase protein to ≥${proteinMin}g.`;
+            `Tip: increase protein to at least ${proteinMin}g.`;
         } else if (total.p > proteinMax) {
           suggestion =
             (suggestion ? suggestion + " " : "") +
-            `Tip: slightly reduce protein to ≤${proteinMax}g (optional).`;
+            `Tip: slightly reduce protein to ${proteinMax}g or below if needed.`;
         }
       }
     }
 
-    // grocery/raw
-    // Sum raw protein across all protein rows
-    const rawProtein = proteins.reduce((acc, row) => {
-      if (!row.id || toNum(row.amount) <= 0) return acc;
-      const food = FOOD_BY_ID[row.id];
-      const scaled = scaleFood(food, toNum(row.amount));
-      return acc + cookedToRaw(food.id, scaled.grams);
-    }, 0);
-
     const raw = {
-      protein: rawProtein,
-      veg: vFood ? cookedToRaw(vFood.id, v.grams) : 0,
-      fruit: fruitFood ? cookedToRaw(fruitFood.id, fruit.grams) : 0,
-      carb: path === "carb" && cFood ? cookedToRaw(cFood.id, c.grams) : 0,
-      fat: path === "fat" && fFood ? cookedToRaw(fFood.id, f.grams) : 0,
+      protein: Math.round(pSum.grams),
+      veg: Math.round(v.grams),
+      fruit: Math.round(fruit.grams),
+      carb: Math.round(c.grams),
+      fat: Math.round(f.grams),
       oil: usedOil ? Math.round(oil.grams) : 0,
     };
+
     const list = {
       protein: raw.protein * mealCount,
       veg: raw.veg * mealCount,
@@ -206,15 +182,14 @@ const carbOnlyOptions = useMemo(
       fat: raw.fat * mealCount,
       oil: raw.oil * mealCount,
     };
-    const oilVol = usedOil ? oilVolumeFromGrams(list.oil) : null;
 
-    // Protein label list (for summary table)
+    const oilVol = usedOil && list.oil > 0 ? oilVolumeFromGrams(list.oil) : null;
+
     const proteinNames = proteins
-      .map((r) => (r.id ? FOOD_BY_ID[r.id]?.name : ""))
+      .map((r) => (r.id && FOOD_BY_ID[r.id] ? FOOD_BY_ID[r.id].name : ""))
       .filter(Boolean);
 
     return {
-      items: { pSum, v, fruit, c, f, oil },
       total,
       suggestion,
       raw,
@@ -234,7 +209,6 @@ const carbOnlyOptions = useMemo(
     vegAmount,
     fruitId,
     fruitAmount,
-    path,
     carbId,
     carbAmount,
     fatId,
@@ -249,24 +223,33 @@ const carbOnlyOptions = useMemo(
     proteinMax,
   ]);
 
-  // ---------- step guards ----------
-  const canNext = () => {
-    if (step === 0) {
-      // need at least one valid protein row
-      return proteins.some((r) => !!r.id && toNum(r.amount) > 0);
+  const macroBar = useMemo(() => {
+    const proteinKcal = calc.total.p * 4;
+    const carbKcal = calc.total.c * 4;
+    const fatKcal = calc.total.f * 9;
+
+    const totalMacroKcal = proteinKcal + carbKcal + fatKcal;
+
+    if (totalMacroKcal <= 0) {
+      return {
+        proteinPct: 0,
+        carbPct: 0,
+        fatPct: 0,
+        hasData: false,
+      };
     }
-    if (step === 1) {
-      const vegOk = !!vegId && toNum(vegAmount) > 0;
-      const fruitOk = !!fruitId && toNum(fruitAmount) > 0;
-      return vegOk || fruitOk; // veg OR fruit
-    }
-    if (step === 2) {
-      // Carb/Fat optional now
-      return true;
-    }
-    if (step === 3) return usedOil ? toNum(oilGrams) >= 0 : true;
+
+    return {
+      proteinPct: (proteinKcal / totalMacroKcal) * 100,
+      carbPct: (carbKcal / totalMacroKcal) * 100,
+      fatPct: (fatKcal / totalMacroKcal) * 100,
+      hasData: true,
+    };
+  }, [calc.total.p, calc.total.c, calc.total.f]);
+
+  function canNext() {
     return true;
-  };
+  }
 
   function handleReset() {
     setStep(0);
@@ -280,6 +263,7 @@ const carbOnlyOptions = useMemo(
     setFatId("");
     setFatAmount("");
     setUsedOil(false);
+    setOilId("olive_oil");
     setOilGrams("");
     setMealCountStr("1");
     setUseTargets(false);
@@ -288,7 +272,31 @@ const carbOnlyOptions = useMemo(
     setProteinMax(defaultTargets.proteinMax);
   }
 
-  // ---------- UI ----------
+  function clearStep(stepIndex) {
+    if (stepIndex === 0) {
+      setProteins([{ id: "", amount: "" }]);
+    }
+    if (stepIndex === 1) {
+      setVegId("");
+      setVegAmount("");
+      setFruitId("");
+      setFruitAmount("");
+    }
+    if (stepIndex === 2) {
+      setCarbId("");
+      setCarbAmount("");
+    }
+    if (stepIndex === 3) {
+      setFatId("");
+      setFatAmount("");
+    }
+    if (stepIndex === 4) {
+      setUsedOil(false);
+      setOilId("olive_oil");
+      setOilGrams("");
+    }
+  }
+
   return (
     <div className={styles.container}>
       {!isOpen && (
@@ -306,68 +314,84 @@ const carbOnlyOptions = useMemo(
           <button className={styles.closeBtn} onClick={() => setIsOpen(false)}>
             ✕
           </button>
+
           <h2 className={styles.title}>Meal Builder</h2>
-          <p className={styles.subtitle}>Build a meal in 5 quick steps.</p>
+          <p className={styles.subtitle}>
+            Build your meal your way. Add what you want, skip what you don’t.
+            All weights are raw unless stated otherwise.
+          </p>
 
-          {/* Live stats + coaching toggle + reset */}
-          <div className={styles.statsBar}>
-            <div className={styles.statChip}>
-              <span className={styles.chipLabel}>Calories</span>
-              <div className={styles.chipValueWrap}>
-                <strong
-                  className={
-                    useTargets && Math.abs(targetKcal - calc.total.kcal) <= 30
-                      ? styles.ok
-                      : ""
-                  }
-                >
-                  {calc.total.kcal}
-                </strong>
-                <small className={styles.chipUnit}>
-                  {useTargets ? ` / ${targetKcal} ` : ""}kcal
-                </small>
+          <div className={styles.macroBarCard}>
+            <div className={styles.builderTools}>
+              <label className={styles.targetsToggle}>
+                <input
+                  type="checkbox"
+                  checked={useTargets}
+                  onChange={(e) => setUseTargets(e.target.checked)}
+                />
+                <span>Targets</span>
+              </label>
+
+              <button
+                type="button"
+                className={styles.resetBtn}
+                onClick={handleReset}
+              >
+                Reset
+              </button>
+            </div>
+
+            <div className={styles.macroBarHeader}>
+              <h3 className={styles.macroBarTitle}>Meal Breakdown</h3>
+
+              <div className={styles.macroTotals}>
+                <span>{calc.total.kcal} kcal</span>
+                <span>P {calc.total.p}g</span>
+                <span>C {calc.total.c}g</span>
+                <span>F {calc.total.f}g</span>
+                <span>Fibre {calc.total.fiber}g</span>
               </div>
             </div>
 
-            <div className={styles.statChip}>
-              <span className={styles.chipLabel}>Protein</span>
-              <div className={styles.chipValueWrap}>
-                <strong
-                  className={
-                    useTargets &&
-                    calc.total.p >= proteinMin &&
-                    calc.total.p <= proteinMax
-                      ? styles.ok
-                      : ""
-                  }
-                >
-                  {calc.total.p}
-                </strong>
-                <small className={styles.chipUnit}>
-                  {useTargets ? ` / ${proteinMin}–${proteinMax} ` : ""}g
-                </small>
-              </div>
-            </div>
+            {macroBar.hasData ? (
+              <>
+                <div className={styles.macroBarTrack}>
+                  <div
+                    className={styles.macroProtein}
+                    style={{ width: `${macroBar.proteinPct}%` }}
+                  />
+                  <div
+                    className={styles.macroCarb}
+                    style={{ width: `${macroBar.carbPct}%` }}
+                  />
+                  <div
+                    className={styles.macroFat}
+                    style={{ width: `${macroBar.fatPct}%` }}
+                  />
+                </div>
 
-            <label className={styles.targetsToggle}>
-              <input
-                type="checkbox"
-                checked={useTargets}
-                onChange={(e) => setUseTargets(e.target.checked)}
-              />
-              <span>Targets</span>
-            </label>
-
-            <button
-              type="button"
-              className={styles.resetBtn}
-              onClick={handleReset}
-            >
-              Reset
-            </button>
+                <div className={styles.macroLegend}>
+                  <span>
+                    <i className={`${styles.legendDot} ${styles.proteinDot}`} />
+                    Protein {Math.round(macroBar.proteinPct)}%
+                  </span>
+                  <span>
+                    <i className={`${styles.legendDot} ${styles.carbDot}`} />
+                    Carbs {Math.round(macroBar.carbPct)}%
+                  </span>
+                  <span>
+                    <i className={`${styles.legendDot} ${styles.fatDot}`} />
+                    Fat {Math.round(macroBar.fatPct)}%
+                  </span>
+                </div>
+              </>
+            ) : (
+              <p className={styles.macroEmpty}>
+                Add foods to see your meal breakdown.
+              </p>
+            )}
           </div>
 
-          {/* Targets form */}
           {useTargets && (
             <div className={styles.section}>
               <h3 className={styles.h3}>Targets</h3>
@@ -391,7 +415,6 @@ const carbOnlyOptions = useMemo(
             </div>
           )}
 
-          {/* Progress */}
           <div className={styles.progressWrap}>
             <div className={styles.progressTrack}>
               <div
@@ -404,10 +427,12 @@ const carbOnlyOptions = useMemo(
             </div>
           </div>
 
-          {/* Step 1: Dynamic Proteins */}
           {step === 0 && (
             <section className={styles.section}>
-              <h3 className={styles.h3}>Step 1: Choose Protein(s)</h3>
+              <h3 className={styles.h3}>Step 1: Protein</h3>
+              <p className={styles.subtitle} style={{ marginTop: "-.25rem" }}>
+                Add one protein, multiple proteins, or skip this step.
+              </p>
 
               {proteins.map((row, idx) => (
                 <div key={idx} className={styles.formRow}>
@@ -420,6 +445,7 @@ const carbOnlyOptions = useMemo(
                     options={FOODS_BY_GROUP.protein}
                     placeholder="Choose protein…"
                   />
+
                   <AmountField
                     label={usesUnits(row.id) ? "Amount (units)" : "Amount (g)"}
                     value={row.amount}
@@ -427,11 +453,10 @@ const carbOnlyOptions = useMemo(
                     step={usesUnits(row.id) ? 1 : 10}
                     placeholder={usesUnits(row.id) ? "1" : "150"}
                   />
+
                   {proteins.length > 1 && (
                     <div className={styles.formGroup}>
-                      <span style={{ visibility: "hidden" }}>
-                        remove label spacer
-                      </span>
+                      <span style={{ visibility: "hidden" }}>spacer</span>
                       <button
                         type="button"
                         className={styles.secondaryBtn}
@@ -458,14 +483,13 @@ const carbOnlyOptions = useMemo(
             </section>
           )}
 
-          {/* Step 2: Fruits & Vegetables */}
           {step === 1 && (
             <section className={styles.section}>
               <h3 className={styles.h3}>Step 2: Fruits & Vegetables</h3>
 
               <div className={styles.formRow}>
                 <SelectField
-                  label="Vegetable (optional)"
+                  label="Vegetable"
                   value={vegId}
                   onChange={setVegId}
                   options={FOODS_BY_GROUP.veg}
@@ -482,7 +506,7 @@ const carbOnlyOptions = useMemo(
 
               <div className={styles.formRow}>
                 <SelectField
-                  label="Fruit (optional)"
+                  label="Fruit"
                   value={fruitId}
                   onChange={setFruitId}
                   options={fruitOptions}
@@ -498,88 +522,70 @@ const carbOnlyOptions = useMemo(
               </div>
 
               <p className={styles.subtitle} style={{ marginTop: "-.25rem" }}>
-                Add vegetables, fruit, or both—your calories, carbs, and fiber
-                update live above.
+                Add vegetables, fruit, both, or skip this step.
               </p>
             </section>
           )}
 
-          {/* Step 3: Carb or Fat (optional) */}
           {step === 2 && (
             <section className={styles.section}>
-              <h3 className={styles.h3}>
-                Step 3 (optional): Choose{" "}
-                <span className={styles.badge}>Carb</span> or{" "}
-                <span className={styles.badge}>Fat</span>
-              </h3>
+              <h3 className={styles.h3}>Step 3: Carbohydrate</h3>
               <p className={styles.subtitle} style={{ marginTop: "-.25rem" }}>
-                You can skip this step if you only want protein and
-                fruits/vegetables.
+                Add a carbohydrate source or skip this step.
               </p>
 
-              <div className={styles.toggle}>
-                <button
-                  type="button"
-                  className={`${styles.toggleBtn} ${
-                    path === "carb" ? styles.active : ""
-                  }`}
-                  onClick={() => setPath("carb")}
-                >
-                  Carbohydrate
-                </button>
-                <button
-                  type="button"
-                  className={`${styles.toggleBtn} ${
-                    path === "fat" ? styles.active : ""
-                  }`}
-                  onClick={() => setPath("fat")}
-                >
-                  Fat
-                </button>
+              <div className={styles.formRow}>
+                <SelectField
+                  label="Carb"
+                  value={carbId}
+                  onChange={setCarbId}
+                  options={carbOnlyOptions}
+                  placeholder="Choose carbohydrate…"
+                />
+                <AmountField
+                  label={usesUnits(carbId) ? "Amount (units)" : "Amount (g)"}
+                  value={carbAmount}
+                  onChange={setCarbAmount}
+                  step={usesUnits(carbId) ? 1 : 10}
+                  placeholder={usesUnits(carbId) ? "1" : "75"}
+                />
               </div>
-
-              {path === "carb" ? (
-                <div className={styles.formRow}>
-                  <SelectField
-                    label="Carb (optional)"
-                    value={carbId}
-                    onChange={setCarbId}
-                    options={carbOnlyOptions}
-                    placeholder="Choose carbohydrate…"
-                  />
-                  <AmountField
-                    label={usesUnits(carbId) ? "Amount (units)" : "Amount (g)"}
-                    value={carbAmount}
-                    onChange={setCarbAmount}
-                    step={usesUnits(carbId) ? 1 : 10}
-                    placeholder="150"
-                  />
-                </div>
-              ) : (
-                <div className={styles.formRow}>
-                  <SelectField
-                    label="Fat (optional)"
-                    value={fatId}
-                    onChange={setFatId}
-                    options={FOODS_BY_GROUP.fat}
-                    placeholder="Choose fat…"
-                  />
-                  <AmountField
-                    label={usesUnits(fatId) ? "Amount (units)" : "Amount (g)"}
-                    value={fatAmount}
-                    onChange={setFatAmount}
-                    step={usesUnits(fatId) ? 1 : 2}
-                    placeholder="20"
-                  />
-                </div>
-              )}
             </section>
           )}
 
-          {/* Step 4: Cooking Oil (optional) */}
           {step === 3 && (
             <section className={styles.section}>
-              <h3 className={styles.h3}>Step 4: Cooking Oil (optional)</h3>
+              <h3 className={styles.h3}>Step 4: Fat</h3>
+              <p className={styles.subtitle} style={{ marginTop: "-.25rem" }}>
+                Add a fat source or skip this step.
+              </p>
+
+              <div className={styles.formRow}>
+                <SelectField
+                  label="Fat"
+                  value={fatId}
+                  onChange={setFatId}
+                  options={FOODS_BY_GROUP.fat.filter((f) => f.id !== "olive_oil")}
+                  placeholder="Choose fat…"
+                />
+                <AmountField
+                  label={usesUnits(fatId) ? "Amount (units)" : "Amount (g)"}
+                  value={fatAmount}
+                  onChange={setFatAmount}
+                  step={usesUnits(fatId) ? 1 : 2}
+                  placeholder={usesUnits(fatId) ? "1" : "20"}
+                />
+              </div>
+            </section>
+          )}
+
+          {step === 4 && (
+            <section className={styles.section}>
+              <h3 className={styles.h3}>Step 5: Cooking Oil</h3>
+              <p className={styles.subtitle} style={{ marginTop: "-.25rem" }}>
+                Add oil if used for cooking, or skip this step.
+              </p>
+
               <div className={styles.formRow}>
                 <div className={styles.formGroup}>
                   <label>Used oil?</label>
@@ -592,6 +598,7 @@ const carbOnlyOptions = useMemo(
                     <option value="yes">Yes</option>
                   </select>
                 </div>
+
                 {usedOil && (
                   <>
                     <div className={styles.formGroup}>
@@ -604,6 +611,7 @@ const carbOnlyOptions = useMemo(
                         <option value="olive_oil">Olive oil</option>
                       </select>
                     </div>
+
                     <div className={styles.formGroup}>
                       <label>Oil (grams)</label>
                       <input
@@ -630,11 +638,10 @@ const carbOnlyOptions = useMemo(
             </section>
           )}
 
-          {/* Step 5: Summary & Grocery */}
-          {step === 4 && (
+          {step === 5 && (
             <>
               <section className={styles.section}>
-                <h3 className={styles.h3}>Step 5: Summary</h3>
+                <h3 className={styles.h3}>Step 6: Summary</h3>
                 <div className={styles.grid}>
                   <Stat label="Calories" value={`${calc.total.kcal} kcal`} />
                   <Stat label="Protein" value={`${calc.total.p} g`} />
@@ -643,13 +650,15 @@ const carbOnlyOptions = useMemo(
                   <Stat label="Fiber" value={`${calc.total.fiber} g`} />
                   <Stat label="Total Weight" value={`${calc.total.grams} g`} />
                 </div>
+
                 {useTargets && calc.suggestion && (
                   <p className={styles.suggestion}>{calc.suggestion}</p>
                 )}
               </section>
 
               <section className={styles.section}>
-                <h3 className={styles.h3}>Grocery (Raw) Estimate</h3>
+                <h3 className={styles.h3}>Grocery Estimate</h3>
+
                 <div className={styles.formRow}>
                   <div className={styles.formGroup}>
                     <label>How many meals like this?</label>
@@ -661,12 +670,10 @@ const carbOnlyOptions = useMemo(
                       step="1"
                       value={mealCountStr}
                       onChange={(e) => {
-                        // allow empty while typing; keep only digits
                         const v = e.target.value.replace(/[^\d]/g, "");
                         setMealCountStr(v);
                       }}
                       onBlur={(e) => {
-                        // normalize on blur to at least 1
                         const n = Math.max(
                           1,
                           parseInt(e.target.value || "1", 10)
@@ -686,42 +693,51 @@ const carbOnlyOptions = useMemo(
                     </tr>
                   </thead>
                   <tbody>
-                    <GroceryRow
-                      label={`Protein (${
-                        calc.names.proteinNames.length
-                          ? calc.names.proteinNames.join(", ")
-                          : "—"
-                      })`}
-                      one={calc.raw.protein}
-                      many={calc.list.protein}
-                    />
-                    <GroceryRow
-                      label={`Vegetable (${calc.names.vFood?.name ?? "—"})`}
-                      one={calc.raw.veg}
-                      many={calc.list.veg}
-                    />
-                    {fruitId && toNum(fruitAmount) > 0 && (
+                    {calc.raw.protein > 0 && (
+                      <GroceryRow
+                        label={`Protein (${
+                          calc.names.proteinNames.length
+                            ? calc.names.proteinNames.join(", ")
+                            : "—"
+                        })`}
+                        one={calc.raw.protein}
+                        many={calc.list.protein}
+                      />
+                    )}
+
+                    {calc.raw.veg > 0 && (
+                      <GroceryRow
+                        label={`Vegetable (${calc.names.vFood?.name ?? "—"})`}
+                        one={calc.raw.veg}
+                        many={calc.list.veg}
+                      />
+                    )}
+
+                    {calc.raw.fruit > 0 && (
                       <GroceryRow
                         label={`Fruit (${calc.names.fruitFood?.name ?? "—"})`}
                         one={calc.raw.fruit}
                         many={calc.list.fruit}
                       />
                     )}
-                    {path === "carb" && (
+
+                    {calc.raw.carb > 0 && (
                       <GroceryRow
                         label={`Carb (${calc.names.cFood?.name ?? "—"})`}
                         one={calc.raw.carb}
                         many={calc.list.carb}
                       />
                     )}
-                    {path === "fat" && (
+
+                    {calc.raw.fat > 0 && (
                       <GroceryRow
                         label={`Fat (${calc.names.fFood?.name ?? "—"})`}
                         one={calc.raw.fat}
                         many={calc.list.fat}
                       />
                     )}
-                    {usedOil && (
+
+                    {calc.raw.oil > 0 && (
                       <tr>
                         <td>Cooking oil</td>
                         <td>{calc.raw.oil} g</td>
@@ -736,13 +752,23 @@ const carbOnlyOptions = useMemo(
                         </td>
                       </tr>
                     )}
+
+                    {calc.raw.protein === 0 &&
+                      calc.raw.veg === 0 &&
+                      calc.raw.fruit === 0 &&
+                      calc.raw.carb === 0 &&
+                      calc.raw.fat === 0 &&
+                      calc.raw.oil === 0 && (
+                        <tr>
+                          <td colSpan="3">No foods added yet.</td>
+                        </tr>
+                      )}
                   </tbody>
                 </table>
               </section>
             </>
           )}
 
-          {/* Nav buttons */}
           <div className={styles.stepNav}>
             <button
               className={styles.secondaryBtn}
@@ -751,16 +777,29 @@ const carbOnlyOptions = useMemo(
             >
               Back
             </button>
+
             {step < steps.length - 1 ? (
-              <button
-                className={styles.primaryBtn}
-                disabled={!canNext()}
-                onClick={() =>
-                  setStep((s) => Math.min(steps.length - 1, s + 1))
-                }
-              >
-                Next
-              </button>
+              <>
+                <button
+                  className={styles.secondaryBtn}
+                  onClick={() => {
+                    clearStep(step);
+                    setStep((s) => Math.min(steps.length - 1, s + 1));
+                  }}
+                >
+                  Skip
+                </button>
+
+                <button
+                  className={styles.primaryBtn}
+                  disabled={!canNext()}
+                  onClick={() =>
+                    setStep((s) => Math.min(steps.length - 1, s + 1))
+                  }
+                >
+                  Next
+                </button>
+              </>
             ) : (
               <button
                 className={styles.primaryBtn}
@@ -775,21 +814,20 @@ const carbOnlyOptions = useMemo(
     </div>
   );
 
-  // ---- local helpers for proteins ----
   function addProtein() {
     setProteins((rows) => [...rows, { id: "", amount: "" }]);
   }
+
   function updateProtein(index, patch) {
     setProteins((rows) =>
       rows.map((r, i) => (i === index ? { ...r, ...patch } : r))
     );
   }
+
   function removeProtein(index) {
     setProteins((rows) => rows.filter((_, i) => i !== index));
   }
 }
-
-/* ---------- Subcomponents ---------- */
 
 function AmountField({
   label,
@@ -809,7 +847,7 @@ function AmountField({
         step={step}
         value={value}
         placeholder={placeholder}
-        onChange={(e) => onChange(e.target.value)} // keep as string
+        onChange={(e) => onChange(e.target.value)}
         onBlur={(e) =>
           onChange(e.target.value === "" ? "" : String(toNum(e.target.value)))
         }
@@ -881,24 +919,31 @@ function GroceryRow({ label, one, many }) {
   );
 }
 
-/* ---------- Helpers ---------- */
-
 function usesUnits(foodId) {
   if (!foodId) return false;
   const food = FOOD_BY_ID[foodId];
-  return food?.unit?.kind === "perUnit" || food?.unit?.kind === "per10g";
+  return food?.unit?.kind === "perUnit";
 }
+
 function firstProteinFood(proteins) {
-  const first = proteins.find((r) => r.id);
+  const first = proteins.find((r) => r.id && FOOD_BY_ID[r.id]);
   return first ? FOOD_BY_ID[first.id] : null;
 }
+
+function safeScaleFood(food, amount) {
+  if (!food || !food.unit || amount <= 0) return empty();
+  return scaleFood(food, amount);
+}
+
 function empty() {
   return { kcal: 0, p: 0, c: 0, f: 0, fiber: 0, grams: 0 };
 }
+
 function roundTo(n, step) {
   if (!n || !step) return 0;
   return Math.round(n / step) * step;
 }
+
 function toNum(v) {
   const n = parseFloat(v);
   return Number.isFinite(n) ? Math.max(0, n) : 0;
