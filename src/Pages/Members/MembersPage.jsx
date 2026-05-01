@@ -42,32 +42,32 @@ export default function MembersPage() {
       {/* Hero */}
       <section className={styles.hero}>
         <h1>
-          Start Your Journey with the <span>FitBlueprint</span>
+          Know Exactly What to Do in the Gym—and Lose 2–4kg in Your First 30 Days with <span>FitBlueprint</span>
         </h1>
         <p>
-          Build confidence, learn the fundamentals, and create a strong base for long-term fitness success.
+          Follow a step-by-step workout and nutrition plan designed for beginners, so you can walk into the gym with confidence and start losing 2–4kg in your first 30 days—without guessing what to do.
         </p>
       </section>
 
       {/* Benefits */}
       <section className={styles.benefits}>
-        <h2>What You’ll Get Inside</h2>
+        <h2>What You’ll Get Inside to Help You Lose Your First 2–4kg</h2>
         <div className={styles.benefitsGrid}>
           <div className={styles.benefitCard}>
             <FiVideo className={styles.icon} />
-            <p>Beginner-friendly workout videos</p>
+            <p>Beginner-friendly workout videos so you know exactly how to train</p>
           </div>
           <div className={styles.benefitCard}>
             <FiBarChart2 className={styles.icon} />
-            <p>Step-by-step nutrition & calorie calculator</p>
+            <p>Step-by-step nutrition guidance and a calorie calculator to help you stay in a calorie deficit without overthinking</p>
           </div>
           <div className={styles.benefitCard}>
             <FiCalendar className={styles.icon} />
-            <p>A free starter training plan</p>
+            <p>A simple beginner training plan designed to help you build consistency from day one</p>
           </div>
           <div className={styles.benefitCard}>
             <FiBookOpen className={styles.icon} />
-            <p>Exclusive fitness & nutrition guides</p>
+            <p>Practical fitness and nutrition guides that show you how to make progress week by week</p>
           </div>
         </div>
       </section>
