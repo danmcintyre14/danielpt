@@ -38,7 +38,7 @@ export default function MemberAuth() {
           setInfoMessage("Verification email sent previously. Please verify your email before logging in.");
           return;
         }
-        navigate("/membersArea");
+        navigate("/rebuild/hub");
       } else {
         // SIGN UP
         if (!name.trim()) {

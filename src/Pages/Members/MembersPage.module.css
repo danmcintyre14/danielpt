@@ -1,133 +1,250 @@
-/* src/pages/MembersPage/MembersPage.module.css */
-
 .pageContainer {
-  /* tokens (mirror your homepage) */
   --brand: #4166f5;
   --brand-dark: #3652c9;
   --ink: #222;
   --muted: #666;
-  --bg: #f9f9f9;
-  --surface: #ffffff;
+  --surface: #fff;
   --radius: 16px;
   --radius-lg: 24px;
 
-  padding: clamp(1.25rem, 2vw, 2rem) 1rem 3rem;
-  max-width: 1200px;
+  width: min(100% - 2rem, 1200px);
   margin: 0 auto;
+  padding: clamp(1.5rem, 3vw, 2.5rem) 0 4rem;
 }
 
-/* ===== Hero ===== */
-.hero {
+.branding {
   text-align: center;
-  margin: 0 auto 2.5rem;
-  max-width: 900px;
+  margin-bottom: clamp(2rem, 5vw, 3.5rem);
+}
+
+.brandName {
+  color: var(--ink);
+  font-size: clamp(1.35rem, 3vw, 1.8rem);
+  font-weight: 900;
+  letter-spacing: 0.09em;
+  line-height: 1;
+}
+
+.branding p {
+  margin: 0.45rem 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.hero {
+  max-width: 860px;
+  margin: 0 auto;
+  text-align: center;
 }
 
 .hero h1 {
-  font-size: clamp(2rem, 4.8vw, 2.8rem);
-  line-height: 1.1;
-  font-weight: 800;
+  max-width: 800px;
+  margin: 0 auto;
   color: var(--ink);
-  letter-spacing: -0.01em;
+  font-size: clamp(2.15rem, 6vw, 3.6rem);
+  font-weight: 850;
+  letter-spacing: -0.035em;
+  line-height: 1.04;
 }
 
-.hero h1 span {
-  color: var(--brand);
-}
-
-.hero p {
-  margin-top: 0.75rem;
+.hero > p {
+  max-width: 680px;
+  margin: 1.25rem auto 0;
   color: var(--muted);
-  font-size: clamp(1rem, 1.4vw, 1.125rem);
+  font-size: clamp(1rem, 1.8vw, 1.15rem);
+  line-height: 1.65;
 }
 
-/* ===== Benefits ===== */
-.benefits {
-  margin: 2.5rem 0;
+.vsl {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  margin: clamp(2rem, 5vw, 3rem) auto 1.5rem;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: #111;
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.14);
 }
 
-.benefits h2 {
-  text-align: center;
-  font-size: clamp(1.4rem, 2.6vw, 1.75rem);
-  font-weight: 700;
-  margin-bottom: 1.5rem;
+.vslPlaceholder {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: #fff;
+}
+
+.vslPlaceholder span {
+  font-size: clamp(1.3rem, 4vw, 2.2rem);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+
+.vslPlaceholder small {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.9rem;
+}
+
+.primaryCta {
+  display: inline-block;
+  border-radius: 12px;
+  background: var(--brand);
+  color: #fff;
+  padding: 1rem 1.6rem;
+  font-weight: 800;
+  text-decoration: none;
+  transition: background 120ms ease, transform 120ms ease;
+}
+
+.primaryCta:hover {
+  background: var(--brand-dark);
+  transform: translateY(-1px);
+}
+
+.primaryCta:focus-visible {
+  outline: 3px solid rgba(65, 102, 245, 0.3);
+  outline-offset: 3px;
+}
+
+.ctaNote {
+  display: block;
+  margin-top: 0.7rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.philosophy {
+  max-width: 760px;
+  margin: clamp(4.5rem, 10vw, 8rem) auto;
+}
+
+.philosophy h2 {
+  margin: 0 0 1.5rem;
+  color: var(--ink);
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.12;
+}
+
+.philosophy p {
+  margin: 0 0 1.1rem;
+  color: var(--muted);
+  font-size: clamp(1rem, 1.6vw, 1.1rem);
+  line-height: 1.75;
+}
+
+.philosophy strong {
   color: var(--ink);
 }
 
-.benefitsGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: clamp(1rem, 2vw, 1.5rem);
-}
-
-.benefitCard {
-  background: var(--surface);
-  border-radius: var(--radius);
-  padding: 1.25rem;
-  text-align: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-  border: 1px solid rgba(0,0,0,0.06);
-  transition: transform 120ms ease, box-shadow 120ms ease;
-}
-
-.benefitCard:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-}
-
-.icon {
-  width: 36px;
-  height: 36px;
-  margin: 0 auto 0.75rem;
-  color: var(--brand);
-}
-
-.benefitCard p {
-  color: var(--ink);
-  font-weight: 600;
-  line-height: 1.35;
-}
-
-/* ===== Reviews & CTA spacing helpers (for your components) ===== */
-:global(.googleReviewsWrapper),
-:global(.joinNowWrapper) {
-  /* if your child components expose wrappers, this will add consistent spacing */
-  margin: 2.5rem 0;
-}
-
-/* ===== Signup ===== */
 .signup {
-  margin-top: 2.5rem;
+  max-width: 760px;
+  margin: 0 auto;
+  scroll-margin-top: 1.5rem;
+}
+
+.signupIntro {
+  margin-bottom: 1.25rem;
+  text-align: center;
+}
+
+.signupIntro h2 {
+  margin: 0 0 0.5rem;
+  color: var(--ink);
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.signupIntro p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
 }
 
 .signupBox {
-  background: var(--surface);
+  border: 1px solid rgba(0, 0, 0, 0.06);
   border-radius: var(--radius-lg);
-  padding: clamp(1.25rem, 2.5vw, 2rem);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-  border: 1px solid rgba(0,0,0,0.06);
-  max-width: 760px;
-  margin: 0 auto;
+  background: var(--surface);
+  padding: clamp(1.25rem, 3vw, 2rem);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
 }
 
-.signupBox h2 {
-  font-size: clamp(1.25rem, 2.4vw, 1.75rem);
-  font-weight: 800;
-  color: var(--ink);
-  margin-bottom: 0.5rem;
-}
+/* =========================
+   LEGAL FOOTER
+========================= */
 
-.signupBox p {
+.legalFooter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  gap: 0.5rem;
+
+  margin-top: 3.5rem;
+  padding-top: 1.5rem;
+
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+
   color: var(--muted);
-  margin-bottom: 1rem;
+
+  font-size: 0.78rem;
+  line-height: 1.5;
+
+  text-align: center;
 }
 
+.legalFooter a {
+  color: var(--muted);
 
+  font-weight: 600;
 
-/* ===== Small screens ===== */
-@media (max-width: 420px) {
-  .icon { width: 32px; height: 32px; }
-  .benefitCard { padding: 1rem; }
+  text-decoration: none;
+
+  transition: color 120ms ease;
+}
+
+.legalFooter a:hover {
+  color: var(--brand);
+}
+
+.legalFooter a:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+
+  border-radius: 3px;
+}
+
+.footerDivider {
+  color: rgba(0, 0, 0, 0.25);
+}
+
+@media (max-width: 600px) {
+  .pageContainer {
+    width: min(100% - 1.25rem, 1200px);
+    padding-top: 1.25rem;
+  }
+
+  .branding {
+    margin-bottom: 2rem;
+  }
+
+  .vsl {
+    border-radius: 16px;
+  }
+
+  .primaryCta {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .philosophy {
+    margin: 4.5rem auto;
+  }
 }
 
 

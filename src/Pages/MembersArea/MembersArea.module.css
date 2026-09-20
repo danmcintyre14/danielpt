@@ -1,4 +1,4 @@
-/* src/pages/MembersArea/MembersArea.module.css */
+/* src/Pages/MembersArea/MembersArea.module.css */
 
 .container {
   --brand: #4166f5;
@@ -7,89 +7,655 @@
   --muted: #666;
   --bg: #f9f9f9;
   --surface: #ffffff;
-  --radius: 16px;
-  --container: 1100px; /* shared site-wide max width */
+  --border: rgba(0, 0, 0, 0.07);
 
-  padding: clamp(1.25rem, 2vw, 2rem) 1rem 3rem;
+  --whatsapp: #25d366;
+  --whatsapp-dark: #1ca653;
+
+  --radius: 16px;
+  --radius-lg: 24px;
+  --container: 1100px;
+
   width: 100%;
   max-width: var(--container);
+
   margin: 0 auto;
+
+  padding:
+    clamp(1.25rem, 3vw, 2.5rem)
+    1rem
+    4rem;
+
+  box-sizing: border-box;
 }
 
-/* ===== Top bar ===== */
+
+/* =========================
+   TOP / WELCOME
+========================= */
+
 .topbar {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+
+  width: 100%;
+
+  gap: 1.5rem;
+
+  margin-bottom:
+    clamp(2.5rem, 6vw, 4.5rem);
+}
+
+
+/* =========================
+   ACCOUNT ACTIONS
+========================= */
+
+.accountActions {
+  display: flex;
+
   align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-bottom: 2.5rem;
+  justify-content: flex-end;
+
+  width: 100%;
+
+  gap: 0.65rem;
+}
+
+
+/* Shared button styles */
+
+.contactButton,
+.logoutButton {
+  min-height: 42px;
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding:
+    0.65rem
+    1rem;
+
+  box-sizing: border-box;
+
+  border-radius: 10px;
+
+  font-family: inherit;
+
+  font-size: 0.85rem;
+  font-weight: 700;
+
+  line-height: 1;
+
+  white-space: nowrap;
+
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease,
+    transform 0.15s ease;
+}
+
+
+/* WhatsApp Contact */
+
+.contactButton {
+  gap: 0.45rem;
+
+  background:
+    rgba(37, 211, 102, 0.06);
+
+  border:
+    1px solid
+    rgba(37, 211, 102, 0.45);
+
+  color: var(--whatsapp-dark);
+}
+
+.contactButton svg {
+  width: 1.1rem;
+  height: 1.1rem;
+
+  flex-shrink: 0;
+}
+
+.contactButton:hover {
+  background:
+    rgba(37, 211, 102, 0.11);
+
+  border-color:
+    rgba(37, 211, 102, 0.65);
+
+  transform:
+    translateY(-1px);
+}
+
+
+/* Logout */
+
+.logoutButton {
+  background: #fff;
+
+  border:
+    1px solid
+    rgba(0, 0, 0, 0.1);
+
+  color: #555;
+}
+
+.logoutButton:hover {
+  background: #f5f5f5;
+
+  border-color:
+    rgba(0, 0, 0, 0.15);
+
+  color: #222;
+
+  transform:
+    translateY(-1px);
+}
+
+
+/* Focus */
+
+.contactButton:focus-visible,
+.logoutButton:focus-visible {
+  outline:
+    2px solid var(--brand);
+
+  outline-offset: 2px;
+}
+
+
+/* =========================
+   GREETING
+========================= */
+
+.greeting {
+  max-width: 720px;
+}
+
+.eyebrow {
+  margin:
+    0
+    0
+    0.5rem;
+
+  color:
+    var(--brand) !important;
+
+  font-size:
+    0.8rem !important;
+
+  font-weight: 800;
+
+  letter-spacing: 0.12em;
 }
 
 .greeting h1 {
-  font-size: clamp(1.75rem, 4vw, 2.25rem);
-  font-weight: 800;
+  margin: 0;
+
   color: var(--ink);
-  line-height: 1.2;
+
+  font-size:
+    clamp(2rem, 4.5vw, 3rem);
+
+  font-weight: 800;
+
+  line-height: 1.08;
+
+  letter-spacing: -0.025em;
 }
 
 .greeting p {
+  max-width: 620px;
+
+  margin:
+    0.8rem
+    0
+    0;
+
   color: var(--muted);
-  margin-top: 0.25rem;
-  font-size: 1.05rem;
+
+  font-size:
+    clamp(1rem, 1.5vw, 1.1rem);
+
+  line-height: 1.6;
 }
 
-/* ===== Calculators grid ===== */
+
+/* =========================
+   SECTION HEADINGS
+========================= */
+
+.sectionHeading {
+  max-width: 760px;
+
+  margin-bottom: 1.75rem;
+}
+
+.sectionHeading > span {
+  display: inline-block;
+
+  margin-bottom: 0.45rem;
+
+  color: var(--brand);
+
+  font-size: 0.78rem;
+  font-weight: 800;
+
+  letter-spacing: 0.12em;
+}
+
+.sectionHeading h2 {
+  margin: 0;
+
+  color: var(--ink);
+
+  font-size:
+    clamp(1.75rem, 3.5vw, 2.35rem);
+
+  font-weight: 800;
+
+  line-height: 1.15;
+
+  letter-spacing: -0.02em;
+}
+
+.sectionHeading p {
+  max-width: 680px;
+
+  margin:
+    0.8rem
+    0
+    0;
+
+  color: var(--muted);
+
+  font-size:
+    clamp(1rem, 1.4vw, 1.075rem);
+
+  line-height: 1.65;
+}
+
+
+/* =========================
+   START HERE
+========================= */
+
+.introSection {
+  margin-bottom:
+    clamp(4rem, 8vw, 6rem);
+}
+
+.videoPlaceholder {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+
+  aspect-ratio: 16 / 9;
+
+  background: #111;
+
+  border-radius: var(--radius-lg);
+
+  overflow: hidden;
+
+  box-shadow:
+    0 12px 36px
+    rgba(0, 0, 0, 0.12);
+
+  text-align: center;
+
+  color: #fff;
+}
+
+.videoPlaceholder strong {
+  display: block;
+
+  font-size:
+    clamp(1rem, 2vw, 1.25rem);
+
+  letter-spacing: 0.08em;
+}
+
+.videoPlaceholder p {
+  margin:
+    0.5rem
+    1rem
+    0;
+
+  color:
+    rgba(255, 255, 255, 0.65);
+}
+
+
+/* =========================
+   MAIN SECTIONS
+========================= */
+
+.section {
+  width: 100%;
+
+  margin:
+    0
+    auto
+    clamp(4rem, 8vw, 6rem);
+}
+
+
+/* =========================
+   TRAINING PLAN
+========================= */
+
+.workoutGrid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 1.5rem;
+}
+
+.workoutCard {
+  overflow: hidden;
+
+  background: var(--surface);
+
+  border:
+    1px solid var(--border);
+
+  border-radius: var(--radius);
+
+  box-shadow:
+    0 4px 18px
+    rgba(0, 0, 0, 0.05);
+}
+
+.workoutVideo {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+
+  aspect-ratio: 16 / 9;
+
+  background: #111;
+
+  color:
+    rgba(255, 255, 255, 0.7);
+
+  font-size: 0.8rem;
+  font-weight: 800;
+
+  letter-spacing: 0.08em;
+}
+
+.workoutContent {
+  padding: 1.25rem;
+}
+
+.workoutLabel {
+  display: inline-block;
+
+  margin-bottom: 0.4rem;
+
+  color: var(--brand);
+
+  font-size: 0.72rem;
+  font-weight: 800;
+
+  letter-spacing: 0.1em;
+}
+
+.workoutContent h3 {
+  margin: 0;
+
+  color: var(--ink);
+
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.workoutContent p {
+  margin:
+    0.5rem
+    0
+    0;
+
+  color: var(--muted);
+
+  line-height: 1.5;
+}
+
+
+/* =========================
+   VIDEO LIBRARIES
+========================= */
+
+.librarySpacing {
+  margin-top: 3rem;
+}
+
+
+/* =========================
+   NUTRITION TOOLS
+========================= */
+
 .calculatorsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 2rem;
-  margin-bottom: 3rem;
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(min(100%, 300px), 1fr)
+    );
+
+  gap: 1.5rem;
+
+  margin-top: 1.5rem;
 }
 
-/* ===== Section wrappers ===== */
-.section {
-  width: min(100%, var(--container));
-  margin: 0 auto 2.5rem;
-  background: var(--surface);
-  border-radius: var(--radius);
-  padding: 2rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+
+/* =========================
+   WHATSAPP SUPPORT
+========================= */
+
+.supportSection {
+  width: 100%;
+
+  margin-top: 1rem;
 }
 
-.section h2 {
-  font-size: clamp(1.3rem, 2.5vw, 1.6rem);
-  font-weight: 700;
-  margin-bottom: 1rem;
-  color: var(--ink);
-}
 
-/* ===== Mobile optimizations (MembersArea only) ===== */
+/* =========================
+   TABLET / MOBILE
+========================= */
+
 @media (max-width: 768px) {
-  .container { padding: 1rem 0.75rem 2rem; }
-
-  /* Stack greeting + logout, make logout easy to tap */
-  .topbar { flex-direction: column; align-items: stretch; gap: 0.75rem; }
-  .topbar :global(button) { width: 100%; min-height: 44px; }
-
-  /* Stack calculators */
-  .calculatorsGrid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
+  .container {
+    padding:
+      1.25rem
+      1rem
+      3rem;
   }
 
-  /* Lighter cards on mobile */
-  .section { padding: 1rem; border-radius: 14px; margin-bottom: 1.25rem; }
+  .topbar {
+    gap: 1.4rem;
+
+    margin-bottom: 3rem;
+  }
+
+  .accountActions {
+    gap: 0.5rem;
+  }
+
+  .contactButton,
+  .logoutButton {
+    min-height: 40px;
+
+    padding:
+      0.6rem
+      0.85rem;
+
+    font-size: 0.8rem;
+  }
+
+  .workoutGrid {
+    grid-template-columns: 1fr;
+
+    gap: 1.25rem;
+  }
+
+  .calculatorsGrid {
+    grid-template-columns: 1fr;
+
+    gap: 1rem;
+  }
+
+  .introSection,
+  .section {
+    margin-bottom: 4rem;
+  }
+
+  .librarySpacing {
+    margin-top: 2.5rem;
+  }
 }
 
-/* Tighten typography on very small phones (iPhone Mini widths) */
-@media (max-width: 390px) {
-  .greeting h1 { font-size: 1.4rem; }
-  .greeting p  { font-size: 0.95rem; }
+
+/* =========================
+   SMALL PHONES
+========================= */
+
+@media (max-width: 420px) {
+  .container {
+    padding-left: 0.85rem;
+    padding-right: 0.85rem;
+  }
+
+  .accountActions {
+    gap: 0.4rem;
+  }
+
+  .contactButton,
+  .logoutButton {
+    min-height: 38px;
+
+    padding:
+      0.55rem
+      0.75rem;
+
+    font-size: 0.78rem;
+
+    border-radius: 9px;
+  }
+
+  .contactButton svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .greeting h1 {
+    font-size: 2rem;
+  }
+
+  .sectionHeading h2 {
+    font-size: 1.7rem;
+  }
+
+  .workoutContent {
+    padding: 1rem;
+  }
+
+  .videoPlaceholder {
+    border-radius: 16px;
+  }
 }
 
-/* Helpful defaults just for this page */
-:where(img, video, canvas, svg) { max-width: 100%; height: auto; display: block; }
+/* =========================
+   LEGAL FOOTER
+========================= */
 
+.legalFooter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  gap: 0.5rem;
+
+  width: 100%;
+
+  margin-top: 3.5rem;
+  padding-top: 1.5rem;
+
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+
+  color: var(--muted);
+
+  font-size: 0.78rem;
+  line-height: 1.5;
+
+  text-align: center;
+}
+
+.legalFooter a {
+  color: var(--muted);
+
+  font-weight: 600;
+
+  text-decoration: none;
+
+  transition: color 120ms ease;
+}
+
+.legalFooter a:hover {
+  color: var(--brand);
+}
+
+.legalFooter a:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+
+  border-radius: 3px;
+}
+
+.footerDivider {
+  color: rgba(0, 0, 0, 0.25);
+}
+
+
+/* =========================
+   MEDIA DEFAULTS
+========================= */
+
+:where(img, video, canvas, svg) {
+  max-width: 100%;
+
+  height: auto;
+
+  display: block;
+}
+
+
+/* =========================
+   REDUCED MOTION
+========================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .contactButton,
+  .logoutButton {
+    transition: none;
+  }
+}
 

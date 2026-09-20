@@ -1,223 +1,787 @@
-/* NutritionCalculator.module.css */
-
-/* Wrapper (prevents horizontal stretch on mobile) */
 .container {
-  max-width: 720px;
   width: 100%;
-  margin: 0 auto;
-  padding: 1rem;
+  min-width: 0;
+
+  margin: 0;
+  padding: 0;
+
   box-sizing: border-box;
-  overflow-x: hidden;
+
+  font-family: inherit;
+
+  --brand: #4166f5;
+  --brand-dark: #3652c9;
+
+  --ink: #222;
+  --muted: #666;
+
+  --surface: #fff;
+  --soft: #f8f9fb;
+
+  --border: rgba(0, 0, 0, 0.07);
 }
 
-/* Big gradient "card" button – same blue as Energy calc */
+
+/* =========================
+   CLOSED CARD
+========================= */
+
 .openBtn {
+  width: 100%;
+  min-height: 180px;
+
   display: flex;
   flex-direction: column;
+
   align-items: center;
   justify-content: center;
 
-  width: 100%;
-  height: 160px;
+  gap: 0.65rem;
 
-  font-size: 1.2em;
-  font-weight: 600;
-  color: #fff;
+  padding: 1.5rem;
 
-  background: linear-gradient(135deg, #007bff, #00a2ff);
+  box-sizing: border-box;
+
   border: none;
   border-radius: 16px;
+
+  background: var(--brand);
+
+  color: #fff;
+
+  font-family: inherit;
+
+  font-size: 1.15rem;
+  font-weight: 700;
+
+  line-height: 1.3;
+
+  text-align: center;
+
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+
+  box-shadow:
+    0 4px 18px
+    rgba(65, 102, 245, 0.18);
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-/* Icon inside the button */
-.icon {
-  font-size: 1.4em;
-  margin-bottom: 0.35rem;
-  color: inherit; /* stays white */
-}
-
-/* Hover / Active / Focus states */
 .openBtn:hover {
-  background: linear-gradient(135deg, #0a86ff, #18adff);
+  background: var(--brand-dark);
+
   transform: translateY(-2px);
-  box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+
+  box-shadow:
+    0 8px 24px
+    rgba(65, 102, 245, 0.22);
 }
+
 .openBtn:active {
-  background: linear-gradient(135deg, #006fe0, #0093e6);
   transform: translateY(0);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
 }
+
 .openBtn:focus-visible {
-  outline: 3px solid #80d4ff;
+  outline:
+    3px solid
+    rgba(65, 102, 245, 0.25);
+
   outline-offset: 3px;
 }
 
-/* Calculator card */
+.icon {
+  color: inherit;
+
+  font-size: 1.45rem;
+}
+
+
+/* =========================
+   OPEN CALCULATOR
+========================= */
+
 .calculatorCard {
   position: relative;
-  background: #fff;
-  border: 1px solid #e5e7eb;
+
+  width: 100%;
+  min-width: 0;
+
+  padding: 1.5rem;
+
+  box-sizing: border-box;
+
+  background: var(--surface);
+
+  border:
+    1px solid var(--border);
+
   border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
-  padding: 1rem;
+
+  box-shadow:
+    0 4px 18px
+    rgba(0, 0, 0, 0.05);
 }
 
-/* Close button (neutral) */
+
+/* =========================
+   CLOSE
+========================= */
+
 .closeBtn {
   position: absolute;
-  right: .6rem;
-  top: .6rem;
+
+  top: 1rem;
+  right: 1rem;
+
   width: 36px;
   height: 36px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  background: #f7f7f7;
+
+  border:
+    1px solid rgba(0, 0, 0, 0.08);
+
   border-radius: 10px;
-  border: 1px solid #e5e7eb;
-  background: #f8fafc;
+
+  color: #666;
+
+  font-family: inherit;
+
+  font-size: 0.9rem;
+
   cursor: pointer;
-  transition: background 0.15s ease, box-shadow 0.15s ease;
-}
-.closeBtn:hover { background: #eef2f7; }
-.closeBtn:focus-visible { outline: 2px solid #4166f5; outline-offset: 2px; }
-
-/* Title */
-.title {
-  font-size: clamp(1.15rem, 2.5vw, 1.5rem);
-  font-weight: 800;
-  margin: .25rem 2rem 1rem .25rem; /* space for closeBtn */
 }
 
-/* Responsive rows (match Energy calc) */
-.formRow {
-  display: grid;
-  grid-template-columns: 1fr; /* mobile: single column */
-  gap: 0.9rem;
-  margin-bottom: 0.9rem;
-}
-@media (min-width: 640px) {
-  .formRow {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  }
+.closeBtn:hover {
+  background: #ededed;
+
+  color: #222;
 }
 
-.formGroup {
-  display: grid;
-  gap: .35rem;
-  min-width: 0; /* prevent overflow in grid */
-}
+.closeBtn:focus-visible {
+  outline:
+    2px solid var(--brand);
 
-/* Labels */
-.formGroup label {
-  font-size: .95rem;
-  font-weight: 600;
-  color: #334155;
-}
-
-/* Inputs / selects – iOS anti-zoom (16px) + safe widths */
-.formGroup select,
-.formGroup input {
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  font-size: 16px; /* ✅ prevents iOS auto-zoom */
-  line-height: 1.4;
-  padding: 0.75rem 0.9rem;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  background: #fff;
-  box-sizing: border-box;
-}
-.formGroup :is(select, input):focus-visible {
-  outline: 2px solid #4166f5;
   outline-offset: 2px;
 }
 
-/* Slider groups */
-.sliderGroup {
-  display: grid;
-  gap: .4rem;
-  margin: 0.75rem 0;
-}
-.proteinLabel,
-.fatLabel {
-  font-size: .95rem;
-  font-weight: 600;
-  color: #334155;
+
+/* =========================
+   HEADER
+========================= */
+
+.eyebrow {
+  display: inline-block;
+
+  margin-bottom: 0.4rem;
+
+  color: var(--brand);
+
+  font-size: 0.7rem;
+  font-weight: 800;
+
+  letter-spacing: 0.1em;
 }
 
-/* Custom slider styles — blue track, round thumb */
-.proteinSlider,
-.fatSlider {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 100%;
-  height: 8px;
-  border-radius: 999px;
-  background: #e6f0ff; /* light blue bg */
-  outline: none;
-}
+.title {
+  max-width:
+    calc(100% - 45px);
 
-/* WebKit thumb */
-.proteinSlider::-webkit-slider-thumb,
-.fatSlider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: #007bff;
-  border: 2px solid #fff;
-  box-shadow: 0 2px 8px rgba(0,0,0,.2);
-  cursor: pointer;
-  transition: transform 0.15s ease, background 0.15s ease;
-}
-.proteinSlider::-webkit-slider-thumb:hover,
-.fatSlider::-webkit-slider-thumb:hover {
-  transform: scale(1.06);
-  background: #0a86ff;
-}
-
-/* Firefox track & thumb */
-.proteinSlider::-moz-range-track,
-.fatSlider::-moz-range-track {
-  height: 8px;
-  border-radius: 999px;
-  background: #e6f0ff;
-}
-.proteinSlider::-moz-range-thumb,
-.fatSlider::-moz-range-thumb {
-  width: 22px;
-  height: 22px;
-  border: 2px solid #fff;
-  border-radius: 50%;
-  background: #007bff;
-  box-shadow: 0 2px 8px rgba(0,0,0,.2);
-  cursor: pointer;
-}
-
-/* Results */
-.results {
-  margin-top: 0.75rem;
-  padding: 1rem;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  background: #f8fafc;
-  overflow-wrap: anywhere;
-  word-break: break-word;
-}
-.results h3 {
-  margin: 0 0 .25rem 0;
-  font-size: 1.05rem;
-}
-.results p {
   margin: 0;
-  font-size: 1.1rem;
+
+  color: var(--ink);
+
+  font-family: inherit;
+
+  font-size:
+    clamp(1.25rem, 2vw, 1.5rem);
+
+  font-weight: 800;
+
+  line-height: 1.2;
+
+  letter-spacing: -0.015em;
+}
+
+.intro {
+  max-width: 620px;
+
+  margin:
+    0.6rem 0 2rem;
+
+  color: var(--muted);
+
+  font-size: 0.95rem;
+
+  line-height: 1.55;
+}
+
+
+/* =========================
+   SECTIONS
+========================= */
+
+.section,
+.resultsSection {
+  margin-top: 2rem;
+
+  padding-top: 2rem;
+
+  border-top:
+    1px solid var(--border);
+}
+
+.sectionHeader {
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 0.9rem;
+
+  margin-bottom: 1.25rem;
+}
+
+.sectionHeader > span {
+  flex: 0 0 auto;
+
+  padding-top: 0.2rem;
+
+  color: var(--brand);
+
+  font-size: 0.72rem;
+  font-weight: 800;
+
+  letter-spacing: 0.08em;
+}
+
+.sectionHeader > div {
+  min-width: 0;
+}
+
+.sectionHeader h3 {
+  margin: 0;
+
+  color: var(--ink);
+
+  font-size: 1.15rem;
+  font-weight: 800;
+
+  line-height: 1.25;
+}
+
+.sectionHeader p {
+  max-width: 620px;
+
+  margin:
+    0.35rem 0 0;
+
+  color: var(--muted);
+
+  font-size: 0.88rem;
+
+  line-height: 1.5;
+}
+
+
+/* =========================
+   DETAILS GRID
+========================= */
+
+.detailsGrid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 1rem;
+}
+
+
+/* =========================
+   FORM
+========================= */
+
+.formGroup {
+  display: grid;
+
+  min-width: 0;
+
+  gap: 0.4rem;
+}
+
+.formGroup label {
+  color: #444;
+
+  font-size: 0.85rem;
   font-weight: 700;
 }
 
-/* Reduce motion */
-@media (prefers-reduced-motion: reduce) {
-  * { transition: none !important; }
+.formGroup input,
+.formGroup select {
+  width: 100%;
+  min-width: 0;
+
+  padding:
+    0.75rem 0.85rem;
+
+  box-sizing: border-box;
+
+  background: #fff;
+
+  border:
+    1px solid #dedede;
+
+  border-radius: 10px;
+
+  color: var(--ink);
+
+  font-family: inherit;
+
+  font-size: 16px;
+
+  line-height: 1.4;
+
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
+.formGroup input:focus,
+.formGroup select:focus {
+  outline: none;
+
+  border-color: var(--brand);
+
+  box-shadow:
+    0 0 0 3px
+    rgba(65, 102, 245, 0.1);
+}
+
+
+/* =========================
+   INPUT UNITS
+========================= */
+
+.inputWithUnit {
+  position: relative;
+}
+
+.inputWithUnit input {
+  padding-right: 4.25rem;
+}
+
+.inputWithUnit small {
+  position: absolute;
+
+  top: 50%;
+  right: 0.9rem;
+
+  transform:
+    translateY(-50%);
+
+  color: #777;
+
+  font-size: 0.78rem;
+  font-weight: 700;
+
+  pointer-events: none;
+}
+
+
+/* =========================
+   GOAL NOTE
+========================= */
+
+.goalNote {
+  margin-top: 1rem;
+
+  padding: 1rem;
+
+  background:
+    rgba(65, 102, 245, 0.055);
+
+  border-left:
+    3px solid var(--brand);
+
+  border-radius: 8px;
+}
+
+.goalNote strong {
+  display: block;
+
+  margin-bottom: 0.25rem;
+
+  color: var(--ink);
+
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.goalNote p {
+  margin: 0;
+
+  color: var(--muted);
+
+  font-size: 0.8rem;
+
+  line-height: 1.5;
+}
+
+
+/* =========================
+   PROTEIN SLIDER
+========================= */
+
+.sliderGroup {
+  width: 100%;
+}
+
+.sliderHeader {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 1rem;
+
+  margin-bottom: 0.7rem;
+}
+
+.sliderHeader label {
+  color: #444;
+
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.sliderHeader span {
+  color: var(--brand);
+
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.slider {
+  width: 100%;
+  height: 6px;
+
+  appearance: none;
+  -webkit-appearance: none;
+
+  border-radius: 999px;
+
+  background:
+    rgba(65, 102, 245, 0.15);
+
+  outline: none;
+
+  cursor: pointer;
+}
+
+.slider::-webkit-slider-thumb {
+  width: 20px;
+  height: 20px;
+
+  appearance: none;
+  -webkit-appearance: none;
+
+  background: var(--brand);
+
+  border:
+    3px solid #fff;
+
+  border-radius: 50%;
+
+  box-shadow:
+    0 2px 8px
+    rgba(0, 0, 0, 0.18);
+
+  cursor: pointer;
+}
+
+.slider::-moz-range-track {
+  height: 6px;
+
+  background:
+    rgba(65, 102, 245, 0.15);
+
+  border-radius: 999px;
+}
+
+.slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+
+  background: var(--brand);
+
+  border:
+    3px solid #fff;
+
+  border-radius: 50%;
+
+  box-shadow:
+    0 2px 8px
+    rgba(0, 0, 0, 0.18);
+
+  cursor: pointer;
+}
+
+.sliderScale {
+  display: flex;
+
+  justify-content: space-between;
+
+  margin-top: 0.45rem;
+
+  color: #888;
+
+  font-size: 0.7rem;
+}
+
+
+/* =========================
+   CALORIE RESULT
+========================= */
+
+.calorieResult {
+  padding: 1.25rem;
+
+  background: var(--soft);
+
+  border:
+    1px solid var(--border);
+
+  border-radius: 14px;
+}
+
+.resultsLabel {
+  display: block;
+
+  margin-bottom: 0.65rem;
+
+  color: var(--brand);
+
+  font-size: 0.68rem;
+  font-weight: 800;
+
+  letter-spacing: 0.1em;
+}
+
+.mainCalories {
+  display: flex;
+
+  align-items: baseline;
+
+  gap: 0.35rem;
+}
+
+.mainCalories strong {
+  color: var(--ink);
+
+  font-size: 2.1rem;
+  font-weight: 800;
+
+  line-height: 1;
+}
+
+.mainCalories span {
+  color: var(--muted);
+
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.calorieResult p {
+  margin:
+    0.75rem 0 0;
+
+  color: var(--muted);
+
+  font-size: 0.8rem;
+
+  line-height: 1.45;
+}
+
+.calorieResult p strong {
+  color: #444;
+}
+
+
+/* =========================
+   MACRO RESULTS
+========================= */
+
+.resultsGrid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 0.75rem;
+
+  margin-top: 0.75rem;
+}
+
+.resultItem {
+  min-width: 0;
+
+  padding: 1rem;
+
+  background: #fff;
+
+  border:
+    1px solid var(--border);
+
+  border-radius: 12px;
+}
+
+.resultItem > span {
+  display: block;
+
+  margin-bottom: 0.35rem;
+
+  color: var(--muted);
+
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.resultItem > div {
+  display: flex;
+
+  align-items: baseline;
+
+  gap: 0.25rem;
+}
+
+.resultItem strong {
+  color: var(--ink);
+
+  font-size: 1.25rem;
+  font-weight: 800;
+
+  line-height: 1.2;
+}
+
+.resultItem small {
+  color: var(--muted);
+
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+
+/* =========================
+   STARTING POINT
+========================= */
+
+.startingPoint {
+  margin-top: 1rem;
+
+  padding: 1rem;
+
+  background:
+    rgba(65, 102, 245, 0.055);
+
+  border-left:
+    3px solid var(--brand);
+
+  border-radius: 8px;
+}
+
+.startingPoint strong {
+  display: block;
+
+  margin-bottom: 0.3rem;
+
+  color: var(--ink);
+
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.startingPoint p {
+  margin: 0;
+
+  color: var(--muted);
+
+  font-size: 0.8rem;
+
+  line-height: 1.55;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+  .openBtn {
+    min-height: 160px;
+
+    padding: 1.25rem;
+
+    border-radius: 14px;
+
+    font-size: 1.05rem;
+  }
+
+  .calculatorCard {
+    padding: 1.25rem;
+
+    border-radius: 14px;
+  }
+
+  .title {
+    font-size: 1.25rem;
+  }
+
+  .intro {
+    margin-bottom: 1.5rem;
+  }
+
+  .section,
+  .resultsSection {
+    margin-top: 1.5rem;
+
+    padding-top: 1.5rem;
+  }
+
+  .detailsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .resultsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .sliderHeader {
+    align-items: flex-start;
+  }
+}
+
+
+/* =========================
+   REDUCED MOTION
+========================= */
+
+@media (
+  prefers-reduced-motion: reduce
+) {
+  .openBtn,
+  .closeBtn,
+  .formGroup input,
+  .formGroup select {
+    transition: none;
+  }
+}

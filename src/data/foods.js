@@ -151,7 +151,7 @@ export const FOODS = [
   // ===================== VEGETABLES =====================
   {
     id: "veg_mixed",
-    name: "Mixed non-starchy veg",
+    name: "Mixed vegetables",
     group: "veg",
     unit: { kind: "per100g" },
     perLabel: "per 100 g (raw)",

@@ -1,99 +1,330 @@
 // src/pages/Terms/Terms.jsx
+
 import styles from "./Terms.module.css";
 
 export default function Terms() {
   return (
     <main className={styles.page}>
       <header className={styles.hero}>
+        <p className={styles.eyebrow}>LEGAL</p>
+
         <h1>Terms &amp; Conditions</h1>
-        <p>Effective date: October 8, 2025</p>
+
+        <p className={styles.effectiveDate}>
+          Effective date: September 20, 2026
+        </p>
       </header>
 
       <section className={styles.section}>
         <p>
-          Welcome to <a href="https://www.daniel-mcintyre.com">www.daniel-mcintyre.com</a> (the “Site”), operated by{" "}
-          <strong>Daniel McIntyre</strong> (“I”, “me”, or “my”). By accessing or using this Site, you agree to these
+          These Terms &amp; Conditions apply to your use of{" "}
+          <a
+            href="https://www.daniel-mcintyre.com"
+            target="_blank"
+            rel="noreferrer"
+          >
+            www.daniel-mcintyre.com
+          </a>{" "}
+          (the "Site") and <strong>The Rebuild</strong>, operated by{" "}
+          <strong>Daniel McIntyre</strong> ("I", "me", or "my").
+        </p>
+
+        <p>
+          By accessing or using the Site or The Rebuild, you agree to these
           Terms &amp; Conditions.
         </p>
       </section>
 
       <section className={styles.section}>
-        <h2>1. Purpose of the Site</h2>
+        <h2>1. About The Rebuild</h2>
+
         <p>
-          This Site provides educational content, calculators, guides, and resources for fitness, nutrition, and
-          lifestyle improvement. Access to certain features (e.g., the FitBlueprint Members Area) requires user
-          registration via Firebase authentication.
+          The Rebuild is a fitness and nutrition education resource designed
+          to help people who are starting fitness for the first time or
+          returning after time away.
+        </p>
+
+        <p>
+          It may include training programmes, exercise demonstrations,
+          mobility resources, nutrition education, calculators, meal-building
+          tools, videos, downloadable guides and other educational resources.
+        </p>
+
+        <p>
+          The Rebuild is currently provided free of charge. I may change,
+          update, add to, remove or discontinue features or resources in the
+          future.
         </p>
       </section>
 
       <section className={styles.section}>
-        <h2>2. Use of Content</h2>
+        <h2>2. Health, Fitness &amp; Nutrition Disclaimer</h2>
+
         <p>
-          All content on this Site — including videos, PDFs, calculators, and written materials — is owned by
-          <strong> Daniel McIntyre</strong> and protected by applicable intellectual property laws. You may view,
-          download, and use content for personal, non-commercial purposes only. Reproduction, redistribution, or
-          commercial use without written permission is prohibited.
+          The information provided through the Site and The Rebuild is for{" "}
+          <strong>general educational and informational purposes only</strong>.
+          It is not medical advice, diagnosis or treatment and is not a
+          substitute for advice from an appropriately qualified healthcare
+          professional.
+        </p>
+
+        <p>
+          Exercise and physical activity involve inherent risks. The Rebuild
+          cannot take into account every individual's medical history,
+          injuries, physical limitations, experience or circumstances.
+        </p>
+
+        <p>
+          You are responsible for deciding whether a workout, exercise,
+          mobility drill, nutrition suggestion or other resource is
+          appropriate for you. If you have a medical condition, injury,
+          symptoms, concerns about your health, or are unsure whether an
+          activity is suitable for you, seek appropriate professional advice
+          before proceeding.
+        </p>
+
+        <p>
+          Stop exercising and seek appropriate medical attention if you
+          experience symptoms that cause concern.
         </p>
       </section>
 
       <section className={styles.section}>
-        <h2>3. Health &amp; Fitness Disclaimer</h2>
+        <h2>3. Nutrition and Calculator Estimates</h2>
+
         <p>
-          The information on this Site is provided <strong>for educational purposes only</strong> and does not constitute
-          medical, dietary, or health advice. Always consult a qualified healthcare professional before making major
-          changes to your diet, exercise, or lifestyle. By using this Site, you acknowledge that I am not responsible
-          for any injury, illness, or outcome resulting from the use of information or tools provided.
+          Calorie calculations, estimated energy requirements, protein
+          targets, macronutrient targets, meal portions and other outputs
+          generated by The Rebuild are estimates based on the information
+          entered and the formulas used.
+        </p>
+
+        <p>
+          They are intended as practical starting points and general
+          educational guidance. They are not guaranteed to represent your
+          exact physiological requirements and should not be treated as
+          medical or individually prescribed dietary advice.
+        </p>
+
+        <p>
+          Individual requirements and responses can vary. Results should be
+          considered alongside your actual progress, circumstances and, where
+          appropriate, advice from a suitably qualified professional.
         </p>
       </section>
 
       <section className={styles.section}>
         <h2>4. User Accounts</h2>
+
         <p>
-          To access the Members Area, you must create an account through Firebase and keep your credentials confidential.
-          I may suspend or terminate accounts that violate these Terms or are used improperly.
+          Certain parts of The Rebuild require you to create an account. You
+          are responsible for providing accurate account information and for
+          keeping your login credentials secure.
+        </p>
+
+        <p>
+          Your account is for your personal use. You should not share your
+          login credentials or allow another person to access The Rebuild
+          through your account.
+        </p>
+
+        <p>
+          I may restrict, suspend or terminate access where an account is
+          being misused, shared improperly, used to interfere with the Site,
+          or used in breach of these Terms.
         </p>
       </section>
 
       <section className={styles.section}>
-        <h2>5. Limitation of Liability</h2>
+        <h2>5. Personal Use and Intellectual Property</h2>
+
         <p>
-          While I strive for accuracy and availability, I make no guarantees regarding completeness, reliability, or
-          uninterrupted access. To the maximum extent permitted by law, I am not liable for any direct, indirect,
-          incidental, or consequential damages arising from your use of the Site.
+          Unless otherwise stated, the content made available through the
+          Site and The Rebuild — including videos, written materials,
+          training programmes, exercise demonstrations, PDFs, calculators,
+          graphics and other resources — is owned by or licensed to Daniel
+          McIntyre and is protected by applicable intellectual property laws.
+        </p>
+
+        <p>
+          You may access and use these materials for your own personal,
+          non-commercial use.
+        </p>
+
+        <p>You may not, without prior written permission:</p>
+
+        <ul className={styles.list}>
+          <li>
+            Reproduce or redistribute substantial parts of the content.
+          </li>
+
+          <li>
+            Sell, license or commercially exploit The Rebuild materials.
+          </li>
+
+          <li>
+            Republish videos, guides or programmes as your own content.
+          </li>
+
+          <li>
+            Copy or reproduce The Rebuild for use in another commercial
+            fitness or nutrition service.
+          </li>
+        </ul>
+      </section>
+
+      <section className={styles.section}>
+        <h2>6. Acceptable Use</h2>
+
+        <p>
+          You must not use the Site or The Rebuild in a way that is unlawful,
+          fraudulent, harmful, disruptive or intended to compromise the
+          security or operation of the service.
+        </p>
+
+        <p>
+          You must not attempt to gain unauthorised access to another user's
+          account, restricted systems or other areas of the Site that you are
+          not authorised to access.
         </p>
       </section>
 
       <section className={styles.section}>
-        <h2>6. Links to Other Sites</h2>
+        <h2>7. Availability and Changes</h2>
+
         <p>
-          The Site may contain links to third-party websites. I am not responsible for their content, policies, or
-          practices. You access third-party sites at your own risk.
+          I aim to keep the Site and The Rebuild available and useful, but I
+          do not guarantee uninterrupted or error-free access.
+        </p>
+
+        <p>
+          Content, workouts, exercises, videos, calculators, guides and other
+          resources may be corrected, updated, replaced or removed as The
+          Rebuild develops.
+        </p>
+
+        <p>
+          Access may occasionally be interrupted for maintenance, technical
+          problems, security reasons or circumstances outside my reasonable
+          control.
         </p>
       </section>
 
       <section className={styles.section}>
-        <h2>7. Modifications</h2>
+        <h2>8. Third-Party Services and Links</h2>
+
         <p>
-          I may modify these Terms at any time. Changes will be effective when posted on this page. Your continued use
-          of the Site after changes are posted constitutes acceptance of the revised Terms.
+          The Site and The Rebuild may use or link to third-party services,
+          including services such as YouTube, Firebase, WhatsApp and other
+          external websites or platforms.
+        </p>
+
+        <p>
+          Those services are operated independently and may have their own
+          terms, privacy policies and practices. I am not responsible for the
+          content, availability or practices of third-party services.
         </p>
       </section>
 
       <section className={styles.section}>
-        <h2>8. Governing Law</h2>
+        <h2>9. No Guarantee of Results</h2>
+
         <p>
-          These Terms are governed by the laws of the United Arab Emirates. Any disputes shall be subject to the
-          exclusive jurisdiction of the Dubai courts.
+          Fitness, health, body composition and nutrition outcomes vary
+          between individuals.
+        </p>
+
+        <p>
+          Examples, educational material, programmes, calculators or other
+          resources provided through The Rebuild do not constitute a
+          guarantee that you will achieve a particular result.
         </p>
       </section>
 
       <section className={styles.section}>
-        <h2>9. Contact</h2>
+        <h2>10. Limitation of Liability</h2>
+
         <p>
-          For questions about these Terms, contact:<br />
-          <strong>Daniel McIntyre</strong><br />
-          Email: <a href="mailto:info@daniel-mcintyre.com">info@daniel-mcintyre.com</a><br />
-          Location: Dubai, United Arab Emirates
+          I take reasonable care in preparing and maintaining the information
+          and resources provided through the Site and The Rebuild. However,
+          information may occasionally contain errors or become outdated, and
+          the service may not always be available.
+        </p>
+
+        <p>
+          To the maximum extent permitted by applicable law, I will not be
+          liable for indirect, incidental, special or consequential loss
+          arising from your use of, or inability to use, the Site or The
+          Rebuild.
+        </p>
+
+        <p>
+          Nothing in these Terms is intended to exclude or limit any
+          responsibility or liability that cannot lawfully be excluded or
+          limited under applicable law.
+        </p>
+      </section>
+
+      <section className={styles.section}>
+        <h2>11. Privacy</h2>
+
+        <p>
+          Information about how personal data is handled is provided in the{" "}
+          <a href="/privacy-policy">
+            Privacy Policy
+          </a>
+          .
+        </p>
+      </section>
+
+      <section className={styles.section}>
+        <h2>12. Changes to These Terms</h2>
+
+        <p>
+          I may update these Terms from time to time to reflect changes to
+          The Rebuild, the Site, applicable requirements or the services
+          provided.
+        </p>
+
+        <p>
+          The effective date at the top of this page will identify the
+          current version. Continued use of the Site or The Rebuild after
+          updated Terms take effect constitutes acceptance of the revised
+          Terms, to the extent permitted by applicable law.
+        </p>
+      </section>
+
+      <section className={styles.section}>
+        <h2>13. Governing Law</h2>
+
+        <p>
+          These Terms are governed by the applicable laws of the United Arab
+          Emirates and, where applicable, the Emirate of Dubai.
+        </p>
+
+        <p>
+          Any dispute relating to these Terms will be subject to the
+          jurisdiction of the competent courts of Dubai, United Arab
+          Emirates, except where applicable law requires otherwise.
+        </p>
+      </section>
+
+      <section className={styles.section}>
+        <h2>14. Contact</h2>
+
+        <p>
+          If you have questions about these Terms, contact:
+        </p>
+
+        <p className={styles.contact}>
+          <strong>Daniel McIntyre</strong>
+          <br />
+          Email:{" "}
+          <a href="mailto:info@daniel-mcintyre.com">
+            info@daniel-mcintyre.com
+          </a>
+          <br />
+          Dubai, United Arab Emirates
         </p>
       </section>
     </main>
