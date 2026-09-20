@@ -2,9 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { onAuthStateChanged, signOut, reload } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaWhatsapp } from "react-icons/fa";
-
 import { auth } from "../../firebase";
 import { videoData } from "../../data/data";
 
@@ -349,29 +348,21 @@ export default function MembersArea() {
             LEGAL FOOTER
         ========================= */}
 
-        <footer className={styles.legalFooter}>
-          <span>© 2026 Daniel McIntyre</span>
+      <footer className={styles.legalFooter}>
+  <span>© 2026 Daniel McIntyre</span>
 
-          <span className={styles.footerDivider}>•</span>
+  <span className={styles.footerDivider}>•</span>
 
-          <a
-            href="/privacy-policy"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Privacy Policy
-          </a>
+  <Link to="/privacy-policy">
+    Privacy Policy
+  </Link>
 
-          <span className={styles.footerDivider}>•</span>
+  <span className={styles.footerDivider}>•</span>
 
-          <a
-            href="/terms"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Terms &amp; Conditions
-          </a>
-        </footer>
+  <Link to="/terms">
+    Terms &amp; Conditions
+  </Link>
+</footer>
       </main>
     </div>
   );

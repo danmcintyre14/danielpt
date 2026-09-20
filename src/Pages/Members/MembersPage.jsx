@@ -1,6 +1,7 @@
 import MemberAuth from "../../Components/MemberAuth/MemberAuth";
 import SEO from "../../Components/SEO/SEO";
 import styles from "./MembersPage.module.css";
+import { Link } from "react-router-dom";
 
 export default function MembersPage() {
   return (
@@ -97,23 +98,15 @@ export default function MembersPage() {
 
   <span className={styles.footerDivider}>•</span>
 
-  <a
-    href="/privacy-policy"
-    target="_blank"
-    rel="noopener noreferrer"
-  >
+  <Link to="/privacy-policy">
     Privacy Policy
-  </a>
+  </Link>
 
   <span className={styles.footerDivider}>•</span>
 
-  <a
-    href="/terms"
-    target="_blank"
-    rel="noopener noreferrer"
-  >
+  <Link to="/terms">
     Terms &amp; Conditions
-  </a>
+  </Link>
 </footer>
         </section>
       </main>
