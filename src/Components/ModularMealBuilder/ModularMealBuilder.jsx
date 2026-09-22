@@ -82,6 +82,24 @@ export default function ModularMealBuilder() {
       FOOD_BY_ID[fatId] || null;
 
     /*
+      Allow the inputs to be temporarily blank
+      while the user is editing them.
+
+      The calculation uses the defaults until
+      a valid number is entered.
+    */
+
+    const caloriesForCalculation =
+      targetCalories === ""
+        ? DEFAULTS.calories
+        : Number(targetCalories);
+
+    const proteinForCalculation =
+      targetProtein === ""
+        ? DEFAULTS.protein
+        : Number(targetProtein);
+
+    /*
       Fixed parts of the meal first.
 
       Vegetables:
@@ -111,17 +129,8 @@ export default function ModularMealBuilder() {
       Find the best combination of protein
       food + carbohydrate food.
 
-      Instead of making the main protein food
-      hit the protein target by itself, we test
-      practical portions and score the FINAL
-      meal against both:
-
-      - target calories
-      - target protein
-
-      This means protein from rice, potato,
-      oats, vegetables etc. counts toward the
-      meal's protein target.
+      Protein from all selected foods counts
+      toward the final meal target.
     */
 
     const bestCombination =
@@ -130,8 +139,8 @@ export default function ModularMealBuilder() {
         carbFood,
         vegItem,
         fatItem,
-        targetCalories,
-        targetProtein,
+        targetCalories: caloriesForCalculation,
+        targetProtein: proteinForCalculation,
       });
 
     const proteinAmount =
@@ -202,10 +211,13 @@ export default function ModularMealBuilder() {
       items,
 
       calorieDifference:
-        total.kcal - targetCalories,
+        total.kcal - caloriesForCalculation,
 
       proteinDifference:
-        total.p - targetProtein,
+        total.p - proteinForCalculation,
+
+      caloriesForCalculation,
+      proteinForCalculation,
     };
   }, [
     targetCalories,
@@ -274,7 +286,9 @@ export default function ModularMealBuilder() {
             portions for your meal.
           </p>
 
-          {/* 01 TARGETS */}
+          {/* =========================
+              01 — TARGETS
+          ========================= */}
 
           <section className={styles.section}>
             <div className={styles.sectionHeader}>
@@ -292,6 +306,8 @@ export default function ModularMealBuilder() {
             </div>
 
             <div className={styles.targetGrid}>
+              {/* CALORIES */}
+
               <label className={styles.formGroup}>
                 <span>Calories</span>
 
@@ -301,21 +317,47 @@ export default function ModularMealBuilder() {
                     min="100"
                     max="2000"
                     step="25"
+                    inputMode="numeric"
                     value={targetCalories}
-                    onChange={(e) =>
+                    onChange={(e) => {
+                      const value = e.target.value;
+
+                      if (value === "") {
+                        setTargetCalories("");
+                        return;
+                      }
+
+                      setTargetCalories(value);
+                    }}
+                    onBlur={() => {
+                      const value =
+                        Number(targetCalories);
+
+                      if (
+                        targetCalories === "" ||
+                        !Number.isFinite(value)
+                      ) {
+                        setTargetCalories(
+                          DEFAULTS.calories
+                        );
+
+                        return;
+                      }
+
                       setTargetCalories(
-                        clamp(
-                          Number(e.target.value),
-                          100,
-                          2000
+                        Math.min(
+                          2000,
+                          Math.max(100, value)
                         )
-                      )
-                    }
+                      );
+                    }}
                   />
 
                   <small>kcal</small>
                 </div>
               </label>
+
+              {/* PROTEIN */}
 
               <label className={styles.formGroup}>
                 <span>Protein</span>
@@ -326,16 +368,40 @@ export default function ModularMealBuilder() {
                     min="10"
                     max="150"
                     step="5"
+                    inputMode="numeric"
                     value={targetProtein}
-                    onChange={(e) =>
+                    onChange={(e) => {
+                      const value = e.target.value;
+
+                      if (value === "") {
+                        setTargetProtein("");
+                        return;
+                      }
+
+                      setTargetProtein(value);
+                    }}
+                    onBlur={() => {
+                      const value =
+                        Number(targetProtein);
+
+                      if (
+                        targetProtein === "" ||
+                        !Number.isFinite(value)
+                      ) {
+                        setTargetProtein(
+                          DEFAULTS.protein
+                        );
+
+                        return;
+                      }
+
                       setTargetProtein(
-                        clamp(
-                          Number(e.target.value),
-                          10,
-                          150
+                        Math.min(
+                          150,
+                          Math.max(10, value)
                         )
-                      )
-                    }
+                      );
+                    }}
                   />
 
                   <small>g</small>
@@ -344,7 +410,9 @@ export default function ModularMealBuilder() {
             </div>
           </section>
 
-          {/* 02 FOOD CHOICES */}
+          {/* =========================
+              02 — FOOD CHOICES
+          ========================= */}
 
           <section className={styles.section}>
             <div className={styles.sectionHeader}>
@@ -399,7 +467,9 @@ export default function ModularMealBuilder() {
             </p>
           </section>
 
-          {/* 03 YOUR MEAL */}
+          {/* =========================
+              03 — YOUR MEAL
+          ========================= */}
 
           <section className={styles.mealSection}>
             <div className={styles.sectionHeader}>
@@ -497,8 +567,12 @@ export default function ModularMealBuilder() {
               proteinDifference={
                 calculation.proteinDifference
               }
-              targetCalories={targetCalories}
-              targetProtein={targetProtein}
+              targetCalories={
+                calculation.caloriesForCalculation
+              }
+              targetProtein={
+                calculation.proteinForCalculation
+              }
             />
 
             <p className={styles.disclaimer}>
@@ -509,18 +583,21 @@ export default function ModularMealBuilder() {
             </p>
           </section>
 
-          {/* 04 MEAL PREP */}
+          {/* =========================
+              04 — SHOPPING LIST
+          ========================= */}
 
           <section className={styles.section}>
             <div className={styles.sectionHeader}>
               <span>04</span>
 
               <div>
-                <h3>Meal prep</h3>
+                <h3>Shopping List</h3>
 
                 <p>
-                  Making more than one? We'll
-                  calculate how much food you need.
+                  Choose how many meals you're making
+                  and we'll calculate how much of each
+                  food you need.
                 </p>
               </div>
             </div>
@@ -640,20 +717,14 @@ function findBestMealCombination({
 
   let best = null;
 
-  for (
-    const proteinAmount
-    of proteinAmounts
-  ) {
+  for (const proteinAmount of proteinAmounts) {
     const proteinItem =
       safeScaleFood(
         proteinFood,
         proteinAmount
       );
 
-    for (
-      const carbAmount
-      of carbAmounts
-    ) {
+    for (const carbAmount of carbAmounts) {
       const carbItem =
         safeScaleFood(
           carbFood,
@@ -668,12 +739,10 @@ function findBestMealCombination({
       ]);
 
       const calorieDifference =
-        total.kcal -
-        targetCalories;
+        total.kcal - targetCalories;
 
       const proteinDifference =
-        total.p -
-        targetProtein;
+        total.p - targetProtein;
 
       /*
         SCORE
@@ -716,14 +785,15 @@ function findBestMealCombination({
 
       const proteinUnderPenalty =
         proteinDifference < 0
-          ? Math.abs(
-              proteinDifference
-            ) /
-            Math.max(
-              targetProtein,
-              1
-            ) *
-            0.35
+          ? (
+              Math.abs(
+                proteinDifference
+              ) /
+              Math.max(
+                targetProtein,
+                1
+              )
+            ) * 0.35
           : 0;
 
       /*
@@ -784,10 +854,6 @@ function getCandidateAmounts(
 
     Carbohydrate:
     test 0–500 g in 5 g increments.
-
-    This accommodates both energy-dense
-    foods such as rice and lower-calorie
-    foods such as potato.
   */
 
   if (
@@ -1304,7 +1370,7 @@ function formatFoodAmount(
 }
 
 /* ========================================
-   MEAL PREP DISPLAY
+   SHOPPING LIST DISPLAY
 ======================================== */
 
 function formatPrepAmount(
@@ -1443,24 +1509,4 @@ function formatNumber(
   )
     ? String(value)
     : value.toFixed(1);
-}
-
-function clamp(
-  value,
-  min,
-  max
-) {
-  if (
-    !Number.isFinite(value)
-  ) {
-    return min;
-  }
-
-  return Math.min(
-    max,
-    Math.max(
-      min,
-      value
-    )
-  );
 }
